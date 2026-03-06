@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build": "docker build -t nextjs-study-fe . && docker rm -f frontend-app || true && docker run -d -p 3000:3000 --name frontend-app --restart unless-stopped nextjs-study-fe",
+    "log": "docker logs -f frontend-app"
   },
   "dependencies": {
     "react": "^18.2.0",
