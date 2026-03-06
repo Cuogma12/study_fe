@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+README.md
+.next
+.git
+.husky
+.vscode
+.env*
+!.env.production
+.DS_Store
