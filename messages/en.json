@@ -1,0 +1,30 @@
+{
+  "auth": {
+    "layout": {
+      "title": "Unlock your potential today.",
+      "description": "Join over 10,000 students worldwide and start your journey towards excellence with our structured courses and community."
+    },
+    "login": {
+      "title": "Welcome back",
+      "description": "Please enter your details to sign in to your account.",
+      "email_label": "Email or Username",
+      "email_placeholder": "e.g. alex@study.com",
+      "password_label": "Password",
+      "password_placeholder": "••••••••",
+      "forgot_password": "Forgot password?",
+      "remember_me": "Remember me for 30 days",
+      "sign_in": "Sign In",
+      "signing_in": "Signing in...",
+      "no_account": "Don't have an account?",
+      "create_account": "Create an account",
+      "google_login": "Google",
+      "facebook_login": "Facebook",
+      "or_continue": "Or continue with email",
+      "success_message": "Login Successful!"
+    }
+  },
+  "common": {
+    "app_name": "StudyApp",
+    "error": "Error"
+  }
+}

@@ -1,0 +1,17 @@
+# Ignore artifacts
+node_modules
+.next
+.out
+build
+dist
+
+# Ignore env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore other files
+package-lock.json
+public/

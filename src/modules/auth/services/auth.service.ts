@@ -5,7 +5,7 @@ export const authService = {
   login: async (email: string, password: string) => {
     const response = await axiosClient.post('/auth/login', { email, password });
     
-    // Lưu tokens vào cookies
+    // Save tokens to cookies
     if (response.data && response.data.accessToken) {
       Cookies.set('access_token', response.data.accessToken, { expires: 1 }); // 1 day
       Cookies.set('refresh_token', response.data.refreshToken, { expires: 7 }); // 7 days
@@ -28,7 +28,7 @@ export const authService = {
       }
     }
     
-    // Xóa cookies
+    // Clear cookies
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     

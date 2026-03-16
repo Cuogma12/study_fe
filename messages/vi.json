@@ -1,0 +1,30 @@
+{
+  "auth": {
+    "layout": {
+      "title": "Mở khóa tiềm năng của bạn ngay hôm nay.",
+      "description": "Tham gia cùng hơn 10.000 học sinh trên toàn thế giới và bắt đầu hành trình hướng tới sự xuất sắc với các khóa học và cộng đồng có cấu trúc của chúng tôi."
+    },
+    "login": {
+      "title": "Chào mừng quay trở lại",
+      "description": "Vui lòng nhập thông tin để đăng nhập vào tài khoản của bạn.",
+      "email_label": "Email hoặc Tên đăng nhập",
+      "email_placeholder": "vd: alex@study.com",
+      "password_label": "Mật khẩu",
+      "password_placeholder": "••••••••",
+      "forgot_password": "Quên mật khẩu?",
+      "remember_me": "Ghi nhớ đăng nhập trong 30 ngày",
+      "sign_in": "Đăng nhập",
+      "signing_in": "Đang đăng nhập...",
+      "no_account": "Chưa có tài khoản?",
+      "create_account": "Tạo tài khoản mới",
+      "google_login": "Google",
+      "facebook_login": "Facebook",
+      "or_continue": "Hoặc tiếp tục với email",
+      "success_message": "Đăng nhập thành công!"
+    }
+  },
+  "common": {
+    "app_name": "StudyApp",
+    "error": "Lỗi"
+  }
+}

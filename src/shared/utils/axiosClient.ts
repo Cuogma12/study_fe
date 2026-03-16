@@ -10,7 +10,7 @@ const axiosClient = axios.create({
   },
 });
 
-// Interceptor for Request (Gắn Token)
+// Request Interceptor (Attach Token)
 axiosClient.interceptors.request.use(
   (config) => {
     const token = Cookies.get('access_token');
@@ -24,7 +24,7 @@ axiosClient.interceptors.request.use(
   }
 );
 
-// Interceptor for Response (Xử lý Refresh Token)
+// Response Interceptor (Handle Refresh Token)
 axiosClient.interceptors.response.use(
   (response) => {
     return response.data;
@@ -32,7 +32,7 @@ axiosClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Nếu lỗi 401 (Unauthorized) và mã lỗi là STD_AUT_021 (Token hết hạn/không hợp lệ)
+    // If 401 (Unauthorized) and error code is STD_AUT_021 (Token expired/invalid)
     if (
       error.response?.status === 401 && 
       error.response?.data?.message === 'STD_AUT_021' &&
@@ -45,21 +45,21 @@ axiosClient.interceptors.response.use(
           throw new Error('No refresh token available');
         }
 
-        // Gọi API refresh token
+        // Call refresh token API
         const res = await axios.post(`${API_URL}/auth/refresh-token`, {
           refreshToken: refreshToken,
         });
 
         const newAccessToken = res.data.data.accessToken;
 
-        // Lưu token mới
+        // Store new token
         Cookies.set('access_token', newAccessToken);
 
-        // Gắn token mới vào request bị lỗi và gọi lại
+        // Attach new token to the failed request and retry
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return axiosClient(originalRequest);
       } catch (refreshError) {
-        // Nếu refresh token cũng lỗi thì văng ra login
+        // If refresh token also fails, redirect to login
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         if (typeof window !== 'undefined') {
