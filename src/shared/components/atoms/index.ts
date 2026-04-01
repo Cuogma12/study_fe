@@ -5,4 +5,5 @@ export * from './Checkbox';
 export * from './Text';
 export * from './TextLink';
 export * from './Form';
+export * from './Select';
 export * from './icon';

@@ -1,16 +1,17 @@
-'use client';
-
 import { useState } from 'react';
-import { authService } from '../services/auth.service';
-import { useRouter } from 'next/dist/client/components/navigation';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { authService } from '@/modules/auth/services/auth.service';
 
 export const useLogin = () => {
+  const router = useRouter();
+  const t = useTranslations();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ export const useLogin = () => {
     router.push('/forgot-password');
   };
 
-  const handleCreateAccount = () => {
+  const handleRegisterRedirect = () => {
     router.push('/register');
   };
 
@@ -48,6 +49,7 @@ export const useLogin = () => {
     token,
     handleSubmit,
     handleForgotPassword,
-    handleCreateAccount,
+    handleRegisterRedirect,
+    t,
   };
 };

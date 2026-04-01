@@ -1,6 +1,6 @@
 import React from 'react';
-import { Input, InputProps } from '../atoms';
-import { VisibilityIcon, VisibilityOffIcon } from '../atoms/icon';
+import { Input, InputProps } from '@/shared/components/atoms';
+import { VisibilityIcon, VisibilityOffIcon } from '@/shared/components/atoms/icon';
 
 interface PasswordInputProps extends Omit<InputProps, 'type'> {}
 

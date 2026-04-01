@@ -10,8 +10,7 @@ interface AuthLayoutProps {
 }
 
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
-  const t = useTranslations('auth.layout');
-  const c = useTranslations('common');
+  const t = useTranslations();
 
   return (
     <div className="flex min-h-screen">
@@ -21,7 +20,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
           <div className="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
             <SchoolIcon size={20} />
           </div>
-          <Text variant="h3">{c('app_name')}</Text>
+          <Text variant="h3">{t('common.app_name')}</Text>
         </div>
         <div className="z-10 max-w-[300px] text-center">
           <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl">
@@ -31,9 +30,9 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwkdE7n8KCDbKjA0AZ1QpFOHJXoxRCxFbEv2haTrDHuyaPprsn_1NNJr8yR4X6IEq1O897WF3KslTU1RtXhfawOquo6FtxUfZv3m_WU-L91Jv357MqWvgYP-eQNrsYTqDXP5Ew1vjIAbI66qn10oeP_3rpz-pmTQ8fKMZHVXlnjNrLsqV2CMhpSwCUdWd5bMhJAVvT9hc4j3g04Imh52xtIzhdngAqALWTg7gNz9pspQOpQ8sbKu0c_NbyFciVE-Q4vOxtr9Lezqo" 
             />
           </div>
-          <Text variant="h2" className="mb-4">{t('title')}</Text>
+          <Text variant="h2" className="mb-4">{t('auth.layout.title')}</Text>
           <Text variant="body1" className="!text-slate-600 dark:!text-slate-400 text-lg">
-            {t('description')}
+            {t('auth.layout.description')}
           </Text>
         </div>
         {/* Abstract Background Shapes */}

@@ -1,9 +1,10 @@
-import axiosClient from '../../../shared/utils/axiosClient';
+import axiosClient from '@/shared/utils/axiosClient';
 import Cookies from 'js-cookie';
+import { API_ENDPOINTS } from '@/shared/constants/api';
 
 export const authService = {
   login: async (email: string, password: string) => {
-    const response = await axiosClient.post('/auth/login', { email, password });
+    const response = await axiosClient.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
     
     // Save tokens to cookies
     if (response.data && response.data.accessToken) {
@@ -15,14 +16,14 @@ export const authService = {
   },
 
   register: async (data: any) => {
-    return axiosClient.post('/auth/register', data);
+    return axiosClient.post(API_ENDPOINTS.AUTH.REGISTER, data);
   },
 
   logout: async () => {
     const refreshToken = Cookies.get('refresh_token');
     if (refreshToken) {
       try {
-        await axiosClient.post('/auth/logout', { refreshToken });
+        await axiosClient.post(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken });
       } catch (e) {
         console.error("Logout API failed", e);
       }
@@ -38,6 +39,6 @@ export const authService = {
   },
   
   getMe: async (userId: string) => {
-    return axiosClient.get(`/users/${userId}`);
+    return axiosClient.get(API_ENDPOINTS.USERS.GET_BY_ID(userId));
   }
 };
