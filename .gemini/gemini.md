@@ -28,5 +28,40 @@ Toàn bộ UI/Component phải được chia theo chuẩn Atomic Design nghiêm 
 *   **Deployment**: Đang sử dụng **PM2** để chạy dự án thay vì Docker (cổng 3001).
 *   **Formatting**: Đã cấu hình `.prettierrc` (single quote, tab 2) và plugin sắp xếp TailwindCSS.
 
+## 4. BỔ SUNG RULE THỰC THI (BẮT BUỘC)
+*   **API Call Boundary (rất quan trọng)**:
+    *   `src/app/[locale]/**/page.tsx`: chỉ route entry, chỉ import và render Page Component.
+    *   `src/modules/**/pages/*Page.tsx`: chỉ render UI, không gọi API trực tiếp.
+    *   `src/modules/**/hooks/use*.ts`: xử lý state/handler/router/translate, không gọi `fetch`/`axios` trực tiếp.
+    *   `src/modules/**/services/*.service.ts`: nơi duy nhất của module được phép gọi API.
+    *   Toàn bộ HTTP đi qua `src/shared/utils/axiosClient.ts`, không tạo axios instance mới rải rác.
+
+*   **i18n Message Rule**:
+    *   Cấm hardcode text hiển thị cho user (JSX, toast, alert, validation message).
+    *   Mọi message mới phải thêm đồng thời vào `messages/vi.json` và `messages/en.json`.
+    *   Dùng `useTranslations()` với key đầy đủ (ví dụ `auth.login.title`, `common.error`).
+    *   Không render raw message kỹ thuật từ API; phải map qua key đa ngữ.
+
+*   **TypeScript Rule (khai báo interface/type đầy đủ)**:
+    *   Cấm dùng `any` cho form data, request payload, response payload nếu có thể định nghĩa type.
+    *   Mỗi API function trong `services` phải có kiểu dữ liệu đầu vào/đầu ra rõ ràng.
+    *   Type theo module đặt trong `src/modules/<module>/types/`.
+    *   Type dùng chung đặt trong `src/shared/types/`.
+
+*   **Common đưa vào shared**:
+    *   Logic/component/constants/types được dùng lại từ 2 nơi trở lên phải đưa vào `src/shared/`.
+    *   Không copy-paste util hoặc validation rule ở nhiều module.
+
+*   **Atomic Design Enforcement**:
+    *   Tôn trọng phân tầng `atoms -> molecules -> organisms`.
+    *   UI nghiệp vụ không đặt trong file route `page.tsx` của App Router.
+    *   Icons luôn đặt tại `src/shared/components/atoms/icon` và export qua `index.ts`.
+
+*   **BE/API First (không lạm dụng mock data)**:
+    *   Trước khi làm FE có API call, phải kiểm tra BE đã có endpoint chưa (feature checklist, API contract, router/service).
+    *   Nếu endpoint đã có, FE bắt buộc call API thật qua `services`, không thay bằng mock data.
+    *   Nếu endpoint chưa có hoặc BE chưa sẵn sàng, phải báo user trước khi làm mock.
+    *   Chỉ dùng mock data khi user đồng ý; mock phải có ghi chú tạm thời và TODO để thay bằng API thật.
+
 ## Gemini Added Memories
 - Người dùng thích phong cách tương tác thân thiện, thoải mái, sử dụng ngôn ngữ gần gũi (như "b yêu") nhưng vẫn giữ được sự chuyên nghiệp và quyết liệt trong việc giải quyết các tác vụ kỹ thuật.
