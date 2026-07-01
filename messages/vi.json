@@ -24,7 +24,77 @@
     }
   },
   "common": {
-    "app_name": "StudyApp",
+    "app_name": "EduAnalytics",
     "error": "Lỗi"
+  },
+  "profile": {
+    "subtitle": "Học tập thông minh",
+    "search_placeholder": "Tìm kiếm kiến thức...",
+    "avatar_alt": "Ảnh đại diện",
+    "cover_alt": "Ảnh bìa",
+    "edit_cover": "Chỉnh sửa ảnh bìa",
+    "followers": "Người theo dõi",
+    "following": "Đang theo dõi",
+    "points": "Điểm",
+    "follow": "Theo dõi",
+    "about": "Giới thiệu",
+    "edit_profile": "Chỉnh sửa hồ sơ",
+    "badges": "Huy hiệu & Thành tích",
+    "view_all": "Xem tất cả",
+    "tabs": {
+      "activity": "Hoạt động",
+      "collections": "Bộ sưu tập",
+      "saved_questions": "Câu hỏi đã lưu"
+    },
+    "share_prompt": "Chia sẻ kiến thức của bạn...",
+    "result": "KẾT QUẢ",
+    "study_stats": "Thống kê học tập",
+    "xp": "Kinh nghiệm (XP)",
+    "level": "Level {level}",
+    "questions_asked": "Hỏi",
+    "answers_given": "Đáp",
+    "highlights": "Kỹ năng nổi bật",
+    "detail_analysis": "Phân tích chi tiết",
+    "suggested_friends": "Gợi ý kết bạn",
+    "saved_questions": "Câu hỏi đã lưu"
+  },
+  "home": {
+    "header": {
+      "brand_name": "HọcThôngMinh",
+      "search_placeholder": "Tìm kiếm bài tập, đề thi...",
+      "home": "Trang chủ",
+      "courses": "Khóa học",
+      "community": "Cộng đồng"
+    },
+    "sidebar": {
+      "grades": "Khối lớp",
+      "grade_12": "Lớp 12",
+      "grade_11": "Lớp 11",
+      "grade_10": "Lớp 10",
+      "subjects": "Môn học",
+      "upgrade_title": "Nâng cấp",
+      "upgrade_desc": "Mở khóa toàn bộ lời giải chi tiết",
+      "view_pro": "XEM GÓI PRO"
+    },
+    "feed": {
+      "latest_questions": "Câu hỏi mới nhất",
+      "filter": "Lọc",
+      "ai_suggestion": "AI Suggestion",
+      "solve": "Giải đáp"
+    },
+    "right_sidebar": {
+      "ai_assistant": "Trợ lý học tập AI",
+      "online": "Đang trực tuyến",
+      "ai_welcome": "Chào bạn! Tôi có thể giúp bạn giải bài tập hoặc giải thích kiến thức ngay bây giờ. Bạn cần hỗ trợ gì không?",
+      "ai_placeholder": "Hỏi AI bất cứ điều gì...",
+      "trending": "Xu hướng thảo luận",
+      "leaderboard": "Bảng xếp hạng tuần"
+    },
+    "bottom_nav": {
+      "home": "Trang chủ",
+      "courses": "Khóa học",
+      "discussion": "Thảo luận",
+      "profile": "Cá nhân"
+    }
   }
 }

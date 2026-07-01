@@ -24,7 +24,77 @@
     }
   },
   "common": {
-    "app_name": "StudyApp",
+    "app_name": "EduAnalytics",
     "error": "Error"
+  },
+  "profile": {
+    "subtitle": "Smart Learning",
+    "search_placeholder": "Search knowledge...",
+    "avatar_alt": "Avatar",
+    "cover_alt": "Cover photo",
+    "edit_cover": "Edit cover photo",
+    "followers": "Followers",
+    "following": "Following",
+    "points": "Points",
+    "follow": "Follow",
+    "about": "About",
+    "edit_profile": "Edit profile",
+    "badges": "Badges & Achievements",
+    "view_all": "View all",
+    "tabs": {
+      "activity": "Activity",
+      "collections": "Collections",
+      "saved_questions": "Saved Questions"
+    },
+    "share_prompt": "Share your knowledge...",
+    "result": "RESULT",
+    "study_stats": "Study Statistics",
+    "xp": "Experience (XP)",
+    "level": "Level {level}",
+    "questions_asked": "Asked",
+    "answers_given": "Answered",
+    "highlights": "Highlights",
+    "detail_analysis": "Detailed Analysis",
+    "suggested_friends": "Suggested Friends",
+    "saved_questions": "Saved Questions"
+  },
+  "home": {
+    "header": {
+      "brand_name": "SmartStudy",
+      "search_placeholder": "Search questions, exams...",
+      "home": "Home",
+      "courses": "Courses",
+      "community": "Community"
+    },
+    "sidebar": {
+      "grades": "Grades",
+      "grade_12": "Grade 12",
+      "grade_11": "Grade 11",
+      "grade_10": "Grade 10",
+      "subjects": "Subjects",
+      "upgrade_title": "Upgrade",
+      "upgrade_desc": "Unlock all detailed solutions",
+      "view_pro": "VIEW PRO PLAN"
+    },
+    "feed": {
+      "latest_questions": "Latest Questions",
+      "filter": "Filter",
+      "ai_suggestion": "AI Suggestion",
+      "solve": "Solve"
+    },
+    "right_sidebar": {
+      "ai_assistant": "AI Learning Assistant",
+      "online": "Online",
+      "ai_welcome": "Hello! I can help you solve exercises or explain concepts right now. Do you need any support?",
+      "ai_placeholder": "Ask AI anything...",
+      "trending": "Trending Topics",
+      "leaderboard": "Weekly Leaderboard"
+    },
+    "bottom_nav": {
+      "home": "Home",
+      "courses": "Courses",
+      "discussion": "Discussion",
+      "profile": "Profile"
+    }
   }
 }

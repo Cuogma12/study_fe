@@ -1,10 +1,14 @@
 import React from 'react';
+import { HomePage } from '@/modules/home/pages/HomePage';
+import { GlobalHeader } from '@/shared/components/organisms/GlobalHeader';
+import { GlobalBottomNav } from '@/shared/components/organisms/GlobalBottomNav';
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Welcome to Study Frontend</h1>
-      <p className="mt-4 text-lg">Next.js is running successfully!</p>
-    </main>
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <GlobalHeader />
+      <HomePage />
+      <GlobalBottomNav />
+    </div>
   );
 }

@@ -6,26 +6,24 @@ import { authService } from '@/modules/auth/services/auth.service';
 export const useLogin = () => {
   const router = useRouter();
   const t = useTranslations();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    setToken('');
 
     try {
       const res = await authService.login(email, password);
       if (res.data?.accessToken) {
-        setToken(res.data.accessToken);
+        router.push('/profile');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -46,7 +44,6 @@ export const useLogin = () => {
     setPassword,
     error,
     loading,
-    token,
     handleSubmit,
     handleForgotPassword,
     handleRegisterRedirect,

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,8 +16,8 @@ module.exports = {
           100: '#eef2ff', // Example shade for primary/10 or background
         },
         background: {
-          light: '#f8fafc', // from bg-background-light
-          dark: '#0f172a',  // from bg-background-dark
+          light: '#f6f6f8', // from bg-background-light
+          dark: '#111121',  // from bg-background-dark
         }
       },
       fontFamily: {
