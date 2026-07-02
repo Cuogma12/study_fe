@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { API_ENDPOINTS } from '@/shared/constants/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,7 +47,7 @@ axiosClient.interceptors.response.use(
         }
 
         // Call refresh token API
-        const res = await axios.post(`${API_URL}/auth/refresh-token`, {
+        const res = await axios.post(`${API_URL}${API_ENDPOINTS.AUTH.REFRESH_TOKEN}`, {
           refreshToken: refreshToken,
         });
 
