@@ -8,6 +8,8 @@ import { subjectService, Subject } from '@/shared/services/subject.service';
 
 export const HomePage = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [selectedGradeLevel, setSelectedGradeLevel] = useState<number | null>(null);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -21,15 +23,31 @@ export const HomePage = () => {
     fetchSubjects();
   }, []);
 
+  const handleGradeChange = (grade: number) => {
+    setSelectedGradeLevel((current) => (current === grade ? null : grade));
+  };
+
+  const handleSubjectChange = (subjectId: string) => {
+    setSelectedSubjectId((current) => (current === subjectId ? null : subjectId));
+  };
+
   return (
     <main className="mx-auto flex w-full max-w-[1600px] flex-1 px-4 py-6 lg:gap-8 lg:px-10">
-      {/* Sidebar Navigation */}
-      <HomeLeftSidebar subjects={subjects} />
+      <HomeLeftSidebar
+        subjects={subjects}
+        selectedGradeLevel={selectedGradeLevel}
+        selectedSubjectId={selectedSubjectId}
+        onGradeChange={handleGradeChange}
+        onSubjectChange={handleSubjectChange}
+      />
 
-      {/* Main Content Area */}
-      <HomeFeed />
+      <HomeFeed
+        filters={{
+          gradeLevel: selectedGradeLevel,
+          subjectId: selectedSubjectId,
+        }}
+      />
 
-      {/* Right Sidebar */}
       <HomeRightSidebar />
     </main>
   );

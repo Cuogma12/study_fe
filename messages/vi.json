@@ -79,8 +79,13 @@
     "feed": {
       "latest_questions": "Câu hỏi mới nhất",
       "filter": "Lọc",
-      "ai_suggestion": "AI Suggestion",
-      "solve": "Giải đáp"
+      "solve": "Giải đáp",
+      "loading": "Đang tải...",
+      "empty": "Chưa có câu hỏi nào",
+      "load_error": "Không tải được danh sách câu hỏi",
+      "grade_level": "Lớp {level}",
+      "closed": "Đã đóng",
+      "pinned": "Ghim"
     },
     "right_sidebar": {
       "ai_assistant": "Trợ lý học tập AI",

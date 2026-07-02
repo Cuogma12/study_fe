@@ -1,13 +1,11 @@
 import { getRequestConfig } from 'next-intl/server';
+import { defaultLocale } from './config';
 
 export default getRequestConfig(async ({ locale }) => {
-  // LOG FOR DEBUGGING - Check your terminal!
-  console.log('>>> i18n/request.ts locale:', locale);
-
-  const baseLocale = locale || 'vi';
+  const activeLocale = locale && locale === defaultLocale ? locale : defaultLocale;
 
   return {
-    locale: baseLocale,
-    messages: (await import(`../../messages/${baseLocale}.json`)).default,
+    locale: activeLocale,
+    messages: (await import(`../../messages/${activeLocale}.json`)).default,
   };
 });

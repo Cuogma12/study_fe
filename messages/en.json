@@ -79,8 +79,13 @@
     "feed": {
       "latest_questions": "Latest Questions",
       "filter": "Filter",
-      "ai_suggestion": "AI Suggestion",
-      "solve": "Solve"
+      "solve": "Solve",
+      "loading": "Loading...",
+      "empty": "No questions yet",
+      "load_error": "Could not load questions",
+      "grade_level": "Grade {level}",
+      "closed": "Closed",
+      "pinned": "Pinned"
     },
     "right_sidebar": {
       "ai_assistant": "AI Learning Assistant",
