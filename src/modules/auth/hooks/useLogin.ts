@@ -20,7 +20,7 @@ export const useLogin = () => {
     try {
       const res = await authService.login(email, password);
       if (res.data?.accessToken) {
-        router.push('/profile');
+        router.push('/');
       }
     } catch (err: any) {
       setError(err.response?.data?.message);

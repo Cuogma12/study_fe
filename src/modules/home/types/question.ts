@@ -48,6 +48,7 @@ export interface QuestionListParams {
   limit?: number;
   subject_id?: string;
   topic_id?: string;
+  user_id?: string;
   grade_level?: number;
   status?: 'open' | 'closed';
   is_closed?: boolean;

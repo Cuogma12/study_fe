@@ -15,7 +15,7 @@ export const HomeFeed = ({ filters }: HomeFeedProps) => {
   const { questions, loading, error } = useHomeFeed(filters);
 
   return (
-    <section className="min-w-0 flex-1">
+    <section className="scrollbar-nice min-h-0 min-w-0 flex-1 overflow-y-auto px-0 py-6 lg:px-8">
       <div className="mb-6 flex items-center justify-between">
         <Text variant="h3">{t('latest_questions')}</Text>
         <div className="flex gap-2">

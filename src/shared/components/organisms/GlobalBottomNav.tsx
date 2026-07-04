@@ -9,24 +9,32 @@ export const GlobalBottomNav = () => {
   const t = useTranslations('home.bottom_nav');
   const { navigateTo } = useAppNavigation();
 
+  const items = [
+    { path: '/', icon: 'home', label: t('home'), active: true },
+    { path: '/courses', icon: 'book', label: t('courses'), active: false },
+    { path: '/discussion', icon: 'forum', label: t('discussion'), active: false },
+    { path: '/profile', icon: 'person', label: t('profile'), active: false },
+  ] as const;
+
   return (
-    <div className="lg:hidden sticky bottom-0 z-50 flex w-full border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-2 justify-around">
-      <div onClick={() => navigateTo('/')} className="flex flex-col items-center gap-1 text-primary hover:no-underline cursor-pointer">
-        <MaterialIcon icon="home" />
-        <Text variant="caption">{t('home')}</Text>
-      </div>
-      <div onClick={() => navigateTo('/courses')} className="flex flex-col items-center gap-1 text-slate-400 hover:no-underline cursor-pointer">
-        <MaterialIcon icon="book" />
-        <Text variant="caption" weight="medium">{t('courses')}</Text>
-      </div>
-      <div onClick={() => navigateTo('/discussion')} className="flex flex-col items-center gap-1 text-slate-400 hover:no-underline cursor-pointer">
-        <MaterialIcon icon="forum" />
-        <Text variant="caption" weight="medium">{t('discussion')}</Text>
-      </div>
-      <div onClick={() => navigateTo('/profile')} className="flex flex-col items-center gap-1 text-slate-400 hover:no-underline cursor-pointer">
-        <MaterialIcon icon="person" />
-        <Text variant="caption" weight="medium">{t('profile')}</Text>
-      </div>
+    <div className="z-50 flex w-full shrink-0 justify-around border-t border-slate-200 bg-white px-2 py-1.5 dark:border-slate-700 dark:bg-slate-900 lg:hidden">
+      {items.map((item) => (
+        <button
+          key={item.path}
+          type="button"
+          onClick={() => navigateTo(item.path)}
+          className={`flex min-w-[64px] cursor-pointer flex-col items-center gap-0.5 rounded-xl px-3 py-2 transition-colors ${
+            item.active
+              ? 'text-primary'
+              : 'text-slate-400 hover:bg-slate-100 hover:text-primary dark:hover:bg-slate-800'
+          }`}
+        >
+          <MaterialIcon icon={item.icon} />
+          <Text variant="caption" weight="medium">
+            {item.label}
+          </Text>
+        </button>
+      ))}
     </div>
   );
 };

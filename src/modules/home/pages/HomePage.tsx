@@ -32,7 +32,7 @@ export const HomePage = () => {
   };
 
   return (
-    <main className="mx-auto flex w-full max-w-[1600px] flex-1 px-4 py-6 lg:gap-8 lg:px-10">
+    <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 px-4 lg:gap-0 lg:px-10">
       <HomeLeftSidebar
         subjects={subjects}
         selectedGradeLevel={selectedGradeLevel}

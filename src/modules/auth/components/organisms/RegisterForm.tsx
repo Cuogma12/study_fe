@@ -1,35 +1,45 @@
 'use client';
 
 import React from 'react';
-import { 
-  Button, 
-  Label, 
-  Checkbox, 
-  Form, 
-  TextLink, 
-  Text, 
-  Input, 
-  Select 
+import {
+  Button,
+  Label,
+  Checkbox,
+  Form,
+  TextLink,
+  Text,
+  Input,
+  Select,
 } from '@/shared/components/atoms';
-import { 
-  MailIcon, 
-  UserIcon, 
-  AlternateEmailIcon, 
-  SchoolIcon, 
-  LockIcon, 
-  LockResetIcon, 
-  GoogleIcon, 
-  GithubIcon 
+import {
+  MailIcon,
+  UserIcon,
+  AlternateEmailIcon,
+  SchoolIcon,
+  LockIcon,
+  LockResetIcon,
+  GoogleIcon,
+  GithubIcon,
 } from '@/shared/components/atoms/icon';
 import { PasswordInput } from '@/shared/components/molecules/PasswordInput';
 import { useRegister } from '@/modules/auth/hooks/useRegister';
 
 export const RegisterForm = () => {
-  const { t, handleLoginRedirect, gradeOptions } = useRegister();
+  const {
+    t,
+    form,
+    errors,
+    submitError,
+    loading,
+    gradeOptions,
+    setField,
+    handleBlur,
+    handleSubmit,
+    handleLoginRedirect,
+  } = useRegister();
 
   return (
-    <div className="flex flex-col max-w-[520px] w-full gap-8 mx-auto">
-      {/* Header Section */}
+    <div className="mx-auto flex w-full max-w-[520px] flex-col gap-8">
       <div className="flex flex-col gap-2">
         <Text variant="h1" className="!font-black tracking-[-0.033em]">
           {t('auth.register.title')}
@@ -39,115 +49,177 @@ export const RegisterForm = () => {
         </Text>
       </div>
 
-      {/* Registration Form */}
-      <Form className="flex flex-col gap-5">
-        {/* Full Name */}
+      <Form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
         <div className="flex flex-col gap-2">
           <Label className="text-sm font-semibold">{t('auth.register.full_name_label')}</Label>
-          <Input 
+          <Input
+            value={form.full_name}
+            onChange={(e) => setField('full_name', e.target.value)}
+            onBlur={() => handleBlur('full_name')}
             placeholder={t('auth.register.full_name_placeholder')}
             icon={<UserIcon size={20} />}
+            error={errors.full_name?.message}
+            errorTone={errors.full_name?.tone}
+            autoComplete="name"
           />
         </div>
 
-        {/* Email & Username Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-semibold">{t('auth.register.email_label')}</Label>
-            <Input 
+            <Input
               type="email"
+              value={form.email}
+              onChange={(e) => setField('email', e.target.value)}
+              onBlur={() => handleBlur('email')}
               placeholder={t('auth.register.email_placeholder')}
               icon={<MailIcon size={20} />}
+              error={errors.email?.message}
+              errorTone={errors.email?.tone}
+              autoComplete="email"
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-semibold">{t('auth.register.username_label')}</Label>
-            <Input 
+            <Input
+              value={form.username}
+              onChange={(e) => setField('username', e.target.value)}
+              onBlur={() => handleBlur('username')}
               placeholder={t('auth.register.username_placeholder')}
               icon={<AlternateEmailIcon size={20} />}
+              error={errors.username?.message}
+              errorTone={errors.username?.tone}
+              autoComplete="username"
             />
           </div>
         </div>
 
-        {/* Grade Level Dropdown */}
         <div className="flex flex-col gap-2">
           <Label className="text-sm font-semibold">{t('auth.register.grade_label')}</Label>
-          <Select 
+          <Select
             icon={<SchoolIcon size={20} />}
             options={gradeOptions}
             placeholder={t('auth.register.grade_placeholder')}
-            defaultValue=""
+            value={form.grade_level}
+            onChange={(e) => setField('grade_level', e.target.value)}
+            onBlur={() => handleBlur('grade_level')}
+            error={errors.grade_level?.message}
+            errorTone={errors.grade_level?.tone}
           />
         </div>
 
-        {/* Password Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-semibold">{t('auth.register.password_label')}</Label>
-            <PasswordInput 
+            <PasswordInput
+              value={form.password}
+              onChange={(e) => setField('password', e.target.value)}
+              onBlur={() => handleBlur('password')}
               placeholder={t('auth.register.password_placeholder')}
               icon={<LockIcon size={20} />}
+              error={errors.password?.message}
+              errorTone={errors.password?.tone}
+              autoComplete="new-password"
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-semibold">{t('auth.register.confirm_password_label')}</Label>
-            <PasswordInput 
+            <Label className="text-sm font-semibold">
+              {t('auth.register.confirm_password_label')}
+            </Label>
+            <PasswordInput
+              value={form.confirm_password}
+              onChange={(e) => setField('confirm_password', e.target.value)}
+              onBlur={() => handleBlur('confirm_password')}
               placeholder={t('auth.register.confirm_password_placeholder')}
               icon={<LockResetIcon size={20} />}
+              error={errors.confirm_password?.message}
+              errorTone={errors.confirm_password?.tone}
+              autoComplete="new-password"
             />
           </div>
         </div>
 
-        {/* Terms & Conditions */}
-        <div className="flex items-start gap-3 py-2">
-          <Checkbox 
-            id="terms"
-            label=""
-            className="mt-1"
-          />
-          <Label htmlFor="terms" className="!mb-0 !font-normal text-slate-500 dark:text-slate-400 leading-tight">
-            {t('auth.register.terms_text')}{' '}
-            <TextLink className="!text-sm">{t('auth.register.terms_link')}</TextLink>{' '}
-            {t('auth.register.and')}{' '}
-            <TextLink className="!text-sm">{t('auth.register.privacy_link')}</TextLink>.
-          </Label>
+        <div className="flex flex-col gap-1 py-2">
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="terms"
+              label=""
+              className="mt-1"
+              checked={form.terms}
+              onChange={(e) => setField('terms', e.target.checked)}
+            />
+            <Label
+              htmlFor="terms"
+              className="!mb-0 leading-tight !font-normal text-slate-500 dark:text-slate-400"
+            >
+              {t('auth.register.terms_text')}{' '}
+              <TextLink className="!text-sm">{t('auth.register.terms_link')}</TextLink>{' '}
+              {t('auth.register.and')}{' '}
+              <TextLink className="!text-sm">{t('auth.register.privacy_link')}</TextLink>.
+            </Label>
+          </div>
+          {errors.terms && (
+            <span
+              className={`text-xs ${
+                errors.terms.tone === 'invalid'
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-rose-500'
+              }`}
+            >
+              {errors.terms.message}
+            </span>
+          )}
         </div>
 
-        {/* Sign Up Button */}
-        <Button 
-          variant="primary" 
+        {submitError && (
+          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600 dark:bg-rose-900/20">
+            {submitError}
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          variant="primary"
           size="lg"
+          disabled={loading}
           className="w-full !rounded-xl !py-4 shadow-lg shadow-primary/30"
         >
-          {t('auth.register.sign_up')}
+          {loading ? t('auth.register.signing_up') : t('auth.register.sign_up')}
         </Button>
       </Form>
 
-      {/* Social Sign Up Divider */}
       <div className="relative py-4">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
+          <div className="w-full border-t border-slate-200 dark:border-slate-800" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-background-light dark:bg-background-dark px-4 text-slate-500 font-medium">
+          <span className="bg-background-light px-4 font-medium text-slate-500 dark:bg-background-dark">
             {t('auth.register.or_register_with')}
           </span>
         </div>
       </div>
 
-      {/* Social Icons */}
       <div className="grid grid-cols-2 gap-4">
-        <button className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-3 px-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+        <button
+          type="button"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-primary/40 dark:hover:bg-primary/10"
+        >
           <GoogleIcon size={20} />
-          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t('auth.register.google_login')}</span>
+          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+            {t('auth.register.google_login')}
+          </span>
         </button>
-        <button className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-3 px-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+        <button
+          type="button"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-primary/40 dark:hover:bg-primary/10"
+        >
           <GithubIcon size={20} />
-          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t('auth.register.github_login')}</span>
+          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+            {t('auth.register.github_login')}
+          </span>
         </button>
       </div>
 
-      {/* Footer Text */}
       <Text variant="body2" className="text-center text-slate-500 dark:text-slate-400">
         {t('auth.register.already_account')}{' '}
         <TextLink onClick={handleLoginRedirect}>{t('auth.register.login_link')}</TextLink>

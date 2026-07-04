@@ -15,3 +15,52 @@
 .material-symbols-outlined {
   font-size: 20px;
 }
+
+/* Scrollbar mỏng, chỉ hiện khi hover — tránh thanh mặc định to xấu */
+.scrollbar-nice {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollbar-nice:hover,
+.scrollbar-nice:focus-within {
+  scrollbar-color: rgb(203 213 225 / 0.9) transparent;
+}
+
+.dark .scrollbar-nice:hover,
+.dark .scrollbar-nice:focus-within {
+  scrollbar-color: rgb(71 85 105 / 0.9) transparent;
+}
+
+.scrollbar-nice::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-nice::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-nice::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 9999px;
+}
+
+.scrollbar-nice:hover::-webkit-scrollbar-thumb,
+.scrollbar-nice:focus-within::-webkit-scrollbar-thumb {
+  background-color: rgb(203 213 225 / 0.9);
+}
+
+.dark .scrollbar-nice:hover::-webkit-scrollbar-thumb,
+.dark .scrollbar-nice:focus-within::-webkit-scrollbar-thumb {
+  background-color: rgb(71 85 105 / 0.9);
+}
+
+.scrollbar-nice::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(148 163 184);
+}
+
+.dark .scrollbar-nice::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(100 116 139);
+}
+

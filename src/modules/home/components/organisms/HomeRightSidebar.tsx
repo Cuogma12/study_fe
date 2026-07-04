@@ -8,8 +8,7 @@ export const HomeRightSidebar = () => {
   const t = useTranslations('home.right_sidebar');
 
   return (
-    <aside className="hidden w-80 shrink-0 flex-col gap-6 lg:flex">
-      {/* AI Assistant Quick Chat */}
+    <aside className="scrollbar-nice hidden min-h-0 w-80 shrink-0 flex-col gap-6 overflow-y-auto border-l border-slate-200 py-6 pl-6 dark:border-slate-700 lg:flex">
       <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center gap-3 bg-primary p-4 text-white">
           <MaterialIcon icon="smart_toy" />
@@ -45,7 +44,6 @@ export const HomeRightSidebar = () => {
         </div>
       </div>
 
-      {/* Trending Topics */}
       <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <Text variant="body2" weight="bold" className="mb-4 flex items-center gap-2">
           <MaterialIcon icon="trending_up" className="text-xl !text-primary" />
@@ -70,7 +68,6 @@ export const HomeRightSidebar = () => {
         </div>
       </div>
 
-      {/* Leaderboard (Optional for social proof) */}
       <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <Text variant="body2" weight="bold" className="mb-4">
           {t('leaderboard')}
@@ -86,7 +83,7 @@ export const HomeRightSidebar = () => {
                 <Text variant="small" weight="bold" className="w-4 !text-slate-400">
                   {u.rank}
                 </Text>
-                <div className={`h-6 w-6 rounded-full ${u.color}`}></div>
+                <div className={`h-6 w-6 rounded-full ${u.color}`} />
                 <Text variant="small" weight="medium">
                   {u.name}
                 </Text>

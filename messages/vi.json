@@ -21,42 +21,98 @@
       "facebook_login": "Facebook",
       "or_continue": "Hoặc tiếp tục với email",
       "success_message": "Đăng nhập thành công!"
+    },
+    "register": {
+      "title": "Tạo tài khoản mới",
+      "description": "Tham gia cộng đồng học tập và bắt đầu đặt câu hỏi ngay hôm nay.",
+      "full_name_label": "Họ và tên",
+      "full_name_placeholder": "vd: Nguyễn Văn An",
+      "email_label": "Email",
+      "email_placeholder": "vd: an@study.com",
+      "username_label": "Tên đăng nhập",
+      "username_placeholder": "vd: annguyen",
+      "grade_label": "Khối lớp",
+      "grade_placeholder": "Chọn khối lớp",
+      "grades": {
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12"
+      },
+      "password_label": "Mật khẩu",
+      "password_placeholder": "Tối thiểu 8 ký tự",
+      "confirm_password_label": "Xác nhận mật khẩu",
+      "confirm_password_placeholder": "Nhập lại mật khẩu",
+      "terms_text": "Tôi đồng ý với",
+      "terms_link": "Điều khoản sử dụng",
+      "and": "và",
+      "privacy_link": "Chính sách bảo mật",
+      "sign_up": "Đăng ký",
+      "signing_up": "Đang đăng ký...",
+      "or_register_with": "Hoặc đăng ký với",
+      "google_login": "Google",
+      "github_login": "GitHub",
+      "already_account": "Đã có tài khoản?",
+      "login_link": "Đăng nhập",
+      "errors": {
+        "required": "Vui lòng nhập trường này",
+        "email_invalid": "Email không hợp lệ",
+        "username_min": "Tên đăng nhập tối thiểu 3 ký tự",
+        "username_format": "Chỉ dùng chữ và số, không dấu",
+        "password_format": "Mật khẩu tối thiểu 8 ký tự, gồm chữ và số",
+        "password_mismatch": "Mật khẩu xác nhận không khớp",
+        "terms_required": "Bạn cần đồng ý điều khoản để tiếp tục",
+        "submit_failed": "Đăng ký thất bại. Thử lại sau."
+      }
     }
   },
   "common": {
-    "app_name": "EduAnalytics",
+    "app_name": "HọcThôngMinh",
     "error": "Lỗi"
   },
   "profile": {
-    "subtitle": "Học tập thông minh",
-    "search_placeholder": "Tìm kiếm kiến thức...",
     "avatar_alt": "Ảnh đại diện",
-    "cover_alt": "Ảnh bìa",
-    "edit_cover": "Chỉnh sửa ảnh bìa",
-    "followers": "Người theo dõi",
-    "following": "Đang theo dõi",
-    "points": "Điểm",
-    "follow": "Theo dõi",
+    "avatar_view": "Xem ảnh",
+    "avatar_change": "Đổi ảnh",
+    "avatar_close": "Đóng",
+    "avatar_change_failed": "Không đổi được ảnh. Thử lại hoặc chọn file khác.",
+    "avatar_not_configured": "Chưa cấu hình Cloudinary (thiếu cloud name / preset).",
     "about": "Giới thiệu",
+    "no_bio": "Chưa có giới thiệu. Cập nhật bio để mọi người hiểu bạn hơn.",
+    "grade_level": "Lớp {level}",
+    "joined_at": "Tham gia từ {date}",
+    "logout": "Đăng xuất",
     "edit_profile": "Chỉnh sửa hồ sơ",
-    "badges": "Huy hiệu & Thành tích",
-    "view_all": "Xem tất cả",
+    "edit_title": "Chỉnh sửa hồ sơ",
+    "edit_desc": "Cập nhật thông tin hiển thị của bạn.",
+    "edit_full_name": "Họ và tên",
+    "edit_full_name_placeholder": "vd: Nguyễn Văn An",
+    "edit_bio": "Giới thiệu",
+    "edit_bio_placeholder": "Viết vài dòng về bạn...",
+    "edit_grade": "Khối lớp",
+    "edit_grade_placeholder": "Chọn khối lớp",
+    "edit_cancel": "Hủy",
+    "edit_save": "Lưu thay đổi",
+    "edit_saving": "Đang lưu...",
+    "update_failed": "Không cập nhật được hồ sơ. Thử lại sau.",
+    "stat_questions": "Bài đã đăng",
+    "stat_saved": "Đã lưu",
+    "closed": "Đã đóng",
     "tabs": {
-      "activity": "Hoạt động",
-      "collections": "Bộ sưu tập",
-      "saved_questions": "Câu hỏi đã lưu"
+      "my_questions": "Bài của tôi",
+      "saved_questions": "Đã lưu"
     },
-    "share_prompt": "Chia sẻ kiến thức của bạn...",
-    "result": "KẾT QUẢ",
-    "study_stats": "Thống kê học tập",
-    "xp": "Kinh nghiệm (XP)",
-    "level": "Level {level}",
-    "questions_asked": "Hỏi",
-    "answers_given": "Đáp",
-    "highlights": "Kỹ năng nổi bật",
-    "detail_analysis": "Phân tích chi tiết",
-    "suggested_friends": "Gợi ý kết bạn",
-    "saved_questions": "Câu hỏi đã lưu"
+    "empty_mine": "Chưa có bài đăng",
+    "empty_mine_hint": "Đăng câu hỏi mới để bắt đầu thảo luận.",
+    "empty_saved": "Chưa lưu bài nào",
+    "empty_saved_hint": "Bấm Lưu trên trang chi tiết câu hỏi để xem lại sau.",
+    "loading": "Đang tải...",
+    "load_error": "Không tải được hồ sơ",
+    "not_found": "Không tìm thấy hồ sơ",
+    "back_home": "Về trang chủ",
+    "login_required_title": "Bạn chưa đăng nhập",
+    "login_required_desc": "Đăng nhập để xem hồ sơ, câu hỏi đã lưu và quản lý tài khoản của bạn.",
+    "go_login": "Đăng nhập",
+    "go_register": "Tạo tài khoản"
   },
   "home": {
     "header": {
@@ -64,7 +120,11 @@
       "search_placeholder": "Tìm kiếm bài tập, đề thi...",
       "home": "Trang chủ",
       "courses": "Khóa học",
-      "community": "Cộng đồng"
+      "community": "Cộng đồng",
+      "ask_question": "Đặt câu hỏi",
+      "profile": "Hồ sơ",
+      "login": "Đăng nhập",
+      "logout": "Đăng xuất"
     },
     "sidebar": {
       "grades": "Khối lớp",
@@ -100,6 +160,129 @@
       "courses": "Khóa học",
       "discussion": "Thảo luận",
       "profile": "Cá nhân"
+    }
+  },
+  "create_question": {
+    "loading": "Đang tải...",
+    "breadcrumb": "Đặt câu hỏi mới",
+    "fields": {
+      "subject": "Môn học",
+      "topic": "Chủ đề",
+      "grade": "Khối lớp",
+      "title": "Tiêu đề câu hỏi",
+      "content": "Nội dung chi tiết",
+      "images": "Ảnh minh họa (không bắt buộc)",
+      "images_count": "Ảnh minh họa ({count})"
+    },
+    "placeholders": {
+      "subject": "Chọn môn học",
+      "topic": "Chọn chủ đề",
+      "topic_disabled": "Chọn môn học trước",
+      "topic_grade_disabled": "Chọn khối lớp trước",
+      "topic_loading": "Đang tải chủ đề...",
+      "topic_empty": "Không có chủ đề cho lớp này",
+      "grade": "Chọn khối lớp",
+      "title": "Ví dụ: Giúp mình bài đạo hàm lớp 12",
+      "content": "Mô tả chi tiết khó khăn của bạn..."
+    },
+    "grades": {
+      "grade_10": "Lớp 10",
+      "grade_11": "Lớp 11",
+      "grade_12": "Lớp 12"
+    },
+    "content_counter": "{current} / {min} ký tự tối thiểu",
+    "add_image": "THÊM ẢNH",
+    "remove_image": "Xóa ảnh",
+    "images_hint": "JPG, PNG — tối đa 5MB/ảnh, tối đa 10 ảnh",
+    "tips": {
+      "title": "Mẹo đặt câu hỏi",
+      "desc": "Nêu rõ bước bạn đang gặp khó khăn để nhận được giải đáp chính xác hơn."
+    },
+    "rules": {
+      "title": "Quy tắc cộng đồng",
+      "desc": "Không đăng nội dung không liên quan đến học tập hoặc quảng cáo."
+    },
+    "footer": {
+      "ready_hint": "Bạn đã hoàn thiện các trường bắt buộc",
+      "ready_action": "Có thể đăng ngay bây giờ",
+      "incomplete": "Vui lòng hoàn thiện các trường bắt buộc"
+    },
+    "actions": {
+      "cancel": "Hủy bỏ",
+      "submit": "Đăng câu hỏi",
+      "submitting": "Đang đăng..."
+    },
+    "cancel_confirm": "Bỏ nội dung đang soạn và quay lại trang chủ?",
+    "error_summary": {
+      "title": "Vui lòng sửa các lỗi sau để tiếp tục"
+    },
+    "summary": {
+      "subject": "Chưa chọn môn học",
+      "grade": "Chưa chọn khối lớp",
+      "title": "Tiêu đề không được để trống",
+      "content": "Nội dung không được để trống"
+    },
+    "errors": {
+      "subject_required": "Vui lòng chọn môn học",
+      "grade_required": "Vui lòng chọn khối lớp",
+      "title_required": "Vui lòng nhập tiêu đề câu hỏi",
+      "title_min": "Tiêu đề cần ít nhất {min} ký tự",
+      "title_max": "Tiêu đề tối đa {max} ký tự",
+      "content_required": "Vui lòng nhập nội dung",
+      "images_max": "Tối đa {max} ảnh",
+      "image_too_large": "Ảnh quá lớn (tối đa 5MB)",
+      "image_upload_failed": "Không upload được ảnh. Thử lại.",
+      "cloudinary_not_configured": "Chưa cấu hình Cloudinary.",
+      "submit_failed": "Không đăng được câu hỏi. Thử lại sau."
+    },
+    "login_overlay": {
+      "title": "Bạn cần đăng nhập để đặt câu hỏi",
+      "desc": "Tham gia cộng đồng HọcThôngMinh ngay để được giải đáp mọi thắc mắc học tập hoàn toàn miễn phí.",
+      "login": "Đăng nhập ngay",
+      "no_account": "Chưa có tài khoản?",
+      "register": "Đăng ký"
+    }
+  },
+  "question_detail": {
+    "loading": "Đang tải...",
+    "load_error": "Không tìm thấy câu hỏi hoặc không tải được dữ liệu",
+    "back_home": "Về trang chủ",
+    "grade_level": "Lớp {level}",
+    "closed": "Đã đóng",
+    "pinned": "Ghim",
+    "save": "Lưu",
+    "saved": "Đã lưu",
+    "share": "Chia sẻ",
+    "link_copied": "Đã copy",
+    "close_discussion": "Đóng thảo luận",
+    "close_confirm": "Bạn chắc chắn muốn đóng thảo luận? Không ai có thể trả lời thêm.",
+    "answers_title": "Câu trả lời từ cộng đồng",
+    "answers_count": "{count} trả lời",
+    "closed_notice": "Thảo luận đã đóng. Không thể thêm trả lời mới.",
+    "login_to_answer": "Đăng nhập để trả lời câu hỏi này.",
+    "no_answers": "Chưa có câu trả lời nào. Hãy là người đầu tiên!",
+    "write_answer": "Viết câu trả lời",
+    "answer_placeholder": "Chia sẻ cách giải hoặc gợi ý của bạn (tối thiểu 20 ký tự)...",
+    "reply_placeholder": "Viết phản hồi (tối thiểu 20 ký tự)...",
+    "submit_answer": "Gửi trả lời",
+    "submit_reply": "Gửi phản hồi",
+    "submitting": "Đang gửi...",
+    "cancel": "Hủy",
+    "reply": "Trả lời",
+    "show_replies": "Xem phản hồi",
+    "hide_replies": "Ẩn phản hồi",
+    "no_replies": "Chưa có phản hồi",
+    "content_too_short": "Nội dung cần tối thiểu {min} ký tự",
+    "submit_error": "Không gửi được. Thử lại sau.",
+    "ai": {
+      "title": "Hỏi đáp cùng AI",
+      "online": "Trực tuyến",
+      "welcome": "Xin chào! Mình có thể giúp bạn hiểu thêm về bài này. (Tính năng AI đang phát triển — hiện chỉ là giao diện demo.)",
+      "suggestions": "Đề xuất câu hỏi",
+      "suggestion_1": "Giải thích lại bước chính của bài",
+      "suggestion_2": "Cho ví dụ tương tự",
+      "placeholder": "Hỏi AI thêm về bài tập này...",
+      "disclaimer": "AI có thể trả lời sai, hãy kiểm tra lại thông tin quan trọng."
     }
   }
 }

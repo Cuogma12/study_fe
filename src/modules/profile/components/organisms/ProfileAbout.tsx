@@ -1,77 +1,83 @@
 'use client';
 
 import React from 'react';
-import { Text, Button, MaterialIcon } from '@/shared/components/atoms';
+import { Button, Text, MaterialIcon } from '@/shared/components/atoms';
 import { useTranslations } from 'next-intl';
+import { UserProfile } from '../../types/profile';
 
 interface ProfileAboutProps {
-  bio: string;
-  gradeLevel: string;
-  email: string;
-  createdAt: string;
+  profile: UserProfile;
+  onEdit: () => void;
 }
 
-export const ProfileAbout = ({ bio, gradeLevel, email, createdAt }: ProfileAboutProps) => {
-  const t = useTranslations();
+const InfoRow = ({
+  icon,
+  children,
+}: {
+  icon: string;
+  children: React.ReactNode;
+}) => (
+  <div className="flex items-start gap-3">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+      <MaterialIcon icon={icon} size="text-lg" />
+    </div>
+    <div className="min-w-0 flex-1 pt-1.5 text-sm leading-snug text-slate-600 dark:text-slate-300">
+      {children}
+    </div>
+  </div>
+);
+
+export const ProfileAbout = ({ profile, onEdit }: ProfileAboutProps) => {
+  const t = useTranslations('profile');
 
   return (
-    <section className="rounded-2xl border border-primary/5 bg-white p-6 shadow-sm dark:bg-[#1a1a2e]">
-      <Text variant="h3" weight="bold" className="mb-4 !text-slate-900 dark:!text-white">
-        {t('profile.about')}
-      </Text>
-
-      {bio && (
-        <Text variant="body2" className="mb-4 leading-relaxed !text-slate-600 dark:!text-slate-400">
-          {bio}
+    <section className="rounded-2xl border border-slate-300 bg-white p-5 shadow-sm dark:border-slate-600 dark:bg-slate-900 sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <MaterialIcon icon="person" className="text-primary" />
+        <Text variant="body1" weight="bold" className="!text-slate-900 dark:!text-white">
+          {t('about')}
         </Text>
-      )}
-
-      <div className="space-y-3">
-        <div className="flex items-center gap-3">
-          <MaterialIcon icon="work_outline" size={20} className="!text-primary/60" />
-          <Text variant="body2" className="!text-slate-500 dark:!text-slate-400">
-            {gradeLevel}
-          </Text>
-        </div>
-        <div className="flex items-center gap-3">
-          <MaterialIcon icon="email" size={20} className="!text-primary/60" />
-          <Text variant="body2" className="!text-slate-500 dark:!text-slate-400">
-            {email}
-          </Text>
-        </div>
-        <div className="flex items-center gap-3">
-          <MaterialIcon icon="calendar_today" size={20} className="!text-primary/60" />
-          <Text variant="body2" className="!text-slate-500 dark:!text-slate-400">
-            {new Date(createdAt).toLocaleDateString()}
-          </Text>
-        </div>
-        <div className="flex items-center gap-3 outline outline-2 outline-dashed outline-red-500/80 p-1 rounded">
-          <MaterialIcon icon="place" size={20} className="!text-primary/60" />
-          <Text variant="body2" className="!text-slate-500 dark:!text-slate-400">
-            Hà Nội, Việt Nam
-          </Text>
-        </div>
-        <div className="flex items-center gap-3 outline outline-2 outline-dashed outline-red-500/80 p-1 rounded">
-          <MaterialIcon icon="link" size={20} className="!text-primary/60" />
-          <a className="text-primary hover:underline text-sm" href="#">github.com/minhtam_ai</a>
-        </div>
       </div>
 
-      <div className="mt-6 flex gap-3">
-        <Button
-          variant="ghost"
-          className="flex-1 !rounded-lg !bg-slate-100 py-2 hover:!bg-slate-200 dark:!bg-[#252542]"
-        >
-          Chỉnh sửa hồ sơ
-        </Button>
-        <Button
-          variant="ghost"
-          className="!rounded-lg !bg-slate-100 !p-2 hover:!bg-slate-200 dark:!bg-[#252542]"
-        >
-          <MaterialIcon icon="share" type="filled" size="text-sm" />
-        </Button>
+      <p
+        className={`mb-5 text-sm leading-relaxed ${
+          profile.bio?.trim()
+            ? 'text-slate-600 dark:text-slate-300'
+            : 'italic text-slate-400'
+        }`}
+      >
+        {profile.bio?.trim() || t('no_bio')}
+      </p>
+
+      <div className="mb-5 space-y-3.5 rounded-xl border border-slate-300 bg-slate-50 p-3.5 dark:border-slate-600 dark:bg-slate-800/50">
+        <InfoRow icon="mail">{profile.email}</InfoRow>
+
+        {profile.grade_level != null && (
+          <InfoRow icon="school">
+            {t('grade_level', { level: profile.grade_level })}
+          </InfoRow>
+        )}
+
+        <InfoRow icon="calendar_month">
+          {t('joined_at', {
+            date: new Date(profile.created_at).toLocaleDateString('vi-VN', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            }),
+          })}
+        </InfoRow>
       </div>
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onEdit}
+        className="flex w-full items-center justify-center gap-1.5"
+      >
+        <MaterialIcon icon="edit" size="text-sm" />
+        {t('edit_profile')}
+      </Button>
     </section>
   );
 };
-

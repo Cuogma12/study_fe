@@ -11,7 +11,7 @@ export const SUBJECT_BADGE_THEMES: Record<string, string> = {
   'sinh-hoc': 'bg-teal-50 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400',
   'dia-ly': 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
   'tin-hoc': 'bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
-  gdcd: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400',
+  'gdcd': 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400',
   'lich-su': 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300',
 };
 

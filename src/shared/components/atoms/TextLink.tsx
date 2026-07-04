@@ -8,7 +8,7 @@ export const TextLink = React.forwardRef<HTMLButtonElement, TextLinkProps>(
       <button
         ref={ref}
         type="button"
-        className={`font-bold text-primary hover:underline focus:outline-none bg-transparent p-0 m-0 border-none cursor-pointer inline-flex items-center ${className}`.trim()}
+        className={`m-0 inline-flex cursor-pointer items-center border-none bg-transparent p-0 font-bold text-primary transition-colors hover:text-indigo-600 hover:underline focus:outline-none dark:hover:text-indigo-400 ${className}`.trim()}
         {...props}
       >
         {children}
