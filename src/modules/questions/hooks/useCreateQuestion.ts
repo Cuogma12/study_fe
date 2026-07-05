@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { API_ERROR_CODES } from '@/shared/constants/apiErrorCodes';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { subjectService, Subject } from '@/shared/services/subject.service';
 import { FieldError } from '@/shared/types/field-error';
 import { questionService } from '../services/question.service';
@@ -31,6 +33,15 @@ type FormState = {
 
 type FieldErrors = Partial<Record<CreateQuestionField, FieldError>>;
 
+export type QuestionFormMode = 'create' | 'edit';
+
+type UseQuestionFormOptions = {
+  mode?: QuestionFormMode;
+  questionId?: string;
+  isAuthenticated: boolean;
+  userId?: string | null;
+};
+
 const MAX_IMAGES = 10;
 
 const initialForm: FormState = {
@@ -44,16 +55,35 @@ const initialForm: FormState = {
 
 const requiredError = (message: string): FieldError => ({ message, tone: 'required' });
 
-export const useCreateQuestion = (isAuthenticated: boolean) => {
+const formStatesEqual = (a: FormState, b: FormState) =>
+  a.subject_id === b.subject_id &&
+  a.topic_id === b.topic_id &&
+  a.grade_level === b.grade_level &&
+  a.title === b.title &&
+  a.content === b.content &&
+  JSON.stringify(a.images) === JSON.stringify(b.images);
+
+export const useQuestionForm = ({
+  mode = 'create',
+  questionId,
+  isAuthenticated,
+  userId,
+}: UseQuestionFormOptions) => {
   const router = useRouter();
   const t = useTranslations('create_question');
+  const tApiErrors = useTranslations('api_errors');
 
   const [form, setForm] = useState<FormState>(initialForm);
+  const [initialSnapshot, setInitialSnapshot] = useState<FormState | null>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<CreateQuestionField, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const [loadingQuestion, setLoadingQuestion] = useState(mode === 'edit');
+  const [loadError, setLoadError] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subjectsLoading, setSubjectsLoading] = useState(true);
@@ -122,6 +152,57 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (mode !== 'edit' || !questionId) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadQuestion = async () => {
+      setLoadingQuestion(true);
+      setLoadError(false);
+      setForbidden(false);
+
+      try {
+        const question = await questionService.getById(questionId);
+        if (cancelled) {
+          return;
+        }
+
+        if (userId && question.author?.id !== userId) {
+          setForbidden(true);
+          return;
+        }
+
+        const loaded: FormState = {
+          subject_id: question.subject.id,
+          topic_id: question.topic?.id ?? '',
+          grade_level: question.grade_level != null ? String(question.grade_level) : '',
+          title: question.title,
+          content: question.content,
+          images: Array.isArray(question.images) ? question.images : [],
+        };
+
+        setForm(loaded);
+        setInitialSnapshot(loaded);
+      } catch {
+        if (!cancelled) {
+          setLoadError(true);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingQuestion(false);
+        }
+      }
+    };
+
+    loadQuestion();
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, questionId, userId]);
+
   const topicOptions = useMemo(() => {
     if (!form.subject_id || !form.grade_level) {
       return [];
@@ -141,16 +222,19 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
     Boolean(form.subject_id && !topicsBySubject[form.subject_id] && !topicsPrefetching);
 
   const validateField = (field: CreateQuestionField, state: FormState): FieldError | undefined => {
+    const validationMessage = (code: string) =>
+      requiredError(resolveApiErrorMessage(code, tApiErrors));
+
     switch (field) {
       case 'subject_id':
         if (!state.subject_id) {
-          return requiredError(t('errors.subject_required'));
+          return validationMessage(API_ERROR_CODES.SYSTEM.VALIDATION_ERROR);
         }
         return undefined;
 
       case 'grade_level':
         if (!state.grade_level) {
-          return requiredError(t('errors.grade_required'));
+          return validationMessage(API_ERROR_CODES.SYSTEM.VALIDATION_ERROR);
         }
         return undefined;
 
@@ -159,13 +243,13 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
 
       case 'title':
         if (!state.title.trim()) {
-          return requiredError(t('errors.title_required'));
+          return validationMessage(API_ERROR_CODES.SYSTEM.VALIDATION_ERROR);
         }
         return undefined;
 
       case 'content':
         if (!state.content.trim()) {
-          return requiredError(t('errors.content_required'));
+          return validationMessage(API_ERROR_CODES.VALIDATION.CONTENT_REQUIRED);
         }
         return undefined;
 
@@ -195,6 +279,10 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
   }, [form]);
 
   const isDirty = useMemo(() => {
+    if (mode === 'edit' && initialSnapshot) {
+      return !formStatesEqual(form, initialSnapshot);
+    }
+
     return (
       form.subject_id !== '' ||
       form.topic_id !== '' ||
@@ -203,7 +291,7 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
       form.content.trim() !== '' ||
       form.images.length > 0
     );
-  }, [form]);
+  }, [form, mode, initialSnapshot]);
 
   const errorSummaryItems = useMemo(() => {
     if (!submitted) {
@@ -282,6 +370,25 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
     setImageError(null);
   };
 
+  const buildPayload = () => {
+    const base = {
+      title: form.title.trim(),
+      content: form.content.trim(),
+      subject_id: form.subject_id,
+      grade_level: Number(form.grade_level),
+      ...(form.topic_id ? { topic_id: form.topic_id } : {}),
+    };
+
+    if (mode === 'edit') {
+      return { ...base, images: form.images };
+    }
+
+    return {
+      ...base,
+      ...(form.images.length > 0 ? { images: form.images } : {}),
+    };
+  };
+
   const handleSubmit = async () => {
     if (!isAuthenticated) {
       return;
@@ -299,19 +406,24 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
 
     setSubmitting(true);
     try {
-      const payload = {
-        title: form.title.trim(),
-        content: form.content.trim(),
-        subject_id: form.subject_id,
-        grade_level: Number(form.grade_level),
-        ...(form.topic_id ? { topic_id: form.topic_id } : {}),
-        ...(form.images.length > 0 ? { images: form.images } : {}),
-      };
+      const payload = buildPayload();
+
+      if (mode === 'edit' && questionId) {
+        await questionService.update(questionId, payload);
+        router.push(`/questions/${questionId}`);
+        return;
+      }
 
       const created = await questionService.create(payload);
       router.push(`/questions/${created.id}`);
-    } catch {
-      setSubmitError(t('errors.submit_failed'));
+    } catch (err: unknown) {
+      setSubmitError(
+        resolveApiErrorMessage(
+          err,
+          tApiErrors,
+          mode === 'edit' ? t('errors.update_failed') : t('errors.submit_failed')
+        )
+      );
     } finally {
       setSubmitting(false);
     }
@@ -319,14 +431,23 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
 
   const handleCancel = () => {
     if (isDirty) {
-      if (!window.confirm(t('cancel_confirm'))) {
+      const message =
+        mode === 'edit' ? t('cancel_confirm_edit') : t('cancel_confirm');
+      if (!window.confirm(message)) {
         return;
       }
     }
+
+    if (mode === 'edit' && questionId) {
+      router.push(`/questions/${questionId}`);
+      return;
+    }
+
     router.push('/');
   };
 
   return {
+    mode,
     t,
     form,
     errors,
@@ -337,6 +458,9 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
     isFormValid,
     isDirty,
     errorSummaryItems,
+    loadingQuestion,
+    loadError,
+    forbidden,
     subjectsLoading,
     subjectOptions,
     topicOptions,
@@ -355,3 +479,12 @@ export const useCreateQuestion = (isAuthenticated: boolean) => {
     maxImages: MAX_IMAGES,
   };
 };
+
+export const useCreateQuestion = (isAuthenticated: boolean) =>
+  useQuestionForm({ mode: 'create', isAuthenticated });
+
+export const useEditQuestion = (
+  questionId: string,
+  isAuthenticated: boolean,
+  userId: string | null
+) => useQuestionForm({ mode: 'edit', questionId, isAuthenticated, userId });

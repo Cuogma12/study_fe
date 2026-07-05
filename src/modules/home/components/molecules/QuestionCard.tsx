@@ -1,24 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
 import { QuestionListItem } from '../../types/question';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
+import { useAuth } from '@/shared/hooks/useAuth';
 import { getSubjectBadgeClass, NEUTRAL_BADGE_CLASS } from '@/shared/constants/subjectBadgeThemes';
+import { QuestionOwnerMenu } from '@/modules/questions/components/molecules/QuestionOwnerMenu';
+import { questionService } from '@/modules/questions/services/question.service';
 
 interface QuestionCardProps {
   question: QuestionListItem;
+  onDeleted?: (questionId: string) => void;
 }
 
-export const QuestionCard = ({ question }: QuestionCardProps) => {
+export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
   const t = useTranslations('home.feed');
+  const tDetail = useTranslations('question_detail');
   const locale = useLocale();
   const { navigateTo } = useAppNavigation();
+  const { userId } = useAuth();
+  const [deleting, setDeleting] = useState(false);
+
+  const isOwner = Boolean(userId && question.author?.id === userId);
 
   const handleOpen = () => {
     navigateTo(`/questions/${question.id}`);
+  };
+
+  const handleEdit = () => {
+    navigateTo(`/questions/${question.id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(tDetail('delete_confirm'))) {
+      return;
+    }
+
+    setDeleting(true);
+    try {
+      await questionService.delete(question.id);
+      onDeleted?.(question.id);
+    } catch {
+      window.alert(tDetail('delete_failed'));
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
@@ -32,7 +61,7 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
           handleOpen();
         }
       }}
-      className="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+      className="group flex cursor-pointer flex-col rounded-xl border border-slate-300 bg-white p-5 shadow-sm transition-all hover:border-primary/50 hover:shadow-md dark:border-slate-600 dark:bg-slate-900 dark:hover:border-primary/50"
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
@@ -48,7 +77,7 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
             </span>
           )}
         </div>
-        <div className="flex shrink-0 gap-1.5">
+        <div className="flex shrink-0 items-center gap-1.5">
           {question.is_pinned && (
             <span className="flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold uppercase text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
               <MaterialIcon icon="push_pin" size="text-sm" />
@@ -61,6 +90,13 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
               {t('closed')}
             </span>
           )}
+          {isOwner && (
+            <QuestionOwnerMenu
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              disabled={deleting}
+            />
+          )}
         </div>
       </div>
 
@@ -71,7 +107,7 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
         {question.excerpt}
       </Text>
 
-      <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
+      <div className="mt-auto flex items-center justify-between border-t border-slate-300 pt-4 dark:border-slate-600">
         <div className="flex items-center gap-3">
           {question.author?.avatar_url ? (
             <div className="h-8 w-8 overflow-hidden rounded-full">

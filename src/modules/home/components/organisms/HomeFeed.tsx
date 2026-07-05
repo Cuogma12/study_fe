@@ -12,7 +12,7 @@ interface HomeFeedProps {
 
 export const HomeFeed = ({ filters }: HomeFeedProps) => {
   const t = useTranslations('home.feed');
-  const { questions, loading, error } = useHomeFeed(filters);
+  const { questions, loading, error, removeQuestion } = useHomeFeed(filters);
 
   return (
     <section className="scrollbar-nice min-h-0 min-w-0 flex-1 overflow-y-auto px-0 py-6 lg:px-8">
@@ -51,7 +51,13 @@ export const HomeFeed = ({ filters }: HomeFeedProps) => {
 
         {!loading &&
           !error &&
-          questions.map((question) => <QuestionCard key={question.id} question={question} />)}
+          questions.map((question) => (
+            <QuestionCard
+              key={question.id}
+              question={question}
+              onDeleted={removeQuestion}
+            />
+          ))}
       </div>
     </section>
   );

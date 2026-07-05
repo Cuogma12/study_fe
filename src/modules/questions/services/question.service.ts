@@ -1,6 +1,6 @@
 import axiosClient from '@/shared/utils/axiosClient';
 import { API_ENDPOINTS } from '@/shared/constants/api';
-import { CreateQuestionPayload, CreateQuestionResponse } from '../types/create-question';
+import { CreateQuestionPayload, CreateQuestionResponse, UpdateQuestionPayload } from '../types/create-question';
 import { QuestionDetail } from '../types/question';
 
 export const questionService = {
@@ -21,6 +21,19 @@ export const questionService = {
 
   close: async (id: string): Promise<{ id: string; status: string; updated_at: string }> => {
     const res = await axiosClient.patch(API_ENDPOINTS.QUESTIONS.CLOSE(id));
+    return res.data;
+  },
+
+  update: async (
+    id: string,
+    payload: UpdateQuestionPayload
+  ): Promise<QuestionDetail> => {
+    const res = await axiosClient.put(API_ENDPOINTS.QUESTIONS.DETAIL(id), payload);
+    return res.data;
+  },
+
+  delete: async (id: string): Promise<{ id: string; deleted: boolean }> => {
+    const res = await axiosClient.delete(API_ENDPOINTS.QUESTIONS.DETAIL(id));
     return res.data;
   },
 };

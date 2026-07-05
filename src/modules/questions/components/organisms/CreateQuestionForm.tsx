@@ -6,9 +6,9 @@ import { FIELD_ERROR_STYLES } from '@/shared/utils/fieldErrorStyles';
 import { uploadToCloudinary, isCloudinaryConfigured } from '@/shared/services/cloudinary.service';
 import { FieldErrorMessage } from '../molecules/FieldErrorMessage';
 import { CreateQuestionLoginOverlay } from './CreateQuestionLoginOverlay';
-import { useCreateQuestion } from '../../hooks/useCreateQuestion';
+import { useQuestionForm } from '../../hooks/useCreateQuestion';
 
-export type CreateQuestionFormState = ReturnType<typeof useCreateQuestion>;
+export type CreateQuestionFormState = ReturnType<typeof useQuestionForm>;
 
 interface CreateQuestionFormProps {
   isAuthenticated: boolean;

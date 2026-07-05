@@ -10,11 +10,23 @@ interface CreateQuestionFooterProps {
 }
 
 export const CreateQuestionFooter = ({ isAuthenticated, formState }: CreateQuestionFooterProps) => {
-  const { t, isFormValid, submitting, handleSubmit, handleCancel } = formState;
+  const {
+    t,
+    mode,
+    isFormValid,
+    submitting,
+    handleSubmit,
+    handleCancel,
+  } = formState;
 
   if (!isAuthenticated) {
     return null;
   }
+
+  const isEdit = mode === 'edit';
+  const readyAction = isEdit ? t('footer.ready_action_edit') : t('footer.ready_action');
+  const submitLabel = isEdit ? t('actions.save') : t('actions.submit');
+  const submittingLabel = isEdit ? t('actions.saving') : t('actions.submitting');
 
   return (
     <footer className="mt-8 border-t border-slate-200 pt-6">
@@ -26,7 +38,7 @@ export const CreateQuestionFooter = ({ isAuthenticated, formState }: CreateQuest
                 {t('footer.ready_hint')}
               </Text>
               <Text variant="small" weight="medium" className="!text-primary">
-                {t('footer.ready_action')}
+                {readyAction}
               </Text>
             </>
           ) : (
@@ -55,12 +67,12 @@ export const CreateQuestionFooter = ({ isAuthenticated, formState }: CreateQuest
             {submitting ? (
               <>
                 <MaterialIcon icon="progress_activity" className="mr-2 animate-spin" />
-                {t('actions.submitting')}
+                {submittingLabel}
               </>
             ) : (
               <>
-                <MaterialIcon icon="send" className="mr-2" />
-                {t('actions.submit')}
+                <MaterialIcon icon={isEdit ? 'save' : 'send'} className="mr-2" />
+                {submitLabel}
               </>
             )}
           </Button>

@@ -7,6 +7,8 @@ export interface CreateQuestionPayload {
   images?: string[];
 }
 
+export type UpdateQuestionPayload = CreateQuestionPayload;
+
 export interface CreateQuestionResponse {
   id: string;
   user_id: string;

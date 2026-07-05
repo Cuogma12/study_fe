@@ -32,6 +32,7 @@ export const ProfilePage = () => {
     setEditError,
     updateProfile,
     changeAvatar,
+    removeMyQuestion,
   } = useProfilePage();
 
   if (!ready || (isAuthenticated && loading)) {
@@ -116,6 +117,7 @@ export const ProfilePage = () => {
             myQuestions={myQuestions}
             savedQuestions={savedQuestions}
             loading={listLoading}
+            onQuestionDeleted={removeMyQuestion}
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { authService } from '@/modules/auth/services/auth.service';
 import { FieldError } from '@/shared/types/field-error';
 
@@ -45,6 +46,7 @@ const invalidError = (message: string): FieldError => ({ message, tone: 'invalid
 export const useRegister = () => {
   const router = useRouter();
   const t = useTranslations();
+  const tApiErrors = useTranslations('api_errors');
 
   const [form, setForm] = useState<RegisterFormState>(initialForm);
   const [errors, setErrors] = useState<RegisterErrors>({});
@@ -217,10 +219,7 @@ export const useRegister = () => {
       });
       router.push('/login');
     } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        t('auth.register.errors.submit_failed');
-      setSubmitError(message);
+      setSubmitError(resolveApiErrorMessage(err, tApiErrors));
     } finally {
       setLoading(false);
     }

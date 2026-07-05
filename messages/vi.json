@@ -69,6 +69,21 @@
     "app_name": "HọcThôngMinh",
     "error": "Lỗi"
   },
+  "api_errors": {
+    "fallback": "Đã có lỗi xảy ra. Thử lại sau.",
+    "STD_SYS_004": "Dữ liệu không hợp lệ",
+    "STD_VAL_001": "Vui lòng nhập nội dung",
+    "STD_AUT_011": "Email đã được sử dụng",
+    "STD_AUT_012": "Tên đăng nhập đã tồn tại",
+    "STD_AUT_013": "Email hoặc mật khẩu không đúng",
+    "STD_AUT_014": "Tài khoản chưa kích hoạt hoặc bị khóa",
+    "STD_QTN_001": "Không tìm thấy câu hỏi",
+    "STD_QTN_002": "Bạn không có quyền thao tác câu hỏi này",
+    "STD_QTN_003": "Thảo luận đã đóng, không thể trả lời thêm",
+    "STD_ANS_001": "Không tìm thấy câu trả lời",
+    "STD_ANS_002": "Bạn không có quyền thao tác câu trả lời này",
+    "STD_ANS_004": "Không tìm thấy nội dung để phản hồi"
+  },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
     "avatar_view": "Xem ảnh",
@@ -205,14 +220,22 @@
     "footer": {
       "ready_hint": "Bạn đã hoàn thiện các trường bắt buộc",
       "ready_action": "Có thể đăng ngay bây giờ",
+      "ready_action_edit": "Có thể lưu ngay bây giờ",
       "incomplete": "Vui lòng hoàn thiện các trường bắt buộc"
     },
     "actions": {
       "cancel": "Hủy bỏ",
       "submit": "Đăng câu hỏi",
-      "submitting": "Đang đăng..."
+      "submitting": "Đang đăng...",
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu..."
     },
     "cancel_confirm": "Bỏ nội dung đang soạn và quay lại trang chủ?",
+    "cancel_confirm_edit": "Bỏ thay đổi và quay lại câu hỏi?",
+    "edit_breadcrumb": "Chỉnh sửa câu hỏi",
+    "edit_forbidden": "Bạn không có quyền chỉnh sửa câu hỏi này",
+    "edit_load_error": "Không tải được câu hỏi để chỉnh sửa",
+    "back_to_question": "Quay lại câu hỏi",
     "error_summary": {
       "title": "Vui lòng sửa các lỗi sau để tiếp tục"
     },
@@ -233,7 +256,8 @@
       "image_too_large": "Ảnh quá lớn (tối đa 5MB)",
       "image_upload_failed": "Không upload được ảnh. Thử lại.",
       "cloudinary_not_configured": "Chưa cấu hình Cloudinary.",
-      "submit_failed": "Không đăng được câu hỏi. Thử lại sau."
+      "submit_failed": "Không đăng được câu hỏi. Thử lại sau.",
+      "update_failed": "Không lưu được thay đổi. Thử lại sau."
     },
     "login_overlay": {
       "title": "Bạn cần đăng nhập để đặt câu hỏi",
@@ -256,14 +280,20 @@
     "link_copied": "Đã copy",
     "close_discussion": "Đóng thảo luận",
     "close_confirm": "Bạn chắc chắn muốn đóng thảo luận? Không ai có thể trả lời thêm.",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "more_actions": "Thao tác khác",
+    "delete_confirm": "Bạn chắc chắn muốn xóa câu hỏi này? Hành động không thể hoàn tác.",
+    "delete_failed": "Không xóa được câu hỏi. Thử lại sau.",
     "answers_title": "Câu trả lời từ cộng đồng",
+    "answers_list_label": "Danh sách trả lời",
     "answers_count": "{count} trả lời",
     "closed_notice": "Thảo luận đã đóng. Không thể thêm trả lời mới.",
     "login_to_answer": "Đăng nhập để trả lời câu hỏi này.",
     "no_answers": "Chưa có câu trả lời nào. Hãy là người đầu tiên!",
     "write_answer": "Viết câu trả lời",
-    "answer_placeholder": "Chia sẻ cách giải hoặc gợi ý của bạn (tối thiểu 20 ký tự)...",
-    "reply_placeholder": "Viết phản hồi (tối thiểu 20 ký tự)...",
+    "answer_placeholder": "Chia sẻ cách giải hoặc gợi ý của bạn...",
+    "reply_placeholder": "Viết phản hồi...",
     "submit_answer": "Gửi trả lời",
     "submit_reply": "Gửi phản hồi",
     "submitting": "Đang gửi...",
@@ -272,7 +302,6 @@
     "show_replies": "Xem phản hồi",
     "hide_replies": "Ẩn phản hồi",
     "no_replies": "Chưa có phản hồi",
-    "content_too_short": "Nội dung cần tối thiểu {min} ký tự",
     "submit_error": "Không gửi được. Thử lại sau.",
     "ai": {
       "title": "Hỏi đáp cùng AI",

@@ -37,5 +37,9 @@ export const useHomeFeed = (filters: HomeFeedFilters) => {
     fetchQuestions();
   }, [fetchQuestions]);
 
-  return { questions, loading, error, refetch: fetchQuestions };
+  const removeQuestion = useCallback((questionId: string) => {
+    setQuestions((current) => current.filter((item) => item.id !== questionId));
+  }, []);
+
+  return { questions, loading, error, refetch: fetchQuestions, removeQuestion };
 };

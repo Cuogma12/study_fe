@@ -26,11 +26,20 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
     actionLoading,
     toggleSave,
     closeDiscussion,
+    deleteQuestion,
     submitAnswer,
     submitReply,
     loadReplies,
-    minContentLength,
   } = useQuestionDetail(questionId);
+
+  const handleDelete = async () => {
+    try {
+      await deleteQuestion();
+      navigateTo('/');
+    } catch {
+      window.alert(t('delete_failed'));
+    }
+  };
 
   const requireAuth = () => {
     if (!isAuthenticated) {
@@ -66,8 +75,8 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
   const isOwner = Boolean(userId && question.author?.id === userId);
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl grow flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
-      <div className="min-w-0 flex-1 space-y-6">
+    <main className="mx-auto flex w-full max-w-7xl grow flex-col gap-5 px-4 py-6 sm:px-6 lg:flex-row lg:gap-8 lg:px-8">
+      <div className="min-w-0 flex-1 space-y-5">
         <QuestionBreadcrumb question={question} />
 
         <QuestionDetailCard
@@ -76,6 +85,8 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
           actionLoading={actionLoading}
           onToggleSave={toggleSave}
           onClose={closeDiscussion}
+          onEdit={() => navigateTo(`/questions/${question.id}/edit`)}
+          onDelete={handleDelete}
           requireAuth={requireAuth}
         />
 
@@ -85,7 +96,6 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
           isClosed={question.is_closed}
           isAuthenticated={isAuthenticated}
           actionLoading={actionLoading}
-          minContentLength={minContentLength}
           requireAuth={requireAuth}
           onSubmitAnswer={submitAnswer}
           onReply={submitReply}

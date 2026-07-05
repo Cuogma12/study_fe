@@ -14,6 +14,7 @@ interface ProfileActivityProps {
   myQuestions: QuestionListItem[];
   savedQuestions: SavedQuestionItem[];
   loading: boolean;
+  onQuestionDeleted?: (questionId: string) => void;
 }
 
 export const ProfileActivity = ({
@@ -22,6 +23,7 @@ export const ProfileActivity = ({
   myQuestions,
   savedQuestions,
   loading,
+  onQuestionDeleted,
 }: ProfileActivityProps) => {
   const t = useTranslations('profile');
 
@@ -103,7 +105,12 @@ export const ProfileActivity = ({
         {!loading && questions.length > 0 && (
           <div className="scrollbar-nice flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
             {questions.map((question) => (
-              <ProfileQuestionRow key={question.id} question={question} />
+              <ProfileQuestionRow
+                key={question.id}
+                question={question}
+                showOwnerMenu={tab === 'mine'}
+                onDeleted={onQuestionDeleted}
+              />
             ))}
           </div>
         )}

@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { useAuth } from '@/shared/hooks/useAuth';
 import {
   profileService,
@@ -14,6 +16,8 @@ export type ProfileTab = 'mine' | 'saved';
 
 export const useProfilePage = () => {
   const { ready, isAuthenticated, userId } = useAuth();
+  const t = useTranslations('profile');
+  const tApiErrors = useTranslations('api_errors');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [myQuestions, setMyQuestions] = useState<QuestionListItem[]>([]);
   const [savedQuestions, setSavedQuestions] = useState<SavedQuestionItem[]>([]);
@@ -92,10 +96,7 @@ export const useProfilePage = () => {
       setProfile(updated);
       setEditOpen(false);
     } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'update_failed';
-      setEditError(message);
+      setEditError(resolveApiErrorMessage(err, tApiErrors, t('update_failed')));
       throw err;
     } finally {
       setSaving(false);
@@ -114,6 +115,10 @@ export const useProfilePage = () => {
     } finally {
       setAvatarUploading(false);
     }
+  };
+
+  const removeMyQuestion = (questionId: string) => {
+    setMyQuestions((current) => current.filter((item) => item.id !== questionId));
   };
 
   return {
@@ -135,5 +140,6 @@ export const useProfilePage = () => {
     setEditError,
     updateProfile,
     changeAvatar,
+    removeMyQuestion,
   };
 };

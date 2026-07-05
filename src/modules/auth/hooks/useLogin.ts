@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { authService } from '@/modules/auth/services/auth.service';
 
 export const useLogin = () => {
   const router = useRouter();
   const t = useTranslations();
+  const tApiErrors = useTranslations('api_errors');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,8 +24,8 @@ export const useLogin = () => {
       if (res.data?.accessToken) {
         router.push('/');
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message);
+    } catch (err: unknown) {
+      setError(resolveApiErrorMessage(err, tApiErrors));
     } finally {
       setLoading(false);
     }

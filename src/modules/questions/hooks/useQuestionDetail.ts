@@ -6,8 +6,6 @@ import { answerService } from '../services/answer.service';
 import { QuestionDetail } from '../types/question';
 import { AnswerItem } from '../types/answer';
 
-const MIN_CONTENT_LENGTH = 20;
-
 export const useQuestionDetail = (questionId: string) => {
   const [question, setQuestion] = useState<QuestionDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,14 +69,29 @@ export const useQuestionDetail = (questionId: string) => {
     }
   };
 
+  const deleteQuestion = async () => {
+    if (!question) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      await questionService.delete(question.id);
+    } catch (error) {
+      setActionLoading(false);
+      throw error;
+    }
+    setActionLoading(false);
+  };
+
   const submitAnswer = async (content: string) => {
     if (!question) {
       return;
     }
 
     const trimmed = content.trim();
-    if (trimmed.length < MIN_CONTENT_LENGTH) {
-      throw new Error('content_too_short');
+    if (!trimmed) {
+      return;
     }
 
     setActionLoading(true);
@@ -106,8 +119,8 @@ export const useQuestionDetail = (questionId: string) => {
     }
 
     const trimmed = content.trim();
-    if (trimmed.length < MIN_CONTENT_LENGTH) {
-      throw new Error('content_too_short');
+    if (!trimmed) {
+      return;
     }
 
     setActionLoading(true);
@@ -141,9 +154,9 @@ export const useQuestionDetail = (questionId: string) => {
     refetch: fetchQuestion,
     toggleSave,
     closeDiscussion,
+    deleteQuestion,
     submitAnswer,
     submitReply,
     loadReplies,
-    minContentLength: MIN_CONTENT_LENGTH,
   };
 };
