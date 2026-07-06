@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { RegisterForm } from '@/modules/auth/components/organisms/RegisterForm';
 import { SchoolIcon } from '@/shared/components/atoms/icon';
-import { Button, Text } from '@/shared/components/atoms';
+import { Button, Text, TextLink } from '@/shared/components/atoms';
 
 export const RegisterPage = () => {
   const router = useRouter();
@@ -25,9 +25,9 @@ export const RegisterPage = () => {
             </Text>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden text-sm font-medium text-slate-500 dark:text-slate-400 md:block">
+            <Text variant="body2" weight="medium" className="hidden !text-slate-500 dark:!text-slate-400 md:block">
               {t('auth.register.already_account')}
-            </span>
+            </Text>
             <Button 
               variant="outline" 
               size="sm" 
@@ -45,10 +45,16 @@ export const RegisterPage = () => {
 
         {/* Footer Decor */}
         <footer className="mt-auto flex justify-center py-8 opacity-50">
-          <div className="flex gap-6 text-xs font-medium text-slate-400">
-            <span>© 2024 {t('common.app_name')} Education Inc.</span>
-            <button className="hover:text-primary transition-colors">Support</button>
-            <button className="hover:text-primary transition-colors">Privacy</button>
+          <div className="flex gap-6">
+            <Text variant="small" weight="medium" className="!text-slate-400">
+              © 2024 {t('common.app_name')} Education Inc.
+            </Text>
+            <TextLink className="!text-xs !font-medium !text-slate-400 hover:!text-primary">
+              Support
+            </TextLink>
+            <TextLink className="!text-xs !font-medium !text-slate-400 hover:!text-primary">
+              Privacy
+            </TextLink>
           </div>
         </footer>
       </div>

@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
+import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
+import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
+import { MetaStat } from '@/shared/components/molecules/MetaStat';
 import { useLocale, useTranslations } from 'next-intl';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
-import { getSubjectBadgeClass, NEUTRAL_BADGE_CLASS } from '@/shared/constants/subjectBadgeThemes';
 import { detailPanel } from '../../constants/detailPanelStyles';
 import { QuestionDetail } from '../../types/question';
 import { AuthorAvatar } from '../molecules/AuthorAvatar';
@@ -32,7 +34,6 @@ export const QuestionDetailCard = ({
   requireAuth,
 }: QuestionDetailCardProps) => {
   const t = useTranslations('question_detail');
-  const tCreate = useTranslations('create_question');
   const locale = useLocale();
   const [shareDone, setShareDone] = useState(false);
 
@@ -75,23 +76,19 @@ export const QuestionDetailCard = ({
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
             {question.subject?.name && (
-              <span className={getSubjectBadgeClass(question.subject.slug)}>
-                {question.subject.name}
-              </span>
+              <SubjectTag name={question.subject.name} slug={question.subject.slug} />
             )}
-            {question.topic?.name && (
-              <span className={NEUTRAL_BADGE_CLASS}>{question.topic.name}</span>
-            )}
+            {question.topic?.name && <NeutralTag>{question.topic.name}</NeutralTag>}
             {question.grade_level != null && (
-              <span className={NEUTRAL_BADGE_CLASS}>
-                {t('grade_level', { level: question.grade_level })}
-              </span>
+              <NeutralTag>{t('grade_level', { level: question.grade_level })}</NeutralTag>
             )}
             {question.is_closed && (
-              <span className="flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                <MaterialIcon icon="lock" size="text-sm" />
+              <Tag
+                className="!bg-slate-100 !text-[10px] !text-slate-500 dark:!bg-slate-800 dark:!text-slate-400"
+                icon={<MaterialIcon icon="lock" size="text-sm" />}
+              >
                 {t('closed')}
-              </span>
+              </Tag>
             )}
           </div>
 
@@ -136,26 +133,22 @@ export const QuestionDetailCard = ({
           </div>
         </div>
 
-        <div className="whitespace-pre-wrap text-base leading-relaxed text-slate-700 dark:text-slate-300">
+        <Text
+          variant="body1"
+          className="whitespace-pre-wrap !leading-relaxed !text-slate-700 dark:!text-slate-300"
+        >
           {question.content}
-        </div>
+        </Text>
 
         {images.length > 0 && (
-          <div className={detailPanel.softBlock}>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
-              {tCreate('fields.images')}
-            </p>
-            <div className="space-y-3">
-              {images.map((url) => (
-                <div key={url} className="overflow-hidden rounded-lg bg-white p-2 dark:bg-slate-900">
-                  <img
-                    src={url}
-                    alt=""
-                    className="mx-auto max-h-72 w-full rounded-md object-contain"
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="space-y-3">
+            {images.map((url) => (
+              <PreviewableImage
+                key={url}
+                src={url}
+                imageClassName="max-h-96"
+              />
+            ))}
           </div>
         )}
 
@@ -166,24 +159,18 @@ export const QuestionDetailCard = ({
               avatarUrl={question.author?.avatar_url}
             />
             <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">
+              <Text variant="body2" weight="bold">
                 {question.author?.username ?? '—'}
-              </p>
-              <p className="text-xs text-slate-500">
+              </Text>
+              <Text variant="small" className="!text-slate-500">
                 {formatRelativeTime(question.created_at, locale)}
-              </p>
+              </Text>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-sm text-slate-500">
-            <span className="flex items-center gap-1">
-              <MaterialIcon icon="visibility" size="text-sm" />
-              {question.views_count}
-            </span>
-            <span className="flex items-center gap-1">
-              <MaterialIcon icon="chat_bubble" size="text-sm" />
-              {t('answers_count', { count: question.answers_count })}
-            </span>
+          <div className="flex items-center gap-4">
+            <MetaStat icon="visibility" value={question.views_count} />
+            <MetaStat icon="chat_bubble" value={t('answers_count', { count: question.answers_count })} />
           </div>
 
           {isOwner && !question.is_closed && (

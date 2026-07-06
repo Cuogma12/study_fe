@@ -2,7 +2,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MaterialIcon } from '@/shared/components/atoms';
+import { Button, IconButton, MaterialIcon, Text } from '@/shared/components/atoms';
+import { HiddenFileInput } from '@/shared/components/molecules/HiddenFileInput';
+import { MenuItem } from '@/shared/components/molecules/MenuItem';
+import { ModalBackdrop } from '@/shared/components/molecules/ModalBackdrop';
 import { useTranslations } from 'next-intl';
 import { uploadToCloudinary } from '@/shared/services/cloudinary.service';
 
@@ -104,21 +107,19 @@ export const ProfileAvatarMenu = ({
             aria-modal="true"
             aria-label={t('avatar_view')}
           >
-            <button
-              type="button"
-              className="absolute inset-0 cursor-zoom-out"
-              aria-label={t('avatar_close')}
+            <ModalBackdrop
               onClick={() => setViewOpen(false)}
+              ariaLabel={t('avatar_close')}
+              className="!bg-black/90 hover:!bg-black/90"
             />
 
-            <button
-              type="button"
+            <IconButton
+              label={t('avatar_close')}
               onClick={() => setViewOpen(false)}
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
-              aria-label={t('avatar_close')}
+              className="!absolute !right-4 !top-4 !z-10 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20"
             >
               <MaterialIcon icon="close" className="text-2xl" />
-            </button>
+            </IconButton>
 
             <img
               alt={displayName}
@@ -135,12 +136,13 @@ export const ProfileAvatarMenu = ({
   return (
     <>
       <div ref={rootRef} className="relative">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setMenuOpen((open) => !open)}
           disabled={busy}
-          className="group relative block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-label={t('avatar_alt')}
+          className="group relative !h-auto !rounded-full !p-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <img
             alt={t('avatar_alt')}
@@ -148,52 +150,53 @@ export const ProfileAvatarMenu = ({
             src={avatarUrl}
             referrerPolicy="no-referrer"
           />
-          <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 text-white opacity-0 transition-all group-hover:bg-black/35 group-hover:opacity-100">
+          <Text
+            as="span"
+            variant="small"
+            className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 text-white opacity-0 transition-all group-hover:bg-black/35 group-hover:opacity-100"
+          >
             <MaterialIcon icon="photo_camera" className="text-2xl" />
-          </span>
+          </Text>
           {busy && (
-            <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white">
+            <Text
+              as="span"
+              variant="small"
+              className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white"
+            >
               <MaterialIcon icon="progress_activity" className="animate-spin text-2xl" />
-            </span>
+            </Text>
           )}
-        </button>
+        </Button>
 
         {menuOpen && (
           <div className="absolute left-1/2 top-full z-20 mt-2 w-44 -translate-x-1/2 overflow-hidden rounded-xl border border-slate-300 bg-white py-1 shadow-lg dark:border-slate-600 dark:bg-slate-900 sm:left-0 sm:translate-x-0">
-            <button
-              type="button"
+            <MenuItem
+              icon={<MaterialIcon icon="visibility" size="text-lg" />}
               onClick={() => {
                 setMenuOpen(false);
                 setViewOpen(true);
               }}
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary dark:text-slate-200 dark:hover:bg-primary/20"
             >
-              <MaterialIcon icon="visibility" size="text-lg" />
               {t('avatar_view')}
-            </button>
-            <button
-              type="button"
+            </MenuItem>
+            <MenuItem
+              icon={<MaterialIcon icon="upload" size="text-lg" />}
               onClick={() => fileRef.current?.click()}
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary dark:text-slate-200 dark:hover:bg-primary/20"
             >
-              <MaterialIcon icon="upload" size="text-lg" />
               {t('avatar_change')}
-            </button>
+            </MenuItem>
             {error && (
-              <p className="border-t border-slate-100 px-3 py-2 text-xs text-rose-500 dark:border-slate-700">
+              <Text
+                variant="small"
+                className="border-t border-slate-100 px-3 py-2 !text-rose-500 dark:border-slate-700"
+              >
                 {error}
-              </p>
+              </Text>
             )}
           </div>
         )}
 
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handlePickFile}
-        />
+        <HiddenFileInput ref={fileRef} accept="image/*" onChange={handlePickFile} />
       </div>
 
       {lightbox}

@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Text, MaterialIcon } from '@/shared/components/atoms';
+import { Text, MaterialIcon, Tag } from '@/shared/components/atoms';
+import { ProfileStatCard } from '@/shared/components/molecules/ProfileStatCard';
 import { useTranslations } from 'next-intl';
 import { UserProfile } from '../../types/profile';
 import { ProfileAvatarMenu } from '../molecules/ProfileAvatarMenu';
@@ -35,7 +36,6 @@ export const ProfileHeader = ({
 
   return (
     <section className="rounded-2xl border border-slate-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900">
-      {/* Ảnh bìa: DB chưa có cover_url — dùng gradient */}
       <div className="h-28 overflow-hidden rounded-t-2xl md:h-32">
         <div className="h-full w-full bg-gradient-to-br from-primary via-indigo-500 to-violet-500" />
       </div>
@@ -50,43 +50,32 @@ export const ProfileHeader = ({
           />
         </div>
 
-        {/* Chừa chỗ avatar — text luôn nằm dưới bìa */}
         <div className="pt-12 text-center sm:pl-28 sm:pt-3 sm:text-left md:pt-4">
-          <Text
-            variant="h3"
-            weight="bold"
-            className="!text-slate-900 dark:!text-white"
-          >
+          <Text variant="h3" weight="bold" className="!text-slate-900 dark:!text-white">
             {displayName}
           </Text>
 
           <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              <MaterialIcon icon="verified" size="text-sm" />
+            <Tag
+              className="!rounded-full !bg-primary/10 !px-3 !py-1 !text-xs !font-semibold !text-primary"
+              icon={<MaterialIcon icon="verified" size="text-sm" />}
+            >
               {roleLabel(profile.role)}
-            </span>
+            </Tag>
             {profile.grade_level != null && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                <MaterialIcon icon="school" size="text-sm" />
+              <Tag
+                className="!rounded-full !bg-slate-100 !px-3 !py-1 !text-xs !font-medium !text-slate-600 dark:!bg-slate-800 dark:!text-slate-300"
+                icon={<MaterialIcon icon="school" size="text-sm" />}
+              >
                 {t('grade_level', { level: profile.grade_level })}
-              </span>
+              </Tag>
             )}
           </div>
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
-          <div className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 dark:border-slate-600 dark:bg-slate-800/60">
-            <p className="text-xs font-medium text-slate-500">{t('stat_questions')}</p>
-            <p className="mt-0.5 text-2xl font-bold text-slate-900 dark:text-white">
-              {questionsCount}
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 dark:border-slate-600 dark:bg-slate-800/60">
-            <p className="text-xs font-medium text-slate-500">{t('stat_saved')}</p>
-            <p className="mt-0.5 text-2xl font-bold text-slate-900 dark:text-white">
-              {savedCount}
-            </p>
-          </div>
+          <ProfileStatCard label={t('stat_questions')} value={questionsCount} />
+          <ProfileStatCard label={t('stat_saved')} value={savedCount} />
         </div>
       </div>
     </section>

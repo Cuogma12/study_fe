@@ -6,4 +6,8 @@ export * from './Text';
 export * from './TextLink';
 export * from './Form';
 export * from './Select';
+export * from './Textarea';
+export * from './Tag';
+export * from './IconButton';
+export * from './Badge';
 export * from './icon';

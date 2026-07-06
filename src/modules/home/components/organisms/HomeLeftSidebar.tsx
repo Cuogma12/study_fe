@@ -42,7 +42,9 @@ export const HomeLeftSidebar = ({
                     className={`!h-auto !px-3 !py-2 ${isSelected ? '!justify-between' : '!justify-start !font-normal'}`}
                     onClick={() => onGradeChange(grade)}
                   >
-                    <span>{t(`grade_${grade}` as 'grade_12' | 'grade_11' | 'grade_10')}</span>
+                    <Text as="span" variant="body2" className="!font-normal">
+                      {t(`grade_${grade}` as 'grade_12' | 'grade_11' | 'grade_10')}
+                    </Text>
                     {isSelected && <MaterialIcon icon="check_circle" size="text-sm" />}
                   </Button>
                 );

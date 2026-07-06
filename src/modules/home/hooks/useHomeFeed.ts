@@ -1,45 +1,114 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HomeFilters } from '@/shared/utils/homeFilterParams';
+import { HOME_FEED_PAGE_SIZE } from '../constants/feed';
 import { questionService } from '../services/question.service';
 import { QuestionListItem } from '../types/question';
 
-export interface HomeFeedFilters {
-  subjectId?: string | null;
-  gradeLevel?: number | null;
-}
+const buildFilterKey = (filters: HomeFilters) =>
+  JSON.stringify({
+    q: filters.q,
+    gradeLevel: filters.gradeLevel,
+    subjectId: filters.subjectId,
+    topicId: filters.topicId,
+    status: filters.status,
+    sort: filters.sort,
+  });
 
-export const useHomeFeed = (filters: HomeFeedFilters) => {
+export const useHomeFeed = (filters: HomeFilters) => {
   const [questions, setQuestions] = useState<QuestionListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
 
-  const fetchQuestions = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const pageRef = useRef(1);
+  const loadingRef = useRef(false);
+  const filterKey = useMemo(() => buildFilterKey(filters), [filters]);
 
-    try {
-      const data = await questionService.getQuestions({
-        page: 1,
-        limit: 20,
-        sort: 'newest',
-        ...(filters.subjectId ? { subject_id: filters.subjectId } : {}),
-        ...(filters.gradeLevel ? { grade_level: filters.gradeLevel } : {}),
-      });
-      setQuestions(data.items);
-    } catch {
-      setError('load_error');
-      setQuestions([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [filters.gradeLevel, filters.subjectId]);
+  const fetchPage = useCallback(
+    async (page: number, append: boolean) => {
+      if (loadingRef.current) {
+        return;
+      }
+
+      loadingRef.current = true;
+
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+
+      try {
+        const data = await questionService.getQuestions({
+          page,
+          limit: HOME_FEED_PAGE_SIZE,
+          sort: filters.sort,
+          ...(filters.q ? { q: filters.q } : {}),
+          ...(filters.subjectId ? { subject_id: filters.subjectId } : {}),
+          ...(filters.gradeLevel ? { grade_level: filters.gradeLevel } : {}),
+          ...(filters.topicId ? { topic_id: filters.topicId } : {}),
+          ...(filters.status ? { status: filters.status } : {}),
+        });
+
+        setQuestions((current) =>
+          append ? [...current, ...data.items] : data.items
+        );
+        setHasMore(data.pagination.page < data.pagination.total_pages);
+        pageRef.current = page;
+      } catch {
+        if (!append) {
+          setQuestions([]);
+          setHasMore(false);
+        }
+        setError('load_error');
+      } finally {
+        loadingRef.current = false;
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    },
+    [
+      filters.gradeLevel,
+      filters.q,
+      filters.sort,
+      filters.status,
+      filters.subjectId,
+      filters.topicId,
+    ]
+  );
 
   useEffect(() => {
-    fetchQuestions();
-  }, [fetchQuestions]);
+    pageRef.current = 1;
+    void fetchPage(1, false);
+  }, [filterKey, fetchPage]);
+
+  const loadMore = useCallback(() => {
+    if (loadingRef.current || !hasMore) {
+      return;
+    }
+    void fetchPage(pageRef.current + 1, true);
+  }, [fetchPage, hasMore]);
 
   const removeQuestion = useCallback((questionId: string) => {
     setQuestions((current) => current.filter((item) => item.id !== questionId));
   }, []);
 
-  return { questions, loading, error, refetch: fetchQuestions, removeQuestion };
+  const updateQuestionSaved = useCallback((questionId: string, saved: boolean) => {
+    setQuestions((current) =>
+      current.map((item) => (item.id === questionId ? { ...item, is_saved: saved } : item))
+    );
+  }, []);
+
+  return {
+    questions,
+    loading,
+    loadingMore,
+    error,
+    hasMore,
+    loadMore,
+    removeQuestion,
+    updateQuestionSaved,
+  };
 };

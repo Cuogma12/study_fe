@@ -39,15 +39,16 @@ export const ProfileAbout = ({ profile, onEdit }: ProfileAboutProps) => {
         </Text>
       </div>
 
-      <p
-        className={`mb-5 text-sm leading-relaxed ${
+      <Text
+        variant="body2"
+        className={`mb-5 !leading-relaxed ${
           profile.bio?.trim()
-            ? 'text-slate-600 dark:text-slate-300'
-            : 'italic text-slate-400'
+            ? '!text-slate-600 dark:!text-slate-300'
+            : 'italic !text-slate-400'
         }`}
       >
         {profile.bio?.trim() || t('no_bio')}
-      </p>
+      </Text>
 
       <div className="mb-5 space-y-3.5 rounded-xl border border-slate-300 bg-slate-50 p-3.5 dark:border-slate-600 dark:bg-slate-800/50">
         <InfoRow icon="mail">{profile.email}</InfoRow>

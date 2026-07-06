@@ -1,38 +1,49 @@
 'use client';
 
-import React from 'react';
-import { MaterialIcon, Text, TextLink, Input, Button } from '../atoms';
+import React, { Suspense } from 'react';
+import { MaterialIcon, Text, TextLink, Button } from '../atoms';
 import { useTranslations } from 'next-intl';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { UserMenu } from './UserMenu';
+import { HomeSearchField } from '../molecules/HomeSearchField';
+
+const HeaderSearchFallback = () => {
+  const t = useTranslations('home.header');
+  return (
+    <div className="hidden min-w-80 md:block">
+      <div className="h-10 rounded-full bg-slate-100 dark:bg-slate-800" aria-hidden />
+      <Text as="span" variant="small" className="sr-only">
+        {t('search_placeholder')}
+      </Text>
+    </div>
+  );
+};
 
 export const GlobalHeader = () => {
   const t = useTranslations('home.header');
   const { navigateTo } = useAppNavigation();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 shadow-sm dark:border-slate-700 dark:bg-background-dark lg:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-slate-300 bg-white px-6 shadow-sm dark:border-slate-700 dark:bg-background-dark lg:px-10">
       <div className="flex items-center gap-8">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => navigateTo('/')}
-          className="flex cursor-pointer items-center gap-3 rounded-lg transition-opacity hover:opacity-80"
+          className="!h-auto !gap-3 !rounded-lg !p-0 hover:!opacity-80"
         >
           <div className="rounded-lg bg-primary p-1.5 transition-transform group-hover:scale-105">
             <MaterialIcon icon="database" className="text-2xl text-white" />
           </div>
-          <Text variant="h4" className="text-primary">
+          <Text variant="h4" className="!text-primary">
             {t('brand_name')}
           </Text>
-        </button>
+        </Button>
 
         <div className="hidden min-w-80 flex-col md:flex">
-          <Input
-            icon={<MaterialIcon icon="search" />}
-            className="!rounded-full !border-none !bg-slate-100 !py-2 !text-sm dark:!bg-slate-800"
-            placeholder={t('search_placeholder')}
-            type="text"
-          />
+          <Suspense fallback={<HeaderSearchFallback />}>
+            <HomeSearchField />
+          </Suspense>
         </div>
       </div>
 
@@ -61,13 +72,20 @@ export const GlobalHeader = () => {
           className="hidden !gap-1.5 sm:inline-flex"
         >
           <MaterialIcon icon="edit_note" size="text-lg" className="text-white" />
-          <span className="hidden md:inline">{t('ask_question')}</span>
+          <Text as="span" variant="small" className="hidden !font-semibold !text-white md:inline">
+            {t('ask_question')}
+          </Text>
         </Button>
 
         <div className="flex items-center gap-2 border-l border-slate-200 pl-4 dark:border-slate-700 lg:pl-6">
           <Button variant="ghost" size="sm" className="relative !h-10 !w-10 !rounded-full !p-0">
             <MaterialIcon icon="notifications" className="text-slate-600 dark:text-slate-400" />
-            <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-red-500" />
+            <Text
+              as="span"
+              variant="small"
+              className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"
+              aria-hidden
+            />
           </Button>
 
           <UserMenu />

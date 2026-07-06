@@ -67,7 +67,9 @@
   },
   "common": {
     "app_name": "HọcThôngMinh",
-    "error": "Lỗi"
+    "error": "Lỗi",
+    "image_view": "Xem ảnh",
+    "image_close": "Đóng"
   },
   "api_errors": {
     "fallback": "Đã có lỗi xảy ra. Thử lại sau.",
@@ -156,11 +158,39 @@
       "filter": "Lọc",
       "solve": "Giải đáp",
       "loading": "Đang tải...",
+      "loading_more": "Đang tải thêm...",
       "empty": "Chưa có câu hỏi nào",
       "load_error": "Không tải được danh sách câu hỏi",
+      "load_more": "Xem thêm",
+      "end_of_feed": "Đã hiển thị tất cả câu hỏi",
+      "searching": "Kết quả cho \"{q}\"",
+      "active_filters": "Đang lọc:",
+      "remove_filter": "Bỏ bộ lọc",
+      "filter_chip_topic": "Chủ đề",
       "grade_level": "Lớp {level}",
       "closed": "Đã đóng",
-      "pinned": "Ghim"
+      "pinned": "Ghim",
+      "sort": {
+        "newest": "Mới nhất",
+        "most_viewed": "Xem nhiều",
+        "most_answered": "Nhiều trả lời"
+      },
+      "filter_drawer": {
+        "title": "Lọc thêm",
+        "close": "Đóng",
+        "topic": "Chủ đề",
+        "topic_hint": "Chọn khối lớp và môn học ở sidebar trước khi lọc chủ đề.",
+        "topic_for_subject": "Môn: {subject}",
+        "topic_placeholder": "Chọn chủ đề",
+        "topic_loading": "Đang tải chủ đề...",
+        "topic_empty": "Không có chủ đề cho bộ lọc hiện tại",
+        "status": "Trạng thái",
+        "status_all": "Tất cả",
+        "status_open": "Đang mở",
+        "status_closed": "Đã đóng",
+        "apply": "Áp dụng",
+        "reset": "Xóa bộ lọc"
+      }
     },
     "right_sidebar": {
       "ai_assistant": "Trợ lý học tập AI",
@@ -276,6 +306,7 @@
     "pinned": "Ghim",
     "save": "Lưu",
     "saved": "Đã lưu",
+    "save_failed": "Không lưu được bài. Thử lại sau.",
     "share": "Chia sẻ",
     "link_copied": "Đã copy",
     "close_discussion": "Đóng thảo luận",

@@ -150,7 +150,7 @@ export const RegisterForm = () => {
             />
             <Label
               htmlFor="terms"
-              className="!mb-0 leading-tight !font-normal text-slate-500 dark:text-slate-400"
+              className="!mb-0 !font-normal leading-tight text-slate-500 dark:text-slate-400"
             >
               {t('auth.register.terms_text')}{' '}
               <TextLink className="!text-sm">{t('auth.register.terms_link')}</TextLink>{' '}
@@ -159,22 +159,26 @@ export const RegisterForm = () => {
             </Label>
           </div>
           {errors.terms && (
-            <span
-              className={`text-xs ${
+            <Text
+              variant="small"
+              className={
                 errors.terms.tone === 'invalid'
-                  ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-rose-500'
-              }`}
+                  ? '!text-amber-600 dark:!text-amber-400'
+                  : '!text-rose-500'
+              }
             >
               {errors.terms.message}
-            </span>
+            </Text>
           )}
         </div>
 
         {submitError && (
-          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600 dark:bg-rose-900/20">
+          <Text
+            variant="body2"
+            className="rounded-lg bg-rose-50 px-3 py-2 !text-rose-600 dark:bg-rose-900/20"
+          >
             {submitError}
-          </p>
+          </Text>
         )}
 
         <Button
@@ -193,31 +197,46 @@ export const RegisterForm = () => {
           <div className="w-full border-t border-slate-200 dark:border-slate-800" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-background-light px-4 font-medium text-slate-500 dark:bg-background-dark">
+          <Text
+            variant="body2"
+            className="bg-background-light px-4 !font-medium !text-slate-500 dark:bg-background-dark"
+          >
             {t('auth.register.or_register_with')}
-          </span>
+          </Text>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <button
+        <Button
           type="button"
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-primary/40 dark:hover:bg-primary/10"
+          variant="outline"
+          className="!gap-2 !border-slate-200 !py-3 dark:!border-slate-800"
         >
           <GoogleIcon size={20} />
-          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+          <Text
+            as="span"
+            variant="body2"
+            weight="bold"
+            className="!text-slate-700 dark:!text-slate-300"
+          >
             {t('auth.register.google_login')}
-          </span>
-        </button>
-        <button
+          </Text>
+        </Button>
+        <Button
           type="button"
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-primary/40 dark:hover:bg-primary/10"
+          variant="outline"
+          className="!gap-2 !border-slate-200 !py-3 dark:!border-slate-800"
         >
           <GithubIcon size={20} />
-          <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+          <Text
+            as="span"
+            variant="body2"
+            weight="bold"
+            className="!text-slate-700 dark:!text-slate-300"
+          >
             {t('auth.register.github_login')}
-          </span>
-        </button>
+          </Text>
+        </Button>
       </div>
 
       <Text variant="body2" className="text-center text-slate-500 dark:text-slate-400">

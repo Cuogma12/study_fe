@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { MaterialIcon } from '../atoms';
+import { Button, IconButton, MaterialIcon, Text } from '../atoms';
+import { MenuItem } from '../molecules/MenuItem';
 import { useTranslations } from 'next-intl';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useAuth } from '@/shared/hooks/useAuth';
@@ -64,14 +65,13 @@ export const UserMenu = () => {
 
   if (!isAuthenticated) {
     return (
-      <button
-        type="button"
+      <IconButton
+        label={t('login')}
         onClick={() => navigateTo('/profile')}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-primary/20 transition-all hover:scale-105 hover:bg-primary/30 hover:shadow-md"
-        aria-label={t('login')}
+        className="!border !border-primary/30 !bg-primary/20 hover:!scale-105 hover:!bg-primary/30 hover:!shadow-md"
       >
         <MaterialIcon icon="person" className="text-primary" size="text-lg" />
-      </button>
+      </IconButton>
     );
   }
 
@@ -87,43 +87,41 @@ export const UserMenu = () => {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen((current) => !current)}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-slate-100 transition-all hover:scale-105 hover:shadow-md dark:bg-slate-800"
         aria-label={t('profile')}
         aria-expanded={open}
+        className="!h-8 !w-8 !overflow-hidden !rounded-full !border !border-primary/30 !bg-slate-100 !p-0 hover:!scale-105 hover:!shadow-md dark:!bg-slate-800"
       >
         {avatarUrl ? (
           <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
         ) : (
           <MaterialIcon icon="person" className="text-primary" size="text-lg" />
         )}
-      </button>
+      </Button>
 
       {open && (
         <div className="absolute right-0 top-full z-[60] pt-2">
           <div className="min-w-[180px] overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
-            <button
-              type="button"
+            <MenuItem
+              icon={<MaterialIcon icon="person" size="text-lg" />}
               onClick={() => {
                 setOpen(false);
                 navigateTo('/profile');
               }}
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary dark:text-slate-200 dark:hover:bg-primary/20"
             >
-              <MaterialIcon icon="person" size="text-lg" />
               {t('profile')}
-            </button>
+            </MenuItem>
             <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
-            <button
-              type="button"
+            <MenuItem
+              icon={<MaterialIcon icon="logout" size="text-lg" />}
               onClick={handleLogout}
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left text-sm text-rose-600 transition-colors hover:bg-rose-100 dark:text-rose-400 dark:hover:bg-rose-900/30"
+              tone="danger"
             >
-              <MaterialIcon icon="logout" size="text-lg" />
               {t('logout')}
-            </button>
+            </MenuItem>
           </div>
         </div>
       )}

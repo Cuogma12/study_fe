@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Text } from '@/shared/components/atoms';
+import { Button, Form, Text, Textarea } from '@/shared/components/atoms';
 import { useTranslations } from 'next-intl';
 import { API_ERROR_CODES } from '@/shared/constants/apiErrorCodes';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
@@ -54,7 +54,7 @@ export const AnswerForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={compact ? 'space-y-3' : 'space-y-0'}>
+    <Form onSubmit={handleSubmit} className={compact ? 'space-y-3' : 'space-y-0'}>
       {!compact && (
         <>
           <Text variant="body2" weight="bold" className="mb-3">
@@ -63,15 +63,20 @@ export const AnswerForm = ({
           <div className="mb-4 border-b border-primary/10" aria-hidden />
         </>
       )}
-      <textarea
+      <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         disabled={disabled || submitting}
         rows={compact ? 3 : 4}
         placeholder={placeholder ?? t('answer_placeholder')}
+        hideErrorMessage
         className={composeTextareaClass}
       />
-      {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
+      {error && (
+        <Text variant="small" className="mt-2 !text-red-500">
+          {error}
+        </Text>
+      )}
       <div className="mt-3 flex items-center justify-end gap-2">
         {onCancel && (
           <Button type="button" variant="ghost" size="sm" onClick={onCancel} disabled={submitting}>
@@ -82,6 +87,6 @@ export const AnswerForm = ({
           {submitting ? t('submitting') : submitLabel ?? t('submit_answer')}
         </Button>
       </div>
-    </form>
+    </Form>
   );
 };

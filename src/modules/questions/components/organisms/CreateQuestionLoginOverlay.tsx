@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, TextLink } from '@/shared/components/atoms';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useTranslations } from 'next-intl';
 
@@ -29,14 +29,12 @@ export const CreateQuestionLoginOverlay = () => {
           <Button onClick={() => navigateTo('/login')} className="w-full">
             {t('login_overlay.login')}
           </Button>
-          <button
-            type="button"
-            onClick={() => navigateTo('/register')}
-            className="text-sm text-slate-500 transition-colors hover:text-primary"
-          >
+          <Text variant="body2" className="!text-slate-500">
             {t('login_overlay.no_account')}{' '}
-            <span className="font-bold text-primary">{t('login_overlay.register')}</span>
-          </button>
+            <TextLink onClick={() => navigateTo('/register')} className="!text-sm">
+              {t('login_overlay.register')}
+            </TextLink>
+          </Text>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MaterialIcon, Text } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
 import { useTranslations } from 'next-intl';
 import { QuestionListItem } from '@/modules/home/types/question';
 import { SavedQuestionItem } from '../../services/profile.service';
@@ -51,28 +51,31 @@ export const ProfileActivity = ({
         {tabs.map((item) => {
           const active = tab === item.id;
           return (
-            <button
+            <Button
               key={item.id}
               type="button"
+              variant="ghost"
               onClick={() => onTabChange(item.id)}
-              className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-semibold transition-all ${
+              className={`!h-auto !flex-1 !gap-2 !rounded-xl !border !px-3 !py-2.5 !text-sm !font-semibold ${
                 active
-                  ? 'border-primary/40 bg-white text-primary shadow-sm dark:bg-slate-900'
-                  : 'border-slate-200 bg-white/80 text-slate-500 hover:border-primary/30 hover:bg-primary/5 hover:text-primary dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-primary/40 dark:hover:bg-primary/10'
+                  ? '!border-primary/40 !bg-white !text-primary !shadow-sm dark:!bg-slate-900'
+                  : '!border-slate-200 !bg-white/80 !text-slate-500 hover:!border-primary/30 hover:!bg-primary/5 hover:!text-primary dark:!border-slate-700 dark:!bg-slate-900/50 dark:hover:!border-primary/40 dark:hover:!bg-primary/10'
               }`}
             >
               <MaterialIcon icon={item.icon} size="text-lg" />
-              <span className="hidden sm:inline">{item.label}</span>
-              <span
-                className={`rounded-full border px-1.5 py-0.5 text-[11px] font-bold ${
+              <Text as="span" variant="body2" weight="semibold" className="hidden !text-inherit sm:inline">
+                {item.label}
+              </Text>
+              <Tag
+                className={`!rounded-full !border !px-1.5 !py-0.5 !text-[11px] ${
                   active
-                    ? 'border-primary bg-primary text-white'
-                    : 'border-slate-200 bg-slate-50 text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300'
+                    ? '!border-primary !bg-primary !text-white'
+                    : '!border-slate-200 !bg-slate-50 !text-slate-500 dark:!border-slate-600 dark:!bg-slate-800 dark:!text-slate-300'
                 }`}
               >
                 {item.count}
-              </span>
-            </button>
+              </Tag>
+            </Button>
           );
         })}
       </div>
@@ -96,9 +99,9 @@ export const ProfileActivity = ({
             <Text variant="body2" weight="semibold" className="!text-slate-700 dark:!text-slate-200">
               {tab === 'mine' ? t('empty_mine') : t('empty_saved')}
             </Text>
-            <p className="mt-1 max-w-xs text-xs text-slate-400">
+            <Text variant="small" className="mt-1 max-w-xs !text-slate-400">
               {tab === 'mine' ? t('empty_mine_hint') : t('empty_saved_hint')}
-            </p>
+            </Text>
           </div>
         )}
 

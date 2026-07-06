@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Label, Select, Text } from '@/shared/components/atoms';
+import { Button, Form, Input, Label, Select, Text, Textarea } from '@/shared/components/atoms';
+import { ModalBackdrop } from '@/shared/components/molecules/ModalBackdrop';
 import { useTranslations } from 'next-intl';
 import { UserProfile } from '../../types/profile';
 import { UpdateProfilePayload } from '../../services/profile.service';
@@ -60,20 +61,17 @@ export const ProfileEditModal = ({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
-      <button
-        type="button"
-        className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
-        aria-label="Close"
-        onClick={onClose}
-      />
+      <ModalBackdrop onClick={onClose} ariaLabel={t('edit_cancel')} />
 
       <div className="relative z-10 w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-900">
         <Text variant="h5" weight="bold" className="mb-1">
           {t('edit_title')}
         </Text>
-        <p className="mb-5 text-sm text-slate-500">{t('edit_desc')}</p>
+        <Text variant="body2" className="mb-5 !text-slate-500">
+          {t('edit_desc')}
+        </Text>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <Form className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-1.5">
             <Label>{t('edit_full_name')}</Label>
             <Input
@@ -85,12 +83,12 @@ export const ProfileEditModal = ({
 
           <div className="space-y-1.5">
             <Label>{t('edit_bio')}</Label>
-            <textarea
+            <Textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
               placeholder={t('edit_bio_placeholder')}
-              className="w-full resize-none rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-900"
+              hideErrorMessage
             />
           </div>
 
@@ -104,7 +102,11 @@ export const ProfileEditModal = ({
             />
           </div>
 
-          {error && <p className="text-sm text-rose-500">{error}</p>}
+          {error && (
+            <Text variant="body2" className="!text-rose-500">
+              {error}
+            </Text>
+          )}
 
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>
@@ -114,7 +116,7 @@ export const ProfileEditModal = ({
               {saving ? t('edit_saving') : t('edit_save')}
             </Button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   );

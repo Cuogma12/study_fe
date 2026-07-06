@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MaterialIcon } from '@/shared/components/atoms';
+import { MaterialIcon, Text } from '@/shared/components/atoms';
 import { FieldErrorTone } from '@/shared/types/field-error';
 
 interface FieldErrorMessageProps {
@@ -14,7 +14,7 @@ export const FieldErrorMessage = ({ message, tone = 'required' }: FieldErrorMess
 
   return (
     <div
-      className={`mt-1 flex items-center gap-1 text-sm font-medium ${
+      className={`mt-1 flex items-center gap-1 ${
         isWarning ? 'text-amber-600' : 'text-rose-500'
       }`}
     >
@@ -23,7 +23,9 @@ export const FieldErrorMessage = ({ message, tone = 'required' }: FieldErrorMess
         size="text-base"
         className={isWarning ? 'text-amber-600' : 'text-rose-500'}
       />
-      <span>{message}</span>
+      <Text variant="body2" weight="medium" className="!text-inherit">
+        {message}
+      </Text>
     </div>
   );
 };

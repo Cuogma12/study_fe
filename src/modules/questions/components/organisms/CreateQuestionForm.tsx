@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Label, Select, Input, MaterialIcon, Text } from '@/shared/components/atoms';
+import { Label, Select, Input, MaterialIcon, Text, Textarea, Button, IconButton } from '@/shared/components/atoms';
+import { HiddenFileInput } from '@/shared/components/molecules/HiddenFileInput';
 import { FIELD_ERROR_STYLES } from '@/shared/utils/fieldErrorStyles';
 import { uploadToCloudinary, isCloudinaryConfigured } from '@/shared/services/cloudinary.service';
 import { FieldErrorMessage } from '../molecules/FieldErrorMessage';
@@ -109,8 +110,8 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
 
         <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-semibold">
-              {t('fields.subject')} <span className="text-rose-500">*</span>
+            <Label className="text-sm font-semibold" required>
+              {t('fields.subject')}
             </Label>
             <Select
               value={form.subject_id}
@@ -133,8 +134,8 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-semibold">
-              {t('fields.grade')} <span className="text-rose-500">*</span>
+            <Label className="text-sm font-semibold" required>
+              {t('fields.grade')}
             </Label>
             <Select
               value={form.grade_level}
@@ -183,8 +184,8 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-semibold">
-              {t('fields.title')} <span className="text-rose-500">*</span>
+            <Label className="text-sm font-semibold" required>
+              {t('fields.title')}
             </Label>
             <Input
               value={form.title}
@@ -203,18 +204,19 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-semibold">
-              {t('fields.content')} <span className="text-rose-500">*</span>
+            <Label className="text-sm font-semibold" required>
+              {t('fields.content')}
             </Label>
-            <textarea
-                value={form.content}
-                onChange={(e) => setField('content', e.target.value)}
-                onBlur={() => handleBlur('content')}
-                disabled={submitting}
-                rows={6}
-                placeholder={t('placeholders.content')}
-                className={`w-full resize-none rounded-lg border p-4 text-sm outline-none transition-all placeholder:text-slate-400 ${contentFieldClass}`}
-              />
+            <Textarea
+              value={form.content}
+              onChange={(e) => setField('content', e.target.value)}
+              onBlur={() => handleBlur('content')}
+              disabled={submitting}
+              rows={6}
+              placeholder={t('placeholders.content')}
+              hideErrorMessage
+              className={`!p-4 transition-all ${contentFieldClass}`}
+            />
             {showError('content') && errors.content && (
               <FieldErrorMessage message={errors.content.message} tone={errors.content.tone} />
             )}
@@ -233,47 +235,53 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
                   <div className="h-full w-full overflow-hidden rounded-xl border border-slate-300">
                     <img src={url} alt="" className="h-full w-full object-cover" />
                   </div>
-                  <button
-                    type="button"
+                  <IconButton
+                    label={t('remove_image')}
                     onClick={() => removeImage(index)}
                     disabled={submitting}
-                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-rose-600 text-white shadow-md transition-transform hover:scale-110"
-                    aria-label={t('remove_image')}
+                    className="!absolute -right-2 -top-2 !h-6 !w-6 !min-w-6 !bg-rose-600 !text-white shadow-md hover:!scale-110 hover:!bg-rose-600"
                   >
                     <MaterialIcon icon="close" size="text-base" className="text-white" />
-                  </button>
+                  </IconButton>
                 </div>
               ))}
 
               {form.images.length < maxImages && (
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => fileRef.current?.click()}
                   disabled={submitting || imageUploading}
-                  className="flex h-20 w-20 flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-500 transition-all hover:border-primary hover:text-primary disabled:opacity-50"
+                  className="!h-20 !w-20 !flex-col !gap-0.5 !rounded-xl !border-2 !border-dashed !border-slate-300 !bg-slate-50 !p-0 !text-slate-500 hover:!border-primary hover:!text-primary"
                 >
                   {imageUploading ? (
                     <MaterialIcon icon="progress_activity" className="animate-spin text-primary" />
                   ) : (
                     <>
                       <MaterialIcon icon="add_a_photo" />
-                      <span className="text-[10px] font-bold">{t('add_image')}</span>
+                      <Text variant="caption" className="!text-[10px] !normal-case">
+                        {t('add_image')}
+                      </Text>
                     </>
                   )}
-                </button>
+                </Button>
               )}
             </div>
 
-            <input
+            <HiddenFileInput
               ref={fileRef}
-              type="file"
               accept="image/jpeg,image/png,image/webp,image/gif"
-              className="hidden"
               onChange={handleImagePick}
             />
 
-            {imageError && <p className="text-xs text-rose-500">{imageError}</p>}
-            <p className="text-xs text-slate-400">{t('images_hint')}</p>
+            {imageError && (
+              <Text variant="small" className="!text-rose-500">
+                {imageError}
+              </Text>
+            )}
+            <Text variant="small" className="!text-slate-400">
+              {t('images_hint')}
+            </Text>
           </div>
         </div>
       </div>

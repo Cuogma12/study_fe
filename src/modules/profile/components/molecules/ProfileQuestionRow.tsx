@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MaterialIcon, Text } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
+import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
+import { MetaStat } from '@/shared/components/molecules/MetaStat';
 import { QuestionListItem } from '@/modules/home/types/question';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
-import { getSubjectBadgeClass } from '@/shared/constants/subjectBadgeThemes';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { QuestionOwnerMenu } from '@/modules/questions/components/molecules/QuestionOwnerMenu';
@@ -51,16 +52,18 @@ export const ProfileQuestionRow = ({
     <div className="group relative flex w-full shrink-0 flex-col gap-2.5 rounded-xl border border-slate-300 bg-white px-4 py-4 transition-all hover:border-primary/50 hover:shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:hover:border-primary/50">
       <div className="flex flex-wrap items-center gap-2">
         {question.subject?.name && (
-          <span className={getSubjectBadgeClass(question.subject.slug)}>
-            {question.subject.name}
-          </span>
+          <SubjectTag name={question.subject.name} slug={question.subject.slug} />
         )}
         {question.is_closed && (
-          <span className="rounded-md bg-slate-200/80 px-2 py-0.5 text-[10px] font-semibold uppercase text-slate-500 dark:bg-slate-700 dark:text-slate-300">
+          <Tag className="!bg-slate-200/80 !px-2 !py-0.5 !text-[10px] !text-slate-500 dark:!bg-slate-700 dark:!text-slate-300">
             {t('closed')}
-          </span>
+          </Tag>
         )}
-        <span className="ml-auto flex items-center gap-1 text-[11px] text-slate-400">
+        <Text
+          as="span"
+          variant="caption"
+          className="ml-auto inline-flex items-center gap-1 !normal-case !text-slate-400"
+        >
           {formatRelativeTime(question.created_at, locale)}
           {showOwnerMenu && (
             <QuestionOwnerMenu
@@ -69,13 +72,14 @@ export const ProfileQuestionRow = ({
               disabled={deleting}
             />
           )}
-        </span>
+        </Text>
       </div>
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => navigateTo(`/questions/${question.id}`)}
-        className="w-full text-left"
+        className="!h-auto !w-full !flex-col !items-start !justify-start !rounded-none !p-0 !text-left hover:!bg-transparent"
       >
         <Text
           variant="body2"
@@ -86,22 +90,16 @@ export const ProfileQuestionRow = ({
         </Text>
 
         {question.excerpt && (
-          <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+          <Text variant="small" className="mt-1 line-clamp-1 !text-slate-500 dark:!text-slate-400">
             {question.excerpt}
-          </p>
+          </Text>
         )}
 
-        <div className="mt-2 flex items-center gap-4 text-xs text-slate-400">
-          <span className="flex items-center gap-1">
-            <MaterialIcon icon="visibility" size="text-sm" />
-            {question.views_count}
-          </span>
-          <span className="flex items-center gap-1">
-            <MaterialIcon icon="chat_bubble" size="text-sm" />
-            {question.answers_count}
-          </span>
+        <div className="mt-2 flex items-center gap-4">
+          <MetaStat icon="visibility" value={question.views_count} />
+          <MetaStat icon="chat_bubble" value={question.answers_count} />
         </div>
-      </button>
+      </Button>
     </div>
   );
 };

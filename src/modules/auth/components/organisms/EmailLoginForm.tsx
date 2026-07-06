@@ -24,7 +24,12 @@ export const EmailLoginForm = () => {
     <div className="space-y-6">
       {error && (
         <div className="flex items-center gap-2 rounded-lg border border-rose-100 bg-rose-50 p-4 text-sm text-rose-600 dark:border-rose-800/50 dark:bg-rose-900/10">
-          <span className="font-medium">Error:</span> {error}
+          <Text variant="body2" weight="medium" className="!text-rose-600">
+            {t('common.error')}:
+          </Text>
+          <Text variant="body2" className="!text-rose-600">
+            {error}
+          </Text>
         </div>
       )}
       <Form onSubmit={handleSubmit} className="space-y-6">

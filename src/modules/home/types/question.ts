@@ -19,6 +19,7 @@ export interface QuestionListItem {
   id: string;
   title: string;
   excerpt: string;
+  images: string[];
   subject: QuestionListSubject;
   topic: QuestionListTopic | null;
   grade_level: number | null;

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MaterialIcon, Button } from '@/shared/components/atoms';
+import { MaterialIcon, Button, Text } from '@/shared/components/atoms';
 import { useLocale, useTranslations } from 'next-intl';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { detailPanel } from '../../constants/detailPanelStyles';
@@ -74,16 +74,21 @@ export const AnswerItemCard = ({
           size="sm"
         />
         <div>
-          <p className="text-sm font-bold">{answer.author?.username ?? '—'}</p>
-          <p className="text-xs text-slate-500">
+          <Text variant="body2" weight="bold">
+            {answer.author?.username ?? '—'}
+          </Text>
+          <Text variant="small" className="!text-slate-500">
             {formatRelativeTime(answer.created_at, locale)}
-          </p>
+          </Text>
         </div>
       </div>
 
-      <div className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+      <Text
+        variant="body2"
+        className="whitespace-pre-wrap !leading-relaxed !text-slate-700 dark:!text-slate-300"
+      >
         {answer.content}
-      </div>
+      </Text>
 
       <div className="mt-4 flex items-center gap-3">
         {!isClosed && (
@@ -140,22 +145,29 @@ export const AnswerItemCard = ({
                   size="sm"
                 />
                 <div>
-                  <p className="text-xs font-bold">{reply.author?.username ?? '—'}</p>
-                  <p className="text-[10px] text-slate-500">
+                  <Text variant="small" weight="bold">
+                    {reply.author?.username ?? '—'}
+                  </Text>
+                  <Text variant="caption" className="!normal-case !text-slate-500">
                     {formatRelativeTime(reply.created_at, locale)}
-                  </p>
+                  </Text>
                 </div>
               </div>
-              <p className="whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
+              <Text
+                variant="body2"
+                className="whitespace-pre-wrap !text-slate-700 dark:!text-slate-300"
+              >
                 {reply.content}
-              </p>
+              </Text>
             </div>
           ))}
         </div>
       )}
 
       {repliesLoaded && replies.length === 0 && (
-        <p className="mt-3 ml-4 text-xs text-slate-400">{t('no_replies')}</p>
+        <Text variant="small" className="mt-3 ml-4 !text-slate-400">
+          {t('no_replies')}
+        </Text>
       )}
     </div>
   );

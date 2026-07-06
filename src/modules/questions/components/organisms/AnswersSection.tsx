@@ -52,14 +52,18 @@ export const AnswersSection = ({
       <div className={detailPanel.composeSection}>
         <div className={detailPanel.composeArea}>
           {isClosed ? (
-            <p className="text-sm text-slate-600 dark:text-slate-300">{t('closed_notice')}</p>
+            <Text variant="body2" className="!text-slate-600 dark:!text-slate-300">
+              {t('closed_notice')}
+            </Text>
           ) : isAuthenticated ? (
             <AnswerForm
               disabled={actionLoading}
               onSubmit={onSubmitAnswer}
             />
           ) : (
-            <p className="text-sm font-medium text-primary">{t('login_to_answer')}</p>
+            <Text variant="body2" weight="medium" className="!text-primary">
+              {t('login_to_answer')}
+            </Text>
           )}
         </div>
       </div>
@@ -71,9 +75,12 @@ export const AnswersSection = ({
           </Text>
         ) : (
           <>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <Text
+              variant="caption"
+              className="mb-4 !normal-case !tracking-wide !text-slate-500"
+            >
               {t('answers_list_label')}
-            </p>
+            </Text>
             <div className="flex flex-col gap-3">
               {answers.map((answer) => (
                 <AnswerItemCard

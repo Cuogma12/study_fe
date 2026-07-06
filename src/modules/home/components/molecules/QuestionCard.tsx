@@ -1,30 +1,107 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
+import React, { useEffect, useState } from 'react';
+import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
+import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
+import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
 import { QuestionListItem } from '../../types/question';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useAuth } from '@/shared/hooks/useAuth';
-import { getSubjectBadgeClass, NEUTRAL_BADGE_CLASS } from '@/shared/constants/subjectBadgeThemes';
 import { QuestionOwnerMenu } from '@/modules/questions/components/molecules/QuestionOwnerMenu';
 import { questionService } from '@/modules/questions/services/question.service';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 
 interface QuestionCardProps {
   question: QuestionListItem;
   onDeleted?: (questionId: string) => void;
+  onSavedChange?: (questionId: string, saved: boolean) => void;
 }
 
-export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
+const normalizeQuestionImages = (images: unknown): string[] => {
+  if (Array.isArray(images)) {
+    return images.filter((url): url is string => typeof url === 'string' && url.trim().length > 0);
+  }
+
+  if (typeof images === 'string' && images.trim()) {
+    try {
+      const parsed = JSON.parse(images) as unknown;
+      if (Array.isArray(parsed)) {
+        return parsed.filter((url): url is string => typeof url === 'string' && url.trim().length > 0);
+      }
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+};
+
+const QuestionCardImages = ({ images }: { images: string[] }) => {
+  if (images.length === 0) {
+    return null;
+  }
+
+  const visibleImages = images.slice(0, 4);
+  const extraCount = images.length - visibleImages.length;
+
+  return (
+    <div
+      className={`mb-4 ${
+        visibleImages.length > 1 ? 'grid grid-cols-2 gap-2' : ''
+      }`}
+    >
+      {visibleImages.map((url, index) => (
+        <div key={`${url}-${index}`} className="relative">
+          <PreviewableImage
+            src={url}
+            onActivate={(event) => event.stopPropagation()}
+            frameClassName={
+              visibleImages.length === 1 ? '!p-1.5' : '!p-1'
+            }
+            imageClassName={
+              visibleImages.length === 1
+                ? 'aspect-[4/3] max-h-72 object-cover'
+                : 'aspect-video object-cover'
+            }
+          />
+          {index === visibleImages.length - 1 && extraCount > 0 && (
+            <div
+              className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-black/45"
+              aria-hidden
+            >
+              <Text variant="body2" weight="bold" className="!text-white">
+                +{extraCount}
+              </Text>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const feedStatPillClass =
+  'inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-2.5 py-1 text-slate-600 transition-colors hover:!border-primary hover:!bg-white hover:!text-primary dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:!border-primary dark:hover:!bg-slate-900 dark:hover:!text-primary';
+
+export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCardProps) => {
   const t = useTranslations('home.feed');
   const tDetail = useTranslations('question_detail');
+  const tApiError = useTranslations('api_errors');
   const locale = useLocale();
   const { navigateTo } = useAppNavigation();
-  const { userId } = useAuth();
+  const { userId, isAuthenticated } = useAuth();
   const [deleting, setDeleting] = useState(false);
+  const [isSaved, setIsSaved] = useState(question.is_saved);
+  const [saving, setSaving] = useState(false);
 
+  const images = normalizeQuestionImages(question.images);
   const isOwner = Boolean(userId && question.author?.id === userId);
+
+  useEffect(() => {
+    setIsSaved(question.is_saved);
+  }, [question.id, question.is_saved]);
 
   const handleOpen = () => {
     navigateTo(`/questions/${question.id}`);
@@ -50,6 +127,26 @@ export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
     }
   };
 
+  const handleToggleSave = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    if (!isAuthenticated) {
+      navigateTo('/login');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await questionService.toggleSave(question.id);
+      setIsSaved(result.saved);
+      onSavedChange?.(question.id, result.saved);
+    } catch (error) {
+      window.alert(resolveApiErrorMessage(error, tApiError, tApiError('fallback')));
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <article
       role="button"
@@ -66,29 +163,21 @@ export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
           {question.subject?.name && (
-            <span className={getSubjectBadgeClass(question.subject.slug)}>
-              {question.subject.name}
-            </span>
+            <SubjectTag name={question.subject.name} slug={question.subject.slug} />
           )}
-          {question.topic?.name && <span className={NEUTRAL_BADGE_CLASS}>{question.topic.name}</span>}
+          {question.topic?.name && <NeutralTag>{question.topic.name}</NeutralTag>}
           {question.grade_level != null && (
-            <span className={NEUTRAL_BADGE_CLASS}>
-              {t('grade_level', { level: question.grade_level })}
-            </span>
+            <NeutralTag>{t('grade_level', { level: question.grade_level })}</NeutralTag>
           )}
         </div>
         <div className="flex shrink-0 items-center gap-1.5">
-          {question.is_pinned && (
-            <span className="flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold uppercase text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
-              <MaterialIcon icon="push_pin" size="text-sm" />
-              {t('pinned')}
-            </span>
-          )}
           {question.is_closed && (
-            <span className="flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-              <MaterialIcon icon="lock" size="text-sm" />
+            <Tag
+              className="!bg-slate-100 !text-[10px] !text-slate-500 dark:!bg-slate-800 dark:!text-slate-400"
+              icon={<MaterialIcon icon="lock" size="text-sm" />}
+            >
               {t('closed')}
-            </span>
+            </Tag>
           )}
           {isOwner && (
             <QuestionOwnerMenu
@@ -103,6 +192,9 @@ export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
       <Text variant="h5" className="mb-2 transition-colors group-hover:text-primary">
         {question.title}
       </Text>
+
+      {images.length > 0 && <QuestionCardImages images={images} />}
+
       <Text variant="body2" className="mb-4 line-clamp-2 !text-slate-600 dark:!text-slate-400">
         {question.excerpt}
       </Text>
@@ -122,22 +214,47 @@ export const QuestionCard = ({ question, onDeleted }: QuestionCardProps) => {
               {question.author?.username?.charAt(0).toUpperCase() ?? '?'}
             </div>
           )}
-          <div>
-            <p className="text-xs font-bold">{question.author?.username ?? '—'}</p>
-            <p className="text-[10px] text-slate-500">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <Text variant="small" weight="bold" className="leading-tight">
+              {question.author?.username ?? '—'}
+            </Text>
+            <Text variant="caption" className="!mt-0 !normal-case !leading-tight !text-slate-500">
               {formatRelativeTime(question.created_at, locale)}
-            </p>
+            </Text>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-slate-500">
-          <span className="flex items-center gap-1 text-xs">
-            <MaterialIcon icon="visibility" size="text-sm" />
-            {question.views_count}
-          </span>
-          <span className="flex items-center gap-1 text-xs">
-            <MaterialIcon icon="chat_bubble" size="text-sm" />
-            {question.answers_count}
-          </span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className={feedStatPillClass}>
+            <MaterialIcon icon="visibility" size="text-base" />
+            <Text as="span" variant="small" className="!text-inherit">
+              {question.views_count}
+            </Text>
+          </div>
+          <div className={feedStatPillClass}>
+            <MaterialIcon icon="chat_bubble" size="text-base" />
+            <Text as="span" variant="small" className="!text-inherit">
+              {question.answers_count}
+            </Text>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={saving}
+            aria-label={isSaved ? tDetail('saved') : tDetail('save')}
+            onClick={handleToggleSave}
+            className={`!h-9 !min-w-9 !shrink-0 !rounded-full !border !px-2.5 !font-normal transition-colors ${feedStatPillClass} ${
+              isSaved
+                ? '!border-primary !bg-white !text-primary hover:!border-primary hover:!bg-white hover:!text-primary dark:!bg-slate-900 dark:hover:!bg-slate-900'
+                : ''
+            }`}
+          >
+            <MaterialIcon
+              icon={isSaved ? 'bookmark' : 'bookmark_border'}
+              size="text-xl"
+              className="!text-inherit"
+            />
+          </Button>
           <Button
             size="sm"
             onClick={(e) => {

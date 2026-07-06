@@ -4,12 +4,19 @@ import React, { useEffect, useState } from 'react';
 import { HomeLeftSidebar } from '../components/organisms/HomeLeftSidebar';
 import { HomeFeed } from '../components/organisms/HomeFeed';
 import { HomeRightSidebar } from '../components/organisms/HomeRightSidebar';
+import { useHomeFilters } from '../hooks/useHomeFilters';
 import { subjectService, Subject } from '@/shared/services/subject.service';
 
 export const HomePage = () => {
+  const {
+    filters,
+    setFilters,
+    toggleGrade,
+    toggleSubject,
+  } = useHomeFilters();
+
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [selectedGradeLevel, setSelectedGradeLevel] = useState<number | null>(null);
-  const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -23,29 +30,22 @@ export const HomePage = () => {
     fetchSubjects();
   }, []);
 
-  const handleGradeChange = (grade: number) => {
-    setSelectedGradeLevel((current) => (current === grade ? null : grade));
-  };
-
-  const handleSubjectChange = (subjectId: string) => {
-    setSelectedSubjectId((current) => (current === subjectId ? null : subjectId));
-  };
-
   return (
     <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 px-4 lg:gap-0 lg:px-10">
       <HomeLeftSidebar
         subjects={subjects}
-        selectedGradeLevel={selectedGradeLevel}
-        selectedSubjectId={selectedSubjectId}
-        onGradeChange={handleGradeChange}
-        onSubjectChange={handleSubjectChange}
+        selectedGradeLevel={filters.gradeLevel}
+        selectedSubjectId={filters.subjectId}
+        onGradeChange={toggleGrade}
+        onSubjectChange={toggleSubject}
       />
 
       <HomeFeed
-        filters={{
-          gradeLevel: selectedGradeLevel,
-          subjectId: selectedSubjectId,
-        }}
+        filters={filters}
+        subjects={subjects}
+        filterDrawerOpen={filterDrawerOpen}
+        onFilterDrawerOpenChange={setFilterDrawerOpen}
+        onSetFilters={setFilters}
       />
 
       <HomeRightSidebar />

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, Textarea } from '@/shared/components/atoms';
 import { useTranslations } from 'next-intl';
 
 export const QuestionAiSidebar = () => {
@@ -19,9 +19,9 @@ export const QuestionAiSidebar = () => {
               <Text variant="body2" weight="bold">
                 {t('title')}
               </Text>
-              <span className="text-[10px] font-bold uppercase tracking-tight text-green-500">
+              <Text variant="caption" className="!normal-case !text-green-500">
                 {t('online')}
-              </span>
+              </Text>
             </div>
           </div>
         </div>
@@ -31,40 +31,45 @@ export const QuestionAiSidebar = () => {
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <MaterialIcon icon="smart_toy" size="text-sm" />
             </div>
-            <div className="rounded-2xl rounded-tl-none bg-slate-100 p-3 text-sm dark:bg-slate-800">
-              <p>{t('welcome')}</p>
+            <div className="rounded-2xl rounded-tl-none bg-slate-100 p-3 dark:bg-slate-800">
+              <Text variant="body2">{t('welcome')}</Text>
             </div>
           </div>
 
           <div className="flex items-center justify-center gap-2 py-2">
-            <span className="h-px w-8 bg-primary/10" />
-            <span className="text-[10px] font-medium text-slate-400">{t('suggestions')}</span>
-            <span className="h-px w-8 bg-primary/10" />
+            <Text as="span" variant="small" className="h-px w-8 bg-primary/10" aria-hidden />
+            <Text variant="caption" className="!normal-case !text-slate-400">
+              {t('suggestions')}
+            </Text>
+            <Text as="span" variant="small" className="h-px w-8 bg-primary/10" aria-hidden />
           </div>
 
           <div className="flex flex-col gap-2">
-            <button
+            <Button
               type="button"
+              variant="ghost"
               disabled
-              className="w-full rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-left text-xs font-medium text-primary opacity-70"
+              className="!h-auto !w-full !justify-start !rounded-lg !border !border-primary/20 !bg-primary/5 !px-3 !py-2 !text-left !text-xs !font-medium !text-primary opacity-70"
             >
               {t('suggestion_1')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="ghost"
               disabled
-              className="w-full rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-left text-xs font-medium text-primary opacity-70"
+              className="!h-auto !w-full !justify-start !rounded-lg !border !border-primary/20 !bg-primary/5 !px-3 !py-2 !text-left !text-xs !font-medium !text-primary opacity-70"
             >
               {t('suggestion_2')}
-            </button>
+            </Button>
           </div>
         </div>
 
         <div className="p-4 pt-0">
           <div className="relative">
-            <textarea
+            <Textarea
               disabled
-              className="w-full resize-none rounded-xl border border-primary/10 bg-slate-50 p-3 pr-12 text-sm dark:bg-slate-800"
+              hideErrorMessage
+              className="!rounded-xl !border-primary/10 !bg-slate-50 !pr-12 dark:!bg-slate-800"
               placeholder={t('placeholder')}
               rows={2}
             />
@@ -76,7 +81,9 @@ export const QuestionAiSidebar = () => {
               <MaterialIcon icon="send" size="text-lg" />
             </Button>
           </div>
-          <p className="mt-2 text-center text-[10px] text-slate-400">{t('disclaimer')}</p>
+          <Text variant="caption" className="mt-2 text-center !normal-case !text-slate-400">
+            {t('disclaimer')}
+          </Text>
         </div>
       </div>
     </aside>
