@@ -41,6 +41,7 @@ Toàn bộ UI/Component phải được chia theo chuẩn Atomic Design nghiêm 
     *   Mọi message mới phải thêm đồng thời vào `messages/vi.json` và `messages/en.json`.
     *   Dùng `useTranslations()` với key đầy đủ (ví dụ `auth.login.title`, `common.error`).
     *   Không render raw message kỹ thuật từ API; phải map qua key đa ngữ.
+    *   Khi xử lý lỗi API trong FE, bắt buộc map theo `error.response.data.message` (mã `STD_*`) qua `resolveApiErrorMessage` (`src/shared/utils/resolveApiErrorMessage.ts`) và namespace `api_errors`. Cấm hardcode fallback kiểu `"Thử lại sau"` trực tiếp trong component.
 
 *   **TypeScript Rule (khai báo interface/type đầy đủ)**:
     *   Cấm dùng `any` cho form data, request payload, response payload nếu có thể định nghĩa type.
@@ -62,6 +63,11 @@ Toàn bộ UI/Component phải được chia theo chuẩn Atomic Design nghiêm 
     *   Nếu endpoint đã có, FE bắt buộc call API thật qua `services`, không thay bằng mock data.
     *   Nếu endpoint chưa có hoặc BE chưa sẵn sàng, phải báo user trước khi làm mock.
     *   Chỉ dùng mock data khi user đồng ý; mock phải có ghi chú tạm thời và TODO để thay bằng API thật.
+
+*   **UI-Hook-Service Boundary (bắt buộc)**:
+    *   Component trong `components/**` chỉ render UI và gọi handlers từ hook; không gọi `*.service.ts` trực tiếp.
+    *   Mọi side effect (API, `window.alert`, `confirm`, state chuyển trang sau API) phải đi qua `hooks/use*.ts`.
+    *   Nếu cần tái sử dụng logic lỗi API, ưu tiên helper dùng chung ở `shared/utils` thay vì lặp lại trong từng component.
 
 ## Gemini Added Memories
 - Người dùng thích phong cách tương tác thân thiện, thoải mái, sử dụng ngôn ngữ gần gũi (như "b yêu") nhưng vẫn giữ được sự chuyên nghiệp và quyết liệt trong việc giải quyết các tác vụ kỹ thuật.
