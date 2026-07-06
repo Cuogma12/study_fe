@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Label, Select, Input, MaterialIcon, Text, Textarea, Button, IconButton } from '@/shared/components/atoms';
+import {
+  Label,
+  Select,
+  Input,
+  MaterialIcon,
+  Text,
+  Textarea,
+  Button,
+  IconButton,
+} from '@/shared/components/atoms';
 import { HiddenFileInput } from '@/shared/components/molecules/HiddenFileInput';
 import { FIELD_ERROR_STYLES } from '@/shared/utils/fieldErrorStyles';
 import { uploadToCloudinary, isCloudinaryConfigured } from '@/shared/services/cloudinary.service';
@@ -79,10 +88,10 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
 
   const contentFieldClass = showError('content')
     ? FIELD_ERROR_STYLES.required.field
-    : 'border-slate-300 bg-slate-50 focus:border-primary focus:ring-2 focus:ring-primary';
+    : 'border-gray-300 bg-slate-50 focus:border-primary focus:ring-2 focus:ring-primary';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-sm">
       <div
         className={`p-6 md:p-8 ${!isAuthenticated ? 'pointer-events-none select-none opacity-30 blur-[4px]' : ''} ${submitting ? 'pointer-events-none opacity-60' : ''}`}
       >
@@ -174,9 +183,7 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
                         ? t('placeholders.topic_empty')
                         : t('placeholders.topic')
               }
-              disabled={
-                !form.subject_id || !form.grade_level || topicsLoading || submitting
-              }
+              disabled={!form.subject_id || !form.grade_level || topicsLoading || submitting}
               className="!h-11 !py-2.5"
             />
           </div>
@@ -232,7 +239,7 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
             <div className="flex flex-wrap gap-3">
               {form.images.map((url, index) => (
                 <div key={`${url}-${index}`} className="group relative h-20 w-20">
-                  <div className="h-full w-full overflow-hidden rounded-xl border border-slate-300">
+                  <div className="h-full w-full overflow-hidden rounded-xl border border-gray-300">
                     <img src={url} alt="" className="h-full w-full object-cover" />
                   </div>
                   <IconButton
@@ -252,7 +259,7 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
                   variant="ghost"
                   onClick={() => fileRef.current?.click()}
                   disabled={submitting || imageUploading}
-                  className="!h-20 !w-20 !flex-col !gap-0.5 !rounded-xl !border-2 !border-dashed !border-slate-300 !bg-slate-50 !p-0 !text-slate-500 hover:!border-primary hover:!text-primary"
+                  className="!h-20 !w-20 !flex-col !gap-0.5 !rounded-xl !border-2 !border-dashed !border-gray-300 !bg-slate-50 !p-0 !text-slate-500 hover:!border-primary hover:!text-primary"
                 >
                   {imageUploading ? (
                     <MaterialIcon icon="progress_activity" className="animate-spin text-primary" />

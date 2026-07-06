@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button, IconButton, MaterialIcon, Text } from '../atoms';
+import { Button, IconButton, MaterialIcon } from '../atoms';
 import { ModalBackdrop } from './ModalBackdrop';
 import { useTranslations } from 'next-intl';
 
@@ -51,8 +51,16 @@ export const PreviewableImage = ({
   }, [open]);
 
   const handleOpen = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     onActivate?.(event);
     setOpen(true);
+  };
+
+  const handleClose = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(false);
   };
 
   const lightbox =
@@ -63,16 +71,19 @@ export const PreviewableImage = ({
             role="dialog"
             aria-modal="true"
             aria-label={t('image_view')}
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
           >
             <ModalBackdrop
-              onClick={() => setOpen(false)}
+              onClick={handleClose}
               ariaLabel={t('image_close')}
               className="!bg-black/90 hover:!bg-black/90"
             />
 
             <IconButton
               label={t('image_close')}
-              onClick={() => setOpen(false)}
+              onMouseDown={handleClose}
+              onClick={handleClose}
               className="!absolute !right-4 !top-4 !z-10 !bg-white/10 !text-white backdrop-blur-sm hover:!bg-white/20"
             >
               <MaterialIcon icon="close" className="text-2xl" />
@@ -96,7 +107,7 @@ export const PreviewableImage = ({
         variant="ghost"
         onClick={handleOpen}
         aria-label={t('image_view')}
-        className={`group relative !h-auto !w-full !cursor-zoom-in !rounded-xl !border-2 !border-slate-300 !bg-slate-50 !p-2 transition-colors hover:!border-primary/70 hover:!bg-slate-50 dark:!border-slate-600 dark:!bg-slate-800/50 dark:hover:!border-primary/70 ${frameClassName}`.trim()}
+        className={`!h-auto !w-full !cursor-pointer !rounded-xl !border-2 !border-gray-300 !bg-slate-50 !p-2 transition-colors hover:!border-primary dark:!border-slate-600 dark:!bg-slate-800/50 dark:hover:!border-primary ${frameClassName}`.trim()}
       >
         <img
           src={src}
@@ -104,14 +115,6 @@ export const PreviewableImage = ({
           className={`block w-full rounded-lg object-contain ${imageClassName}`.trim()}
           loading="lazy"
         />
-        <Text
-          as="span"
-          variant="small"
-          className="pointer-events-none absolute inset-2 flex items-center justify-center rounded-lg bg-black/0 opacity-0 transition-all group-hover:bg-black/25 group-hover:opacity-100"
-          aria-hidden
-        >
-          <MaterialIcon icon="zoom_in" className="text-3xl text-white drop-shadow-md" />
-        </Text>
       </Button>
 
       {lightbox}

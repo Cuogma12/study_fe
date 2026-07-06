@@ -14,10 +14,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           ref={ref}
           type="checkbox"
           id={id}
-          className={`h-4 w-4 text-primary focus:ring-primary border-slate-300 dark:border-slate-700 rounded bg-white dark:bg-slate-900 transition-colors cursor-pointer ${className}`}
+          className={`h-4 w-4 cursor-pointer rounded border-gray-300 bg-white text-primary transition-colors focus:ring-primary dark:border-slate-700 dark:bg-slate-900 ${className}`}
           {...props}
         />
-        <Label htmlFor={id} className="ml-2 !mb-0 !font-normal cursor-pointer">
+        <Label htmlFor={id} className="!mb-0 ml-2 cursor-pointer !font-normal">
           {label}
         </Label>
       </div>

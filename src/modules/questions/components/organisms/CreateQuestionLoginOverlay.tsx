@@ -11,7 +11,7 @@ export const CreateQuestionLoginOverlay = () => {
 
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/20 p-4">
-      <div className="relative flex w-full max-w-2xl flex-col items-center overflow-hidden rounded-2xl border border-slate-300 bg-white p-8 text-center shadow-lg">
+      <div className="relative flex w-full max-w-2xl flex-col items-center overflow-hidden rounded-2xl border border-gray-300 bg-white p-8 text-center shadow-lg">
         <div className="absolute left-0 top-0 h-1 w-full bg-primary" />
 
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">

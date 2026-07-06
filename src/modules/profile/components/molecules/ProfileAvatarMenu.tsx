@@ -169,7 +169,7 @@ export const ProfileAvatarMenu = ({
         </Button>
 
         {menuOpen && (
-          <div className="absolute left-1/2 top-full z-20 mt-2 w-44 -translate-x-1/2 overflow-hidden rounded-xl border border-slate-300 bg-white py-1 shadow-lg dark:border-slate-600 dark:bg-slate-900 sm:left-0 sm:translate-x-0">
+          <div className="absolute left-1/2 top-full z-20 mt-2 w-44 -translate-x-1/2 overflow-hidden rounded-xl border border-gray-300 bg-white py-1 shadow-lg dark:border-slate-600 dark:bg-slate-900 sm:left-0 sm:translate-x-0">
             <MenuItem
               icon={<MaterialIcon icon="visibility" size="text-lg" />}
               onClick={() => {

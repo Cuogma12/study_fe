@@ -52,7 +52,7 @@ export const QuestionOwnerMenu = ({
           event.stopPropagation();
           setOpen((value) => !value);
         }}
-        className="!rounded-lg !border !border-transparent hover:!border-slate-300 hover:!bg-slate-50 dark:hover:!border-slate-600 dark:hover:!bg-slate-800"
+        className="!rounded-lg !border !border-transparent hover:!border-gray-300 hover:!bg-slate-50 dark:hover:!border-slate-600 dark:hover:!bg-slate-800"
       >
         <MaterialIcon icon="more_vert" size="text-xl" />
       </IconButton>
@@ -60,7 +60,7 @@ export const QuestionOwnerMenu = ({
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-xl border border-slate-300 bg-white py-1 shadow-lg dark:border-slate-600 dark:bg-slate-900"
+          className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-xl border border-gray-300 bg-white py-1 shadow-lg dark:border-slate-600 dark:bg-slate-900"
         >
           <MenuItem
             role="menuitem"

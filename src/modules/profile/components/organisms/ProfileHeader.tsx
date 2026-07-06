@@ -35,7 +35,7 @@ export const ProfileHeader = ({
     `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4848e5&color=fff&size=128`;
 
   return (
-    <section className="rounded-2xl border border-slate-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900">
+    <section className="rounded-2xl border border-gray-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900">
       <div className="h-28 overflow-hidden rounded-t-2xl md:h-32">
         <div className="h-full w-full bg-gradient-to-br from-primary via-indigo-500 to-violet-500" />
       </div>

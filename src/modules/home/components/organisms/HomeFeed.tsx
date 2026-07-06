@@ -30,8 +30,16 @@ export const HomeFeed = ({
   const scrollRootRef = useRef<HTMLElement>(null);
   const loadMoreSentinelRef = useRef<HTMLDivElement>(null);
 
-  const { questions, loading, loadingMore, error, hasMore, loadMore, removeQuestion, updateQuestionSaved } =
-    useHomeFeed(filters);
+  const {
+    questions,
+    loading,
+    loadingMore,
+    error,
+    hasMore,
+    loadMore,
+    removeQuestion,
+    updateQuestionSaved,
+  } = useHomeFeed(filters);
 
   useIntersectionLoadMore({
     rootRef: scrollRootRef,
@@ -73,14 +81,14 @@ export const HomeFeed = ({
                 })
               }
               options={sortOptions}
-              className="!w-auto !min-w-[10rem] !py-2 !pr-8 !text-sm"
+              className="!w-auto !min-w-[10rem] !border-gray-300 !py-2 !pr-10 !text-sm"
               hideErrorMessage
             />
             <Button
               variant="outline"
               size="sm"
               onClick={() => onFilterDrawerOpenChange(true)}
-              className="relative flex items-center gap-1.5 !border-slate-200 !bg-white px-3 py-1.5 !text-slate-900 dark:!border-slate-700 dark:!bg-slate-800 dark:!text-slate-100"
+              className="relative flex items-center gap-1.5 !border-gray-300 !bg-white px-3 py-1.5 !text-slate-900 dark:!border-slate-700 dark:!bg-slate-800 dark:!text-slate-100"
             >
               <MaterialIcon icon="filter_list" size="text-lg" />
               {t('filter')}

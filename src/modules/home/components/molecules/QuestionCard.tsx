@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
 import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
 import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
+import { normalizeQuestionImages } from '@/shared/utils/normalizeQuestionImages';
 import { QuestionListItem } from '../../types/question';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { useLocale, useTranslations } from 'next-intl';
@@ -19,25 +20,6 @@ interface QuestionCardProps {
   onSavedChange?: (questionId: string, saved: boolean) => void;
 }
 
-const normalizeQuestionImages = (images: unknown): string[] => {
-  if (Array.isArray(images)) {
-    return images.filter((url): url is string => typeof url === 'string' && url.trim().length > 0);
-  }
-
-  if (typeof images === 'string' && images.trim()) {
-    try {
-      const parsed = JSON.parse(images) as unknown;
-      if (Array.isArray(parsed)) {
-        return parsed.filter((url): url is string => typeof url === 'string' && url.trim().length > 0);
-      }
-    } catch {
-      return [];
-    }
-  }
-
-  return [];
-};
-
 const QuestionCardImages = ({ images }: { images: string[] }) => {
   if (images.length === 0) {
     return null;
@@ -47,19 +29,13 @@ const QuestionCardImages = ({ images }: { images: string[] }) => {
   const extraCount = images.length - visibleImages.length;
 
   return (
-    <div
-      className={`mb-4 ${
-        visibleImages.length > 1 ? 'grid grid-cols-2 gap-2' : ''
-      }`}
-    >
+    <div className={`mb-4 ${visibleImages.length > 1 ? 'grid grid-cols-2 gap-2' : ''}`}>
       {visibleImages.map((url, index) => (
         <div key={`${url}-${index}`} className="relative">
           <PreviewableImage
             src={url}
             onActivate={(event) => event.stopPropagation()}
-            frameClassName={
-              visibleImages.length === 1 ? '!p-1.5' : '!p-1'
-            }
+            frameClassName={visibleImages.length === 1 ? '!p-1.5' : '!p-1'}
             imageClassName={
               visibleImages.length === 1
                 ? 'aspect-[4/3] max-h-72 object-cover'
@@ -83,7 +59,7 @@ const QuestionCardImages = ({ images }: { images: string[] }) => {
 };
 
 const feedStatPillClass =
-  'inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-2.5 py-1 text-slate-600 transition-colors hover:!border-primary hover:!bg-white hover:!text-primary dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:!border-primary dark:hover:!bg-slate-900 dark:hover:!text-primary';
+  'inline-flex items-center gap-1.5 rounded-full border border-gray-300 bg-white px-2.5 py-1 text-slate-600 transition-colors hover:!border-primary hover:!bg-white hover:!text-primary dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:!border-primary dark:hover:!bg-slate-900 dark:hover:!text-primary';
 
 export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCardProps) => {
   const t = useTranslations('home.feed');
@@ -158,7 +134,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
           handleOpen();
         }
       }}
-      className="group flex cursor-pointer flex-col rounded-xl border border-slate-300 bg-white p-5 shadow-sm transition-all hover:border-primary/50 hover:shadow-md dark:border-slate-600 dark:bg-slate-900 dark:hover:border-primary/50"
+      className="group flex cursor-pointer flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-md transition-shadow duration-200 hover:border-primary/50 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/25 dark:hover:border-primary/50 dark:hover:shadow-black/40"
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex flex-wrap gap-2">
@@ -180,11 +156,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
             </Tag>
           )}
           {isOwner && (
-            <QuestionOwnerMenu
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              disabled={deleting}
-            />
+            <QuestionOwnerMenu onEdit={handleEdit} onDelete={handleDelete} disabled={deleting} />
           )}
         </div>
       </div>
@@ -199,7 +171,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
         {question.excerpt}
       </Text>
 
-      <div className="mt-auto flex items-center justify-between border-t border-slate-300 pt-4 dark:border-slate-600">
+      <div className="mt-auto flex items-center justify-between border-t border-gray-300 pt-4 dark:border-slate-600">
         <div className="flex items-center gap-3">
           {question.author?.avatar_url ? (
             <div className="h-8 w-8 overflow-hidden rounded-full">

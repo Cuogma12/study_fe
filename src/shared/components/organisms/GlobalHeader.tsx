@@ -24,7 +24,7 @@ export const GlobalHeader = () => {
   const { navigateTo } = useAppNavigation();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-slate-300 bg-white px-6 shadow-sm dark:border-slate-700 dark:bg-background-dark lg:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-gray-300 bg-white px-6 shadow-sm dark:border-slate-700 dark:bg-background-dark lg:px-10">
       <div className="flex items-center gap-8">
         <Button
           type="button"

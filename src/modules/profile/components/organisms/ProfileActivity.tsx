@@ -42,12 +42,11 @@ export const ProfileActivity = ({
     },
   ];
 
-  const questions =
-    tab === 'mine' ? myQuestions : savedQuestions.map((item) => item.question);
+  const questions = tab === 'mine' ? myQuestions : savedQuestions.map((item) => item.question);
 
   return (
-    <section className="flex min-h-[560px] flex-col overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900 lg:min-h-[640px]">
-      <div className="flex shrink-0 gap-2 border-b border-slate-300 bg-slate-50 p-2.5 dark:border-slate-600 dark:bg-slate-800/50">
+    <section className="flex min-h-[560px] flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900 lg:min-h-[640px]">
+      <div className="flex shrink-0 gap-2 border-b border-gray-300 bg-slate-50 p-2.5 dark:border-slate-600 dark:bg-slate-800/50">
         {tabs.map((item) => {
           const active = tab === item.id;
           return (
@@ -63,7 +62,12 @@ export const ProfileActivity = ({
               }`}
             >
               <MaterialIcon icon={item.icon} size="text-lg" />
-              <Text as="span" variant="body2" weight="semibold" className="hidden !text-inherit sm:inline">
+              <Text
+                as="span"
+                variant="body2"
+                weight="semibold"
+                className="hidden !text-inherit sm:inline"
+              >
                 {item.label}
               </Text>
               <Tag
@@ -90,13 +94,17 @@ export const ProfileActivity = ({
 
         {!loading && questions.length === 0 && (
           <div className="flex flex-1 flex-col items-center justify-center px-4 py-16 text-center">
-            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-300 bg-slate-50 text-slate-400 dark:border-slate-600 dark:bg-slate-800">
+            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-gray-300 bg-slate-50 text-slate-400 dark:border-slate-600 dark:bg-slate-800">
               <MaterialIcon
                 icon={tab === 'mine' ? 'edit_note' : 'bookmark_border'}
                 className="text-3xl"
               />
             </div>
-            <Text variant="body2" weight="semibold" className="!text-slate-700 dark:!text-slate-200">
+            <Text
+              variant="body2"
+              weight="semibold"
+              className="!text-slate-700 dark:!text-slate-200"
+            >
               {tab === 'mine' ? t('empty_mine') : t('empty_saved')}
             </Text>
             <Text variant="small" className="mt-1 max-w-xs !text-slate-400">

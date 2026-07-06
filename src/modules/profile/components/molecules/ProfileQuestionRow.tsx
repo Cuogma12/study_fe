@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
 import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
 import { MetaStat } from '@/shared/components/molecules/MetaStat';
+import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
+import { normalizeQuestionImages } from '@/shared/utils/normalizeQuestionImages';
 import { QuestionListItem } from '@/modules/home/types/question';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
@@ -28,6 +30,9 @@ export const ProfileQuestionRow = ({
   const { navigateTo } = useAppNavigation();
   const [deleting, setDeleting] = useState(false);
 
+  const images = normalizeQuestionImages(question.images);
+  const coverImage = images[0];
+
   const handleEdit = () => {
     navigateTo(`/questions/${question.id}/edit`);
   };
@@ -49,7 +54,7 @@ export const ProfileQuestionRow = ({
   };
 
   return (
-    <div className="group relative flex w-full shrink-0 flex-col gap-2.5 rounded-xl border border-slate-300 bg-white px-4 py-4 transition-all hover:border-primary/50 hover:shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:hover:border-primary/50">
+    <div className="group relative flex w-full shrink-0 flex-col gap-2.5 rounded-xl border border-gray-300 bg-white px-4 py-4 transition-all hover:border-primary/50 hover:shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:hover:border-primary/50">
       <div className="flex flex-wrap items-center gap-2">
         {question.subject?.name && (
           <SubjectTag name={question.subject.name} slug={question.subject.slug} />
@@ -66,11 +71,7 @@ export const ProfileQuestionRow = ({
         >
           {formatRelativeTime(question.created_at, locale)}
           {showOwnerMenu && (
-            <QuestionOwnerMenu
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              disabled={deleting}
-            />
+            <QuestionOwnerMenu onEdit={handleEdit} onDelete={handleDelete} disabled={deleting} />
           )}
         </Text>
       </div>
@@ -100,6 +101,14 @@ export const ProfileQuestionRow = ({
           <MetaStat icon="chat_bubble" value={question.answers_count} />
         </div>
       </Button>
+
+      {coverImage && (
+        <PreviewableImage
+          src={coverImage}
+          frameClassName="!p-1.5"
+          imageClassName="aspect-[16/9] max-h-44 object-cover"
+        />
+      )}
     </div>
   );
 };

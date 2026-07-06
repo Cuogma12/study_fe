@@ -1,4 +1,6 @@
-import React, { SelectHTMLAttributes } from 'react';
+'use client';
+
+import React, { SelectHTMLAttributes, useState } from 'react';
 import { ExpandMoreIcon } from './icon';
 import { FieldErrorTone } from '@/shared/types/field-error';
 import { FIELD_ERROR_STYLES } from '@/shared/utils/fieldErrorStyles';
@@ -20,7 +22,23 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className = '', options, placeholder, error, errorTone = 'required', hideErrorMessage = false, icon, ...props }, ref) => {
+  (
+    {
+      className = '',
+      options,
+      placeholder,
+      error,
+      errorTone = 'required',
+      hideErrorMessage = false,
+      icon,
+      onMouseDown,
+      onBlur,
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
+    const [isOpen, setIsOpen] = useState(false);
     const tone = error ? FIELD_ERROR_STYLES[errorTone] : null;
     const paddingLeft = icon ? 'pl-12' : 'pl-4';
 
@@ -36,16 +54,34 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       .join(' ')
       .trim();
 
+    const isAutoWidth = /(?:^|\s)!?w-auto(?:\s|$)/.test(className);
+
     return (
       <div className="w-full">
-        <div className="relative w-full">
+        <div className={`relative ${isAutoWidth ? 'inline-block max-w-full' : 'w-full'}`.trim()}>
           {icon && (
             <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-slate-400">
               {icon}
             </div>
           )}
 
-          <select ref={ref} className={fieldStyles} {...props}>
+          <select
+            ref={ref}
+            className={fieldStyles}
+            onMouseDown={(event) => {
+              setIsOpen((prev) => !prev);
+              onMouseDown?.(event);
+            }}
+            onBlur={(event) => {
+              setIsOpen(false);
+              onBlur?.(event);
+            }}
+            onChange={(event) => {
+              setIsOpen(false);
+              onChange?.(event);
+            }}
+            {...props}
+          >
             {placeholder && (
               <option value="" disabled>
                 {placeholder}
@@ -58,7 +94,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             ))}
           </select>
 
-          <div className="pointer-events-none absolute right-4 top-1/2 z-10 -translate-y-1/2 text-slate-400">
+          <div
+            className={`pointer-events-none absolute right-4 top-1/2 z-10 -translate-y-1/2 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          >
             <ExpandMoreIcon size={20} />
           </div>
         </div>
