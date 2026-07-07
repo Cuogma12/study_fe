@@ -12,6 +12,9 @@ export const API_ENDPOINTS = {
     GET_BY_ID: (userId: string) => `${API_V1}/users/${userId}`,
     UPDATE: (userId: string) => `${API_V1}/users/${userId}`,
   },
+  ADMIN: {
+    LOGIN_HISTORY: `${API_V1}/login-history`,
+  },
   ME: {
     SAVED_QUESTIONS: `${API_V1}/me/saved-questions`,
   },

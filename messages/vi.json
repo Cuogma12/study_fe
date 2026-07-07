@@ -84,7 +84,8 @@
     "STD_QTN_003": "Thảo luận đã đóng, không thể trả lời thêm",
     "STD_ANS_001": "Không tìm thấy câu trả lời",
     "STD_ANS_002": "Bạn không có quyền thao tác câu trả lời này",
-    "STD_ANS_004": "Không tìm thấy nội dung để phản hồi"
+    "STD_ANS_004": "Không tìm thấy nội dung để phản hồi",
+    "STD_USR_002": "Bạn không có quyền truy cập tài nguyên này"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -343,6 +344,47 @@
       "suggestion_2": "Cho ví dụ tương tự",
       "placeholder": "Hỏi AI thêm về bài tập này...",
       "disclaimer": "AI có thể trả lời sai, hãy kiểm tra lại thông tin quan trọng."
+    }
+  },
+  "login_history": {
+    "title": "Lịch sử đăng nhập",
+    "description": "Theo dõi các lần đăng nhập thành công/thất bại trong hệ thống.",
+    "loading": "Đang tải dữ liệu...",
+    "load_error": "Không tải được lịch sử đăng nhập",
+    "forbidden": "Bạn không có quyền xem trang này",
+    "empty": "Chưa có dữ liệu đăng nhập",
+    "status": {
+      "success": "Thành công",
+      "failed": "Thất bại"
+    },
+    "filters": {
+      "search_placeholder": "Tìm theo email, username hoặc IP",
+      "status_all": "Tất cả trạng thái",
+      "status_success": "Chỉ thành công",
+      "status_failed": "Chỉ thất bại",
+      "apply": "Áp dụng"
+    },
+    "table": {
+      "time": "Thời gian",
+      "user": "Người dùng",
+      "ip": "IP",
+      "device": "Thiết bị / User agent",
+      "status": "Kết quả",
+      "reason": "Lý do lỗi"
+    },
+    "pagination": {
+      "summary": "Trang {page}/{total_pages} - Tổng {total} bản ghi",
+      "prev": "Trước",
+      "next": "Sau"
+    }
+  },
+  "admin": {
+    "title": "Bảng điều khiển quản trị",
+    "description": "Quản trị hệ thống - hiện đang mở mục lịch sử đăng nhập",
+    "shell": {
+      "brand_title": "Quản trị StudyApp",
+      "brand_subtitle": "Cổng quản trị",
+      "menu_login_history": "Lịch sử đăng nhập"
     }
   }
 }

@@ -1,10 +1,7 @@
 import axiosClient from '@/shared/utils/axiosClient';
 import { API_ENDPOINTS } from '@/shared/constants/api';
 import { UserProfile } from '../types/profile';
-import {
-  QuestionListItem,
-  QuestionListResponse,
-} from '@/modules/home/types/question';
+import { QuestionListItem, QuestionListResponse } from '@/modules/home/types/question';
 
 export interface SavedQuestionItem {
   saved_at: string;
