@@ -85,7 +85,8 @@
     "STD_ANS_001": "Không tìm thấy câu trả lời",
     "STD_ANS_002": "Bạn không có quyền thao tác câu trả lời này",
     "STD_ANS_004": "Không tìm thấy nội dung để phản hồi",
-    "STD_USR_002": "Bạn không có quyền truy cập tài nguyên này"
+    "STD_USR_002": "Bạn không có quyền truy cập tài nguyên này",
+    "STD_USR_004": "Bạn không thể thay đổi trạng thái tài khoản của chính mình"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -368,9 +369,11 @@
       "time": "Thời gian",
       "user": "Người dùng",
       "ip": "IP",
-      "device": "Thiết bị / User agent",
+      "device": "Thiết bị",
       "status": "Kết quả",
-      "reason": "Lý do lỗi"
+      "reason": "Lý do",
+      "unknown_user": "Không rõ",
+      "no_reason": "—"
     },
     "pagination": {
       "summary": "Trang {page}/{total_pages} - Tổng {total} bản ghi",
@@ -384,7 +387,59 @@
     "shell": {
       "brand_title": "Quản trị StudyApp",
       "brand_subtitle": "Cổng quản trị",
-      "menu_login_history": "Lịch sử đăng nhập"
+      "menu_login_history": "Lịch sử đăng nhập",
+      "menu_users": "Quản lý người dùng"
+    },
+    "users": {
+      "title": "Quản lý người dùng",
+      "description": "Danh sách tài khoản, lọc và thay đổi trạng thái",
+      "loading": "Đang tải dữ liệu người dùng...",
+      "load_error": "Không tải được danh sách người dùng",
+      "forbidden": "Bạn không có quyền xem trang này",
+      "empty": "Chưa có người dùng",
+      "update_status_failed": "Không cập nhật được trạng thái người dùng",
+      "filters": {
+        "search_label": "Tìm kiếm",
+        "search_placeholder": "Tìm theo email, username hoặc họ tên",
+        "role_label": "Vai trò",
+        "status_label": "Trạng thái",
+        "role_all": "Tất cả vai trò",
+        "status_all": "Tất cả trạng thái",
+        "apply": "Áp dụng"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Admin",
+        "moderator": "Moderator"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "banned": "Banned",
+        "pending": "Pending"
+      },
+      "table": {
+        "user": "Người dùng",
+        "full_name": "Họ tên",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "joined_at": "Tham gia",
+        "actions": "Thao tác"
+      },
+      "actions": {
+        "ban": "Ban",
+        "activate": "Kích hoạt",
+        "self_protected": "Không thể thao tác"
+      },
+      "confirm": {
+        "ban": "Bạn chắc chắn muốn ban tài khoản này?",
+        "activate": "Bạn chắc chắn muốn kích hoạt lại tài khoản này?"
+      },
+      "pagination": {
+        "summary": "Trang {page}/{total_pages} - Tổng {total} người dùng",
+        "prev": "Trước",
+        "next": "Sau"
+      }
     }
   }
 }

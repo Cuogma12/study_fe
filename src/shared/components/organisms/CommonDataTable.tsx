@@ -2,35 +2,41 @@
 
 import React from 'react';
 
+export interface CommonDataTableColumn {
+  key: string;
+  label: string;
+  className?: string;
+}
+
 interface CommonDataTableProps {
-  headers: string[];
+  columns: CommonDataTableColumn[];
   loading: boolean;
   loadingLabel: string;
   emptyLabel: string;
-  colSpan: number;
   rows: React.ReactNode;
 }
 
 export const CommonDataTable = ({
-  headers,
+  columns,
   loading,
   loadingLabel,
   emptyLabel,
-  colSpan,
   rows,
 }: CommonDataTableProps) => {
+  const colSpan = columns.length;
+
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse">
+        <table className="w-full min-w-[720px] table-fixed border-collapse">
           <thead>
             <tr className="bg-slate-50 text-left">
-              {headers.map((header) => (
+              {columns.map((column) => (
                 <th
-                  key={header}
-                  className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500"
+                  key={column.key}
+                  className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 ${column.className ?? ''}`}
                 >
-                  {header}
+                  {column.label}
                 </th>
               ))}
             </tr>

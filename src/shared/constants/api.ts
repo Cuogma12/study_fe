@@ -14,6 +14,8 @@ export const API_ENDPOINTS = {
   },
   ADMIN: {
     LOGIN_HISTORY: `${API_V1}/login-history`,
+    USERS: `${API_V1}/users`,
+    UPDATE_USER_STATUS: (userId: string) => `${API_V1}/users/${userId}/status`,
   },
   ME: {
     SAVED_QUESTIONS: `${API_V1}/me/saved-questions`,

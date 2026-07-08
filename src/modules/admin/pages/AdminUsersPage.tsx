@@ -4,14 +4,14 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Text } from '@/shared/components/atoms';
 import { useAuth } from '@/shared/hooks/useAuth';
-import { useAdminLoginHistory } from '../hooks/useAdminLoginHistory';
 import { AdminShell } from '../components/organisms/AdminShell';
-import { AdminLoginHistoryFilters } from '../components/molecules/AdminLoginHistoryFilters';
-import { AdminLoginHistoryTable } from '../components/organisms/AdminLoginHistoryTable';
+import { AdminUsersFilters } from '../components/molecules/AdminUsersFilters';
+import { AdminUsersTable } from '../components/organisms/AdminUsersTable';
+import { useAdminUsers } from '../hooks/useAdminUsers';
+import { AdminUserStatus } from '../types/user-management';
 
-export const AdminLoginHistoryPage = () => {
-  const t = useTranslations('login_history');
-  const tAdmin = useTranslations('admin');
+export const AdminUsersPage = () => {
+  const t = useTranslations('admin.users');
   const { ready, user } = useAuth();
   const {
     items,
@@ -20,12 +20,17 @@ export const AdminLoginHistoryPage = () => {
     error,
     keyword,
     setKeyword,
+    role,
+    setRole,
     status,
     setStatus,
+    roleOptions,
     statusOptions,
+    updatingId,
     onSearch,
     onChangePage,
-  } = useAdminLoginHistory();
+    updateStatus,
+  } = useAdminUsers();
 
   if (!ready) {
     return (
@@ -47,15 +52,34 @@ export const AdminLoginHistoryPage = () => {
     );
   }
 
+  const handleUpdateStatus = async (
+    userId: string,
+    nextStatus: AdminUserStatus
+  ) => {
+    const confirmText =
+      nextStatus === 'banned' ? t('confirm.ban') : t('confirm.activate');
+    const ok = window.confirm(confirmText);
+    if (!ok) return;
+    await updateStatus(userId, nextStatus);
+  };
+
   return (
-    <AdminShell title={tAdmin('title')} description={tAdmin('description')}>
-      <AdminLoginHistoryFilters
+    <AdminShell title={t('title')} description={t('description')}>
+      <AdminUsersFilters
         keyword={keyword}
+        role={role}
         status={status}
+        roleOptions={roleOptions}
         statusOptions={statusOptions}
-        searchPlaceholder={t('filters.search_placeholder')}
-        applyLabel={t('filters.apply')}
+        labels={{
+          search: t('filters.search_label'),
+          role: t('filters.role_label'),
+          status: t('filters.status_label'),
+          apply: t('filters.apply'),
+          placeholder: t('filters.search_placeholder'),
+        }}
         onKeywordChange={setKeyword}
+        onRoleChange={(value) => setRole(value as typeof role)}
         onStatusChange={(value) => setStatus(value as typeof status)}
         onApply={onSearch}
       />
@@ -67,7 +91,13 @@ export const AdminLoginHistoryPage = () => {
       ) : null}
 
       <div className="mt-4">
-        <AdminLoginHistoryTable items={items} loading={loading} />
+        <AdminUsersTable
+          items={items}
+          loading={loading}
+          currentUserId={user.userId}
+          updatingId={updatingId}
+          onUpdateStatus={handleUpdateStatus}
+        />
       </div>
 
       <div className="mt-4 flex items-center justify-between">
