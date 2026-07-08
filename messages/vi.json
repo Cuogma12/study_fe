@@ -86,7 +86,13 @@
     "STD_ANS_002": "Bạn không có quyền thao tác câu trả lời này",
     "STD_ANS_004": "Không tìm thấy nội dung để phản hồi",
     "STD_USR_002": "Bạn không có quyền truy cập tài nguyên này",
-    "STD_USR_004": "Bạn không thể thay đổi trạng thái tài khoản của chính mình"
+    "STD_USR_004": "Bạn không thể thay đổi trạng thái tài khoản của chính mình",
+    "STD_QIZ_001": "Không tìm thấy môn học",
+    "STD_QIZ_002": "Không tìm thấy chủ đề",
+    "STD_QIZ_003": "Chủ đề không thuộc môn học đã chọn",
+    "STD_QIZ_004": "Không có câu hỏi ôn tập phù hợp",
+    "STD_QIZ_005": "Không tìm thấy lượt làm bài",
+    "STD_QIZ_006": "Bạn không có quyền xem kết quả này"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -439,6 +445,80 @@
         "summary": "Trang {page}/{total_pages} - Tổng {total} người dùng",
         "prev": "Trước",
         "next": "Sau"
+      }
+    }
+  },
+  "quiz": {
+    "builder": {
+      "title": "Tạo bộ quiz ôn tập",
+      "description": "Chọn thông tin phù hợp để tạo bộ câu hỏi luyện tập nhanh.",
+      "fields": {
+        "subject": "Môn học",
+        "grade_level": "Khối lớp",
+        "topic": "Chủ đề (tùy chọn)",
+        "limit": "Số câu hỏi"
+      },
+      "placeholders": {
+        "subject": "Chọn môn học",
+        "grade_level": "Chọn khối lớp",
+        "topic": "Chọn chủ đề",
+        "topic_subject_required": "Chọn môn học trước",
+        "topic_grade_required": "Chọn khối lớp trước"
+      },
+      "grade_options": {
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12"
+      },
+      "question_count_suffix": "câu",
+      "actions": {
+        "generate": "Bắt đầu làm quiz",
+        "generating": "Đang tạo bộ đề..."
+      },
+      "errors": {
+        "load_failed": "Không tải được dữ liệu môn học/chủ đề",
+        "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại"
+      }
+    },
+    "play": {
+      "title": "Làm quiz",
+      "progress": "Đã trả lời {answered}/{total} câu",
+      "change_quiz": "Đổi bộ câu hỏi",
+      "question_label": "Câu {index}",
+      "submit": "Nộp bài",
+      "submitting": "Đang nộp bài...",
+      "empty": {
+        "title": "Không có dữ liệu quiz",
+        "description": "Vui lòng tạo bộ câu hỏi mới để bắt đầu làm bài.",
+        "back_action": "Quay lại màn tạo quiz"
+      },
+      "errors": {
+        "submit_failed": "Nộp bài thất bại, vui lòng thử lại"
+      }
+    },
+    "result": {
+      "title": "Kết quả quiz",
+      "loading": "Đang tải kết quả...",
+      "summary": "Bạn đúng {correct}/{total} câu - điểm {score}",
+      "question_label": "Câu {index}",
+      "selected_answer": "Bạn chọn",
+      "correct_answer": "Đáp án đúng",
+      "explanation": "Giải thích",
+      "badge": {
+        "correct": "Đúng",
+        "incorrect": "Sai"
+      },
+      "stats": {
+        "correct": "Số câu đúng",
+        "wrong": "Số câu sai",
+        "score": "Điểm số"
+      },
+      "new_quiz_action": "Tạo quiz mới",
+      "errors": {
+        "title": "Không thể tải kết quả",
+        "load_failed": "Không lấy được dữ liệu kết quả quiz",
+        "retry": "Thử lại",
+        "back_builder": "Quay lại tạo quiz"
       }
     }
   }
