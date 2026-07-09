@@ -37,6 +37,7 @@ export const API_ENDPOINTS = {
     CREATE: `${API_V1}/answers`,
   },
   QUIZ: {
+    BANK: `${API_V1}/quiz/bank`,
     GENERATE: `${API_V1}/quiz/generate`,
     SUBMIT: `${API_V1}/quiz/submit`,
     ATTEMPT_RESULT: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/result`,

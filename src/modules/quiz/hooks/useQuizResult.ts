@@ -52,7 +52,7 @@ export const useQuizResult = (attemptId: string) => {
   };
 
   const startNewQuiz = () => {
-    router.push('/quiz');
+    router.push('/quiz/new');
   };
 
   return {

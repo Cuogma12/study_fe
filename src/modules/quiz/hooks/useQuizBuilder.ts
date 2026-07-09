@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { subjectService, Subject } from '@/shared/services/subject.service';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
@@ -15,11 +15,14 @@ import { quizService } from '../services/quiz.service';
 
 const DEFAULT_LIMIT = 10;
 const LIMIT_OPTIONS = [5, 10, 15, 20];
+const MIN_LIMIT = 1;
+const MAX_LIMIT = 50;
 
 export const useQuizBuilder = () => {
   const t = useTranslations('quiz.builder');
   const tApiErrors = useTranslations('api_errors');
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subjectsLoading, setSubjectsLoading] = useState(true);
@@ -29,8 +32,24 @@ export const useQuizBuilder = () => {
   const [topicId, setTopicId] = useState('');
   const [gradeLevel, setGradeLevel] = useState('');
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
+  const [limitError, setLimitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const subjectFromQuery = searchParams.get('subject_id');
+    const topicFromQuery = searchParams.get('topic_id');
+    const gradeFromQuery = searchParams.get('grade_level');
+    if (subjectFromQuery) {
+      setSubjectId(subjectFromQuery);
+    }
+    if (topicFromQuery) {
+      setTopicId(topicFromQuery);
+    }
+    if (gradeFromQuery) {
+      setGradeLevel(gradeFromQuery);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let cancelled = false;
@@ -99,11 +118,13 @@ export const useQuizBuilder = () => {
   }, [gradeLevel, subjectId, topicsBySubject]);
 
   const limitOptions = useMemo(
-    () => LIMIT_OPTIONS.map((value) => ({ label: `${value} ${t('question_count_suffix')}`, value })),
+    () =>
+      LIMIT_OPTIONS.map((value) => ({ label: `${value} ${t('question_count_suffix')}`, value })),
     [t]
   );
 
-  const canGenerate = Boolean(subjectId && gradeLevel && !submitting);
+  const isLimitValid = limit >= MIN_LIMIT && limit <= MAX_LIMIT;
+  const canGenerate = Boolean(subjectId && gradeLevel && !submitting && isLimitValid);
 
   const onSubjectChange = (value: string) => {
     setSubjectId(value);
@@ -124,11 +145,20 @@ export const useQuizBuilder = () => {
 
   const onLimitChange = (value: number) => {
     setLimit(value);
+    setLimitError(null);
     setError(null);
   };
 
+  const validateLimit = () => {
+    if (!isLimitValid) {
+      setLimitError(t('errors.limit_invalid', { min: MIN_LIMIT, max: MAX_LIMIT }));
+      return false;
+    }
+    return true;
+  };
+
   const generateQuiz = async () => {
-    if (!canGenerate) {
+    if (!canGenerate || !validateLimit()) {
       return;
     }
     setSubmitting(true);
@@ -164,6 +194,9 @@ export const useQuizBuilder = () => {
     topicId,
     gradeLevel,
     limit,
+    limitError,
+    minLimit: MIN_LIMIT,
+    maxLimit: MAX_LIMIT,
     error,
     submitting,
     subjectOptions,

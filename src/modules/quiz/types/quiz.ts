@@ -64,3 +64,18 @@ export interface QuizAttemptResult {
   submitted_at: string;
   answers: QuizAttemptAnswer[];
 }
+
+export interface QuizBankItem {
+  subject_id: string;
+  topic_id: string;
+  subject_name: string;
+  topic_name: string;
+  grade_levels: number[];
+  question_count: number;
+  mine_question_count: number;
+  is_mine: boolean;
+}
+
+export interface QuizBankResponse {
+  items: QuizBankItem[];
+}

@@ -3,12 +3,20 @@ import axiosClient from '@/shared/utils/axiosClient';
 import {
   GenerateQuizPayload,
   GenerateQuizResponse,
+  QuizBankResponse,
   QuizAttemptResult,
   SubmitQuizPayload,
   SubmitQuizResponse,
 } from '../types/quiz';
 
 export const quizService = {
+  getQuizBank: async (scope: 'all' | 'my' = 'all'): Promise<QuizBankResponse> => {
+    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.BANK, {
+      params: { scope },
+    });
+    return res.data;
+  },
+
   generateQuiz: async (payload: GenerateQuizPayload): Promise<GenerateQuizResponse> => {
     const res = await axiosClient.post(API_ENDPOINTS.QUIZ.GENERATE, payload);
     return res.data;

@@ -146,6 +146,7 @@
       "home": "Trang chủ",
       "courses": "Khóa học",
       "community": "Cộng đồng",
+      "quiz": "Ôn tập",
       "ask_question": "Đặt câu hỏi",
       "profile": "Hồ sơ",
       "login": "Đăng nhập",
@@ -449,6 +450,78 @@
     }
   },
   "quiz": {
+    "dashboard": {
+      "title": "Tổng quan quiz",
+      "my_quizzes_title": "Quiz Bank",
+      "description": "Sẵn sàng chinh phục bài tập hôm nay chứ?",
+      "greeting": "Chào mừng quay lại!",
+      "create_action": "Tạo bộ quiz",
+      "loading": "Đang tải danh sách quiz...",
+      "empty": "Không có bộ quiz phù hợp với bộ lọc hiện tại.",
+      "errors": {
+        "load_failed": "Không tải được danh sách quiz"
+      },
+      "overview": {
+        "stats": {
+          "total_quizzes": "Tổng số bài đã làm",
+          "avg_score": "Điểm trung bình",
+          "total_points": "Tổng điểm tích lũy",
+          "streak_days": "Chuỗi ngày học tập"
+        },
+        "chart": {
+          "title": "Tiến độ học tập (7 ngày)",
+          "period": "Tuần này"
+        },
+        "history": {
+          "title": "Lịch sử bài làm",
+          "view_all": "Xem tất cả",
+          "columns": {
+            "quiz": "Tên bài kiểm tra",
+            "time": "Ngày làm",
+            "score": "Điểm",
+            "status": "Trạng thái",
+            "action": "Thao tác"
+          },
+          "pass": "Đạt",
+          "fail": "Cần cố gắng",
+          "review_action": "Xem lại",
+          "today_time": "Hôm nay, 14:30",
+          "yesterday": "Hôm qua",
+          "days_ago": "{count} ngày trước"
+        },
+        "quick_actions": {
+          "title": "Thao tác nhanh",
+          "create_quiz": "Tạo Quiz mới",
+          "create_ai": "Tạo bằng AI"
+        },
+        "mastery": {
+          "title": "Mức độ thông thạo"
+        }
+      },
+      "sidebar": {
+        "brand_title": "HọcThôngMinh",
+        "brand_subtitle": "EdTech Platform",
+        "overview": "Trang chủ quiz",
+        "my_quizzes": "Quiz Bank",
+        "statistics": "Thống kê",
+        "classrooms": "Lớp học",
+        "ai_assistant": "Trợ lý AI",
+        "help_center": "Trung tâm trợ giúp"
+      },
+      "filters": {
+        "search_placeholder": "Tìm theo môn hoặc chủ đề...",
+        "all_subjects": "Tất cả môn",
+        "all_grades": "Tất cả lớp",
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12"
+      },
+      "card": {
+        "all_grades": "Mọi khối lớp",
+        "question_count": "{count} câu hỏi",
+        "start_action": "Bắt đầu làm bài"
+      }
+    },
     "builder": {
       "title": "Tạo bộ quiz ôn tập",
       "description": "Chọn thông tin phù hợp để tạo bộ câu hỏi luyện tập nhanh.",
@@ -463,8 +536,10 @@
         "grade_level": "Chọn khối lớp",
         "topic": "Chọn chủ đề",
         "topic_subject_required": "Chọn môn học trước",
-        "topic_grade_required": "Chọn khối lớp trước"
+        "topic_grade_required": "Chọn khối lớp trước",
+        "limit_custom": "Tùy chỉnh"
       },
+      "limit_hint": "Chọn nhanh hoặc nhập số câu ({min}-{max})",
       "grade_options": {
         "grade_10": "Lớp 10",
         "grade_11": "Lớp 11",
@@ -477,7 +552,8 @@
       },
       "errors": {
         "load_failed": "Không tải được dữ liệu môn học/chủ đề",
-        "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại"
+        "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại",
+        "limit_invalid": "Số câu hỏi phải từ {min} đến {max}"
       }
     },
     "play": {

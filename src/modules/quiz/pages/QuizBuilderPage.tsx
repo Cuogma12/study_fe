@@ -1,7 +1,8 @@
 'use client';
-import { Button, Select, Text } from '@/shared/components/atoms';
+import { Button, Text } from '@/shared/components/atoms';
 import { useQuizBuilder } from '../hooks/useQuizBuilder';
 import { QuizBuilderField } from '../components/molecules/QuizBuilderField';
+import { QuizBuilderLimitField } from '../components/molecules/QuizBuilderLimitField';
 
 export const QuizBuilderPage = () => {
   const {
@@ -11,6 +12,9 @@ export const QuizBuilderPage = () => {
     topicId,
     gradeLevel,
     limit,
+    limitError,
+    minLimit,
+    maxLimit,
     error,
     submitting,
     subjectOptions,
@@ -69,17 +73,18 @@ export const QuizBuilderPage = () => {
             onChange={onTopicChange}
           />
 
-          <div>
-            <Text variant="small" className="mb-2 !font-semibold !text-slate-600">
-              {t('fields.limit')}
-            </Text>
-            <Select
-              value={limit}
-              disabled={submitting}
-              options={limitOptions}
-              onChange={(event) => onLimitChange(Number(event.target.value))}
-            />
-          </div>
+          <QuizBuilderLimitField
+            label={t('fields.limit')}
+            value={limit}
+            min={minLimit}
+            max={maxLimit}
+            disabled={submitting}
+            presetOptions={limitOptions}
+            customPlaceholder={t('placeholders.limit_custom')}
+            hint={t('limit_hint', { min: minLimit, max: maxLimit })}
+            error={limitError}
+            onChange={onLimitChange}
+          />
         </div>
 
         {error ? (

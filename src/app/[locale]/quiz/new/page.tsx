@@ -1,11 +1,11 @@
 import React from 'react';
-import { QuizDashboardPage } from '@/modules/quiz/pages/QuizDashboardPage';
+import { QuizBuilderPage } from '@/modules/quiz/pages/QuizBuilderPage';
 import { AppShell } from '@/shared/components/organisms/AppShell';
 
-export default function QuizDashboardRoute() {
+export default function QuizBuilderRoute() {
   return (
     <AppShell showBottomNav={false}>
-      <QuizDashboardPage />
+      <QuizBuilderPage />
     </AppShell>
   );
 }

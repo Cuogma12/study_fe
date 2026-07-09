@@ -68,7 +68,7 @@ export const useQuizPlay = () => {
   };
 
   const backToBuilder = () => {
-    router.push('/quiz');
+    router.push('/quiz/new');
   };
 
   return {

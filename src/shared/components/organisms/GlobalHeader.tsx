@@ -67,6 +67,19 @@ export const GlobalHeader = () => {
         </nav>
 
         <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigateTo('/quiz')}
+          className="!h-10 !w-10 !p-0 sm:!h-auto sm:!w-auto sm:!gap-1.5 sm:!px-3"
+          aria-label={t('quiz')}
+        >
+          <MaterialIcon icon="quiz" size="text-lg" />
+          <Text as="span" variant="small" className="hidden !font-semibold sm:inline">
+            {t('quiz')}
+          </Text>
+        </Button>
+
+        <Button
           size="sm"
           onClick={() => navigateTo('/questions/new')}
           className="hidden !gap-1.5 sm:inline-flex"
