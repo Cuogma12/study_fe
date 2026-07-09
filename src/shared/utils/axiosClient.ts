@@ -32,11 +32,21 @@ axiosClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    const errorCode = error.response?.data?.message;
+
+    if (error.response?.status === 401 && errorCode === 'STD_AUT_020') {
+      Cookies.remove('access_token');
+      Cookies.remove('refresh_token');
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    }
 
     // If 401 (Unauthorized) and error code is STD_AUT_021 (Token expired/invalid)
     if (
       error.response?.status === 401 &&
-      error.response?.data?.message === 'STD_AUT_021' &&
+      errorCode === 'STD_AUT_021' &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;

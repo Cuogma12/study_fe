@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import { QuizDashboardPage } from '@/modules/quiz/pages/QuizDashboardPage';
+import { QuizHistoryPage } from '@/modules/quiz/pages/QuizHistoryPage';
 import { AppShell } from '@/shared/components/organisms/AppShell';
 
-export default function QuizDashboardRoute() {
+export default function QuizHistoryRoute() {
   return (
     <AppShell lockViewport showBottomNav={false}>
       <Suspense fallback={null}>
-        <QuizDashboardPage />
+        <QuizHistoryPage />
       </Suspense>
     </AppShell>
   );

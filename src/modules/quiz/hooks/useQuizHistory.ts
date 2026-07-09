@@ -6,17 +6,26 @@ import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { quizService } from '../services/quiz.service';
-import { QuizAttemptResult } from '../types/quiz';
+import { QuizAttemptListItem, QuizAttemptStatus } from '../types/quiz';
 
-export const useQuizResult = (attemptId: string) => {
-  const t = useTranslations('quiz.result');
+export type QuizMyTab = QuizAttemptStatus;
+
+export const useQuizHistory = () => {
+  const t = useTranslations('quiz.history');
   const tApiErrors = useTranslations('api_errors');
   const router = useRouter();
   const { ready, isAuthenticated } = useRequireAuth();
 
-  const [result, setResult] = useState<QuizAttemptResult | null>(null);
+  const [tab, setTab] = useState<QuizMyTab>('in_progress');
+  const [items, setItems] = useState<QuizAttemptListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
 
   useEffect(() => {
     if (!ready) {
@@ -26,21 +35,19 @@ export const useQuizResult = (attemptId: string) => {
       setLoading(false);
       return;
     }
-    if (!attemptId) {
-      setLoading(false);
-      return;
-    }
 
     let cancelled = false;
 
-    const loadResult = async () => {
+    const loadHistory = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await quizService.getAttemptResult(attemptId);
-        if (!cancelled) {
-          setResult(data);
+        const data = await quizService.getMyAttempts(page, 10, tab);
+        if (cancelled) {
+          return;
         }
+        setItems(data.items ?? []);
+        setTotalPages(data.pagination?.total_pages ?? 1);
       } catch (err: unknown) {
         if (!cancelled) {
           setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
@@ -52,33 +59,38 @@ export const useQuizResult = (attemptId: string) => {
       }
     };
 
-    loadResult();
+    loadHistory();
     return () => {
       cancelled = true;
     };
-  }, [ready, isAuthenticated, attemptId, t, tApiErrors]);
+  }, [ready, isAuthenticated, page, tab, t, tApiErrors]);
 
-  const retry = () => {
-    router.refresh();
-  };
-
-  const startNewQuiz = () => {
+  const goToBuilder = () => {
     router.push('/quiz/new');
   };
 
-  const backToQuiz = () => {
-    router.push('/quiz');
+  const viewResult = (attemptId: string) => {
+    router.push(`/quiz/attempts/${attemptId}/result`);
+  };
+
+  const continueQuiz = (attemptId: string) => {
+    router.push(`/quiz/play?attempt_id=${attemptId}`);
   };
 
   return {
     t,
     ready,
     isAuthenticated,
-    result,
+    tab,
+    setTab,
+    items,
     loading,
     error,
-    retry,
-    startNewQuiz,
-    backToQuiz,
+    page,
+    totalPages,
+    setPage,
+    goToBuilder,
+    viewResult,
+    continueQuiz,
   };
 };

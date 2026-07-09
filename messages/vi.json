@@ -79,6 +79,10 @@
     "STD_AUT_012": "Tên đăng nhập đã tồn tại",
     "STD_AUT_013": "Email hoặc mật khẩu không đúng",
     "STD_AUT_014": "Tài khoản chưa kích hoạt hoặc bị khóa",
+    "STD_AUT_020": "Bạn cần đăng nhập để tiếp tục",
+    "STD_AUT_021": "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+    "STD_AUT_022": "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+    "STD_AUT_023": "Phiên đăng nhập không còn hiệu lực, vui lòng đăng nhập lại",
     "STD_QTN_001": "Không tìm thấy câu hỏi",
     "STD_QTN_002": "Bạn không có quyền thao tác câu hỏi này",
     "STD_QTN_003": "Thảo luận đã đóng, không thể trả lời thêm",
@@ -91,8 +95,10 @@
     "STD_QIZ_002": "Không tìm thấy chủ đề",
     "STD_QIZ_003": "Chủ đề không thuộc môn học đã chọn",
     "STD_QIZ_004": "Không có câu hỏi ôn tập phù hợp",
-    "STD_QIZ_005": "Không tìm thấy lượt làm bài",
-    "STD_QIZ_006": "Bạn không có quyền xem kết quả này"
+    "STD_QIZ_005": "Câu hỏi quiz không hợp lệ",
+    "STD_QIZ_006": "Không tìm thấy lượt làm bài",
+    "STD_QIZ_007": "Bạn không có quyền xem kết quả này",
+    "STD_QIZ_008": "Vui lòng chọn đáp án trước khi nộp bài"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -453,8 +459,7 @@
     "dashboard": {
       "title": "Tổng quan quiz",
       "my_quizzes_title": "Quiz Bank",
-      "description": "Sẵn sàng chinh phục bài tập hôm nay chứ?",
-      "greeting": "Chào mừng quay lại!",
+      "bank_description": "Chọn bộ ôn tập theo môn và chủ đề để bắt đầu làm bài.",
       "create_action": "Tạo bộ quiz",
       "loading": "Đang tải danh sách quiz...",
       "empty": "Không có bộ quiz phù hợp với bộ lọc hiện tại.",
@@ -463,6 +468,7 @@
       },
       "overview": {
         "stats": {
+          "section_title": "Thống kê nhanh",
           "total_quizzes": "Tổng số bài đã làm",
           "avg_score": "Điểm trung bình",
           "total_points": "Tổng điểm tích lũy",
@@ -470,7 +476,8 @@
         },
         "chart": {
           "title": "Tiến độ học tập (7 ngày)",
-          "period": "Tuần này"
+          "period": "Tuần này",
+          "placeholder": "Biểu đồ thống kê sẽ hiển thị khi API dashboard sẵn sàng."
         },
         "history": {
           "title": "Lịch sử bài làm",
@@ -499,10 +506,9 @@
         }
       },
       "sidebar": {
-        "brand_title": "HọcThôngMinh",
-        "brand_subtitle": "EdTech Platform",
         "overview": "Trang chủ quiz",
         "my_quizzes": "Quiz Bank",
+        "my_attempts": "Quiz của tôi",
         "statistics": "Thống kê",
         "classrooms": "Lớp học",
         "ai_assistant": "Trợ lý AI",
@@ -522,9 +528,41 @@
         "start_action": "Bắt đầu làm bài"
       }
     },
+    "history": {
+      "title": "Quiz của tôi",
+      "description": "Theo dõi quiz đang làm dở và các lần đã nộp bài.",
+      "create_action": "Tạo bộ quiz",
+      "loading": "Đang tải danh sách quiz...",
+      "empty_in_progress": "Bạn chưa có quiz nào đang làm dở.",
+      "empty_submitted": "Bạn chưa nộp bài quiz nào.",
+      "tabs": {
+        "in_progress": "Chưa làm xong",
+        "submitted": "Đã nộp bài"
+      },
+      "errors": {
+        "load_failed": "Không tải được danh sách quiz"
+      },
+      "card": {
+        "score": "Điểm",
+        "progress": "Tiến độ",
+        "questions": "Số câu đúng",
+        "submitted_at": "Nộp lúc",
+        "updated_at": "Cập nhật lúc",
+        "status_in_progress": "Đang làm",
+        "status_submitted": "Đã nộp",
+        "view_result": "Xem kết quả",
+        "continue": "Tiếp tục làm"
+      },
+      "pagination": {
+        "prev": "Trước",
+        "next": "Sau",
+        "summary": "Trang {page}/{total_pages}"
+      }
+    },
     "builder": {
       "title": "Tạo bộ quiz ôn tập",
       "description": "Chọn thông tin phù hợp để tạo bộ câu hỏi luyện tập nhanh.",
+      "loading": "Đang tải...",
       "fields": {
         "subject": "Môn học",
         "grade_level": "Khối lớp",
@@ -558,17 +596,35 @@
     },
     "play": {
       "title": "Làm quiz",
+      "loading": "Đang tải bài quiz...",
+      "exam_title_default": "Bài ôn tập",
+      "exam_title_grade": "Bài ôn tập lớp {grade}",
+      "time_remaining": "Thời gian còn lại: {time}",
+      "question_progress": "Câu {current}/{total}",
+      "percent_complete": "{percent}% hoàn thành",
+      "prev_question": "Câu trước",
+      "next_question": "Câu sau",
       "progress": "Đã trả lời {answered}/{total} câu",
       "change_quiz": "Đổi bộ câu hỏi",
       "question_label": "Câu {index}",
       "submit": "Nộp bài",
       "submitting": "Đang nộp bài...",
+      "exit_aria": "Thoát bài làm",
+      "minimap": {
+        "title": "Danh sách câu",
+        "answered": "{answered}/{total} đã chọn",
+        "question_aria": "Câu {index}",
+        "legend_current": "Đang làm",
+        "legend_answered": "Đã chọn ({count})",
+        "legend_unanswered": "Chưa chọn"
+      },
       "empty": {
         "title": "Không có dữ liệu quiz",
         "description": "Vui lòng tạo bộ câu hỏi mới để bắt đầu làm bài.",
         "back_action": "Quay lại màn tạo quiz"
       },
       "errors": {
+        "load_failed": "Không tải được bài quiz",
         "submit_failed": "Nộp bài thất bại, vui lòng thử lại"
       }
     },
@@ -590,6 +646,7 @@
         "score": "Điểm số"
       },
       "new_quiz_action": "Tạo quiz mới",
+      "back_quiz_action": "Quay về trang quiz",
       "errors": {
         "title": "Không thể tải kết quả",
         "load_failed": "Không lấy được dữ liệu kết quả quiz",

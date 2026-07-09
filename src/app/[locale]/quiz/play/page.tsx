@@ -4,7 +4,7 @@ import { AppShell } from '@/shared/components/organisms/AppShell';
 
 export default function QuizPlayRoute() {
   return (
-    <AppShell showBottomNav={false}>
+    <AppShell showBottomNav={false} showHeader={false} lockViewport>
       <QuizPlayPage />
     </AppShell>
   );

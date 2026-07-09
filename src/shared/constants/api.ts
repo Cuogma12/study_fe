@@ -41,5 +41,8 @@ export const API_ENDPOINTS = {
     GENERATE: `${API_V1}/quiz/generate`,
     SUBMIT: `${API_V1}/quiz/submit`,
     ATTEMPT_RESULT: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/result`,
+    ATTEMPT_PLAY: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/play`,
+    ATTEMPT_ANSWERS: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/answers`,
+    ATTEMPTS: `${API_V1}/quiz/attempts`,
   },
 } as const;

@@ -1,3 +1,5 @@
+export type QuizAttemptStatus = 'in_progress' | 'submitted';
+
 export interface QuizQuestion {
   id: string;
   subject_id: string;
@@ -11,14 +13,30 @@ export interface QuizQuestion {
 export interface GenerateQuizPayload {
   subject_id: string;
   topic_id?: string;
+  grade_level?: number;
   limit: number;
 }
 
 export interface GenerateQuizResponse {
+  attempt_id: string;
   subject_id: string;
   topic_id: string | null;
+  grade_level: number | null;
+  status: QuizAttemptStatus;
   total_questions: number;
   questions: QuizQuestion[];
+}
+
+export interface QuizAttemptPlayResponse {
+  attempt_id: string;
+  subject_id: string;
+  topic_id: string | null;
+  grade_level: number | null;
+  status: QuizAttemptStatus;
+  total_questions: number;
+  answered_count: number;
+  questions: QuizQuestion[];
+  saved_answers: SubmitQuizAnswerPayload[];
 }
 
 export interface SubmitQuizAnswerPayload {
@@ -27,8 +45,7 @@ export interface SubmitQuizAnswerPayload {
 }
 
 export interface SubmitQuizPayload {
-  subject_id: string;
-  topic_id?: string;
+  attempt_id: string;
   answers: SubmitQuizAnswerPayload[];
 }
 
@@ -78,4 +95,32 @@ export interface QuizBankItem {
 
 export interface QuizBankResponse {
   items: QuizBankItem[];
+}
+
+export interface QuizAttemptListItem {
+  attempt_id: string;
+  subject_id: string;
+  topic_id: string | null;
+  subject_name: string;
+  topic_name: string;
+  grade_level: number | null;
+  status: QuizAttemptStatus;
+  total_questions: number;
+  answered_count: number;
+  correct_count: number | null;
+  wrong_count: number | null;
+  score: number | null;
+  created_at: string | null;
+  updated_at: string | null;
+  submitted_at: string | null;
+}
+
+export interface QuizAttemptListResponse {
+  items: QuizAttemptListItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+  };
 }

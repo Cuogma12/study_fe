@@ -36,8 +36,6 @@ export const useAdminSidebarMenu = () => {
   }, [pathname, t]);
 
   return {
-    brandTitle: t('brand_title'),
-    brandSubtitle: t('brand_subtitle'),
     menus,
   };
 };

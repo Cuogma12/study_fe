@@ -1,10 +1,11 @@
 import { Button, MaterialIcon, Text } from '@/shared/components/atoms';
+import { quizDashboardPanel } from '../../constants/quizDashboardStyles';
 
 interface QuizDashboardCardProps {
   subjectName: string;
   topicName: string;
   gradeText: string;
-  unknownCountText: string;
+  questionCountText: string;
   startText: string;
   onStart: () => void;
 }
@@ -13,21 +14,31 @@ export const QuizDashboardCard = ({
   subjectName,
   topicName,
   gradeText,
-  unknownCountText,
+  questionCountText,
   startText,
   onStart,
 }: QuizDashboardCardProps) => {
   return (
-    <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex h-20 items-center justify-center rounded-xl bg-indigo-50 text-primary">
+    <article
+      className={`${quizDashboardPanel.shell} ${quizDashboardPanel.shellHover} flex flex-col`}
+    >
+      <div className="mb-3 flex h-20 items-center justify-center rounded-xl border border-indigo-100 bg-indigo-50/80 text-primary dark:border-primary/20 dark:bg-primary/10">
         <MaterialIcon icon="quiz" size="text-3xl" />
       </div>
 
-      <div className="mb-2 flex gap-2">
-        <Text as="span" variant="small" className="rounded bg-slate-100 px-2 py-1 !text-slate-600">
+      <div className="mb-2 flex flex-wrap gap-2">
+        <Text
+          as="span"
+          variant="small"
+          className="rounded-full border border-slate-300 bg-slate-50 px-2.5 py-1 !text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:!text-slate-300"
+        >
           {subjectName}
         </Text>
-        <Text as="span" variant="small" className="rounded bg-slate-100 px-2 py-1 !text-slate-600">
+        <Text
+          as="span"
+          variant="small"
+          className="rounded-full border border-slate-300 bg-slate-50 px-2.5 py-1 !text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:!text-slate-300"
+        >
           {gradeText}
         </Text>
       </div>
@@ -37,10 +48,10 @@ export const QuizDashboardCard = ({
       </Text>
 
       <Text variant="body2" className="mt-2 !text-slate-500">
-        {unknownCountText}
+        {questionCountText}
       </Text>
 
-      <Button className="mt-4 w-full" onClick={onStart}>
+      <Button className="mt-4 w-full shadow-sm" onClick={onStart}>
         {startText}
       </Button>
     </article>

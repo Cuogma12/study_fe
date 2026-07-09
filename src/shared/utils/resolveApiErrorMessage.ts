@@ -46,8 +46,13 @@ export const resolveApiErrorMessage = (
   }
 
   const translated = t(code);
-  if (translated === code) {
-    return fallbackMessage ?? t('STD_SYS_004');
+  const isMissingTranslation =
+    translated === code ||
+    translated === `api_errors.${code}` ||
+    (translated.includes('api_errors') && translated.endsWith(code));
+
+  if (isMissingTranslation) {
+    return fallbackMessage ?? t('fallback');
   }
 
   return translated;

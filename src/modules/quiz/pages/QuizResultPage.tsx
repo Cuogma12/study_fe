@@ -10,7 +10,18 @@ interface QuizResultPageProps {
 }
 
 export const QuizResultPage = ({ attemptId }: QuizResultPageProps) => {
-  const { t, result, loading, error, retry, startNewQuiz } = useQuizResult(attemptId);
+  const { t, ready, isAuthenticated, result, loading, error, retry, startNewQuiz, backToQuiz } =
+    useQuizResult(attemptId);
+
+  if (!ready || !isAuthenticated) {
+    return (
+      <main className="mx-auto flex w-full max-w-5xl justify-center px-4 py-10">
+        <Text variant="body2" className="!text-slate-500">
+          {t('loading')}
+        </Text>
+      </main>
+    );
+  }
 
   if (loading) {
     return (
@@ -25,7 +36,7 @@ export const QuizResultPage = ({ attemptId }: QuizResultPageProps) => {
   if (error || !result) {
     return (
       <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center">
+        <div className="rounded-2xl border border-slate-300 bg-white p-6 text-center">
           <Text variant="h4" className="!font-bold">
             {t('errors.title')}
           </Text>
@@ -45,7 +56,7 @@ export const QuizResultPage = ({ attemptId }: QuizResultPageProps) => {
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="rounded-2xl border border-slate-300 bg-white p-5 shadow-sm sm:p-6">
         <Text variant="h3" className="!font-black">
           {t('title')}
         </Text>
@@ -83,7 +94,10 @@ export const QuizResultPage = ({ attemptId }: QuizResultPageProps) => {
           })}
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex flex-wrap justify-end gap-2">
+          <Button variant="outline" onClick={backToQuiz}>
+            {t('back_quiz_action')}
+          </Button>
           <Button onClick={startNewQuiz}>{t('new_quiz_action')}</Button>
         </div>
       </div>

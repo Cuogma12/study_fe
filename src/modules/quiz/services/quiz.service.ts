@@ -4,8 +4,12 @@ import {
   GenerateQuizPayload,
   GenerateQuizResponse,
   QuizBankResponse,
+  QuizAttemptPlayResponse,
   QuizAttemptResult,
+  QuizAttemptListResponse,
+  QuizAttemptStatus,
   SubmitQuizPayload,
+  SubmitQuizAnswerPayload,
   SubmitQuizResponse,
 } from '../types/quiz';
 
@@ -22,6 +26,21 @@ export const quizService = {
     return res.data;
   },
 
+  getAttemptPlay: async (attemptId: string): Promise<QuizAttemptPlayResponse> => {
+    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPT_PLAY(attemptId));
+    return res.data;
+  },
+
+  saveAttemptAnswers: async (
+    attemptId: string,
+    answers: SubmitQuizAnswerPayload[]
+  ): Promise<QuizAttemptPlayResponse> => {
+    const res = await axiosClient.patch(API_ENDPOINTS.QUIZ.ATTEMPT_ANSWERS(attemptId), {
+      answers,
+    });
+    return res.data;
+  },
+
   submitQuiz: async (payload: SubmitQuizPayload): Promise<SubmitQuizResponse> => {
     const res = await axiosClient.post(API_ENDPOINTS.QUIZ.SUBMIT, payload);
     return res.data;
@@ -29,6 +48,17 @@ export const quizService = {
 
   getAttemptResult: async (attemptId: string): Promise<QuizAttemptResult> => {
     const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPT_RESULT(attemptId));
+    return res.data;
+  },
+
+  getMyAttempts: async (
+    page = 1,
+    limit = 10,
+    status?: QuizAttemptStatus
+  ): Promise<QuizAttemptListResponse> => {
+    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPTS, {
+      params: { page, limit, status },
+    });
     return res.data;
   },
 };

@@ -32,7 +32,7 @@ export const QuizDashboardGrid = ({
           subjectName={card.subjectName}
           topicName={card.topicName}
           gradeText={card.gradeText}
-          unknownCountText={questionCountText(card.questionCount)}
+          questionCountText={questionCountText(card.questionCount)}
           startText={startText}
           onStart={() => onStart(card.subjectId, card.topicId, card.gradeValue)}
         />

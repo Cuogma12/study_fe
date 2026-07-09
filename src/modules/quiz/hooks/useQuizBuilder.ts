@@ -12,6 +12,7 @@ import {
   TopicNode,
 } from '@/modules/questions/services/topic.service';
 import { quizService } from '../services/quiz.service';
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 
 const DEFAULT_LIMIT = 10;
 const LIMIT_OPTIONS = [5, 10, 15, 20];
@@ -23,6 +24,7 @@ export const useQuizBuilder = () => {
   const tApiErrors = useTranslations('api_errors');
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { ready, isAuthenticated } = useRequireAuth();
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subjectsLoading, setSubjectsLoading] = useState(true);
@@ -34,7 +36,8 @@ export const useQuizBuilder = () => {
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [limitError, setLimitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     const subjectFromQuery = searchParams.get('subject_id');
@@ -52,11 +55,19 @@ export const useQuizBuilder = () => {
   }, [searchParams]);
 
   useEffect(() => {
+    if (!ready) {
+      return;
+    }
+    if (!isAuthenticated) {
+      setSubjectsLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     const loadInitialData = async () => {
       setSubjectsLoading(true);
-      setError(null);
+      setLoadError(null);
       try {
         const data = await subjectService.getSubjects();
         if (cancelled) {
@@ -78,7 +89,7 @@ export const useQuizBuilder = () => {
         }
       } catch (err: unknown) {
         if (!cancelled) {
-          setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
+          setLoadError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
         }
       } finally {
         if (!cancelled) {
@@ -92,7 +103,7 @@ export const useQuizBuilder = () => {
     return () => {
       cancelled = true;
     };
-  }, [t, tApiErrors]);
+  }, [ready, isAuthenticated, t, tApiErrors]);
 
   const subjectOptions = useMemo(
     () => subjects.map((item) => ({ label: item.name, value: item.id })),
@@ -129,24 +140,24 @@ export const useQuizBuilder = () => {
   const onSubjectChange = (value: string) => {
     setSubjectId(value);
     setTopicId('');
-    setError(null);
+    setSubmitError(null);
   };
 
   const onGradeChange = (value: string) => {
     setGradeLevel(value);
     setTopicId('');
-    setError(null);
+    setSubmitError(null);
   };
 
   const onTopicChange = (value: string) => {
     setTopicId(value);
-    setError(null);
+    setSubmitError(null);
   };
 
   const onLimitChange = (value: number) => {
     setLimit(value);
     setLimitError(null);
-    setError(null);
+    setSubmitError(null);
   };
 
   const validateLimit = () => {
@@ -162,25 +173,17 @@ export const useQuizBuilder = () => {
       return;
     }
     setSubmitting(true);
-    setError(null);
+    setSubmitError(null);
     try {
       const generated = await quizService.generateQuiz({
         subject_id: subjectId,
         topic_id: topicId || undefined,
+        grade_level: Number(gradeLevel),
         limit,
       });
-      const encodedQuestions = encodeURIComponent(JSON.stringify(generated.questions));
-      const params = new URLSearchParams({
-        subject_id: subjectId,
-        grade_level: gradeLevel,
-        questions: encodedQuestions,
-      });
-      if (topicId) {
-        params.set('topic_id', topicId);
-      }
-      router.push(`/quiz/play?${params.toString()}`);
+      router.push(`/quiz/play?attempt_id=${generated.attempt_id}`);
     } catch (err: unknown) {
-      setError(resolveApiErrorMessage(err, tApiErrors, t('errors.generate_failed')));
+      setSubmitError(resolveApiErrorMessage(err, tApiErrors, t('errors.generate_failed')));
     } finally {
       setSubmitting(false);
     }
@@ -188,6 +191,8 @@ export const useQuizBuilder = () => {
 
   return {
     t,
+    ready,
+    isAuthenticated,
     subjectsLoading,
     topicsLoading,
     subjectId,
@@ -197,7 +202,8 @@ export const useQuizBuilder = () => {
     limitError,
     minLimit: MIN_LIMIT,
     maxLimit: MAX_LIMIT,
-    error,
+    loadError,
+    submitError,
     submitting,
     subjectOptions,
     gradeOptions,

@@ -1,21 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { quizService } from '../services/quiz.service';
 import { QuizBankItem } from '../types/quiz';
-
-type QuizDashboardCard = {
-  id: string;
-  subjectId: string;
-  subjectName: string;
-  topicId: string;
-  topicName: string;
-  gradeValue: number | null;
-  gradeText: string;
-  questionCount: number;
-};
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 
 const getGradeLabel = (value: string, t: ReturnType<typeof useTranslations>) => {
   if (value === '10') return t('filters.grade_10');
@@ -26,10 +17,9 @@ const getGradeLabel = (value: string, t: ReturnType<typeof useTranslations>) => 
 
 export const useQuizDashboard = () => {
   const t = useTranslations('quiz.dashboard');
+  const tApiErrors = useTranslations('api_errors');
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeTab: 'my-quizzes' | 'overview' =
-    searchParams.get('tab') === 'my-quizzes' ? 'my-quizzes' : 'overview';
+  const { ready, isAuthenticated } = useRequireAuth();
 
   const [bankItems, setBankItems] = useState<QuizBankItem[]>([]);
   const [subjectFilter, setSubjectFilter] = useState('');
@@ -39,18 +29,26 @@ export const useQuizDashboard = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!ready) {
+      return;
+    }
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     const loadData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await quizService.getQuizBank(activeTab === 'my-quizzes' ? 'my' : 'all');
+        const data = await quizService.getQuizBank('all');
         if (cancelled) return;
         setBankItems(data.items ?? []);
-      } catch {
+      } catch (err: unknown) {
         if (!cancelled) {
-          setError(t('errors.load_failed'));
+          setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
         }
       } finally {
         if (!cancelled) {
@@ -63,7 +61,7 @@ export const useQuizDashboard = () => {
     return () => {
       cancelled = true;
     };
-  }, [activeTab, t]);
+  }, [ready, isAuthenticated, t, tApiErrors]);
 
   const subjectOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -126,73 +124,10 @@ export const useQuizDashboard = () => {
     router.push(query ? `/quiz/new?${query}` : '/quiz/new');
   };
 
-  const goToOverview = () => {
-    router.push('/quiz');
-  };
-
-  const goToMyQuizzes = () => {
-    router.push('/quiz?tab=my-quizzes');
-  };
-
-  const goToDashboard = () => {
-    if (activeTab === 'my-quizzes') {
-      goToMyQuizzes();
-      return;
-    }
-    goToOverview();
-  };
-
-  const overviewStats = useMemo(
-    () => [
-      { icon: 'task_alt', value: '142', label: t('overview.stats.total_quizzes') },
-      { icon: 'speed', value: '8.5', label: t('overview.stats.avg_score') },
-      { icon: 'stars', value: '2,450', label: t('overview.stats.total_points') },
-      {
-        icon: 'local_fire_department',
-        value: '12',
-        label: t('overview.stats.streak_days'),
-        tone: 'primary' as const,
-      },
-    ],
-    [t]
-  );
-
-  const historyItems = useMemo(
-    () => [
-      {
-        title: 'Dai so 12 - Chuong 1',
-        submittedAt: t('overview.history.today_time'),
-        scoreText: '9.5/10',
-        passed: true,
-      },
-      {
-        title: 'Vat ly dai cuong - Dong luc hoc',
-        submittedAt: t('overview.history.yesterday'),
-        scoreText: '8.0/10',
-        passed: true,
-      },
-      {
-        title: 'Tieng Anh - Unit 4 Vocabulary',
-        submittedAt: t('overview.history.days_ago', { count: 2 }),
-        scoreText: '4.5/10',
-        passed: false,
-      },
-    ],
-    [t]
-  );
-
-  const masteryItems = useMemo(
-    () => [
-      { name: 'Toan hoc', percent: 85 },
-      { name: 'Vat ly', percent: 72 },
-      { name: 'Tieng Anh', percent: 60 },
-      { name: 'Hoa hoc', percent: 92 },
-    ],
-    []
-  );
-
   return {
     t,
+    ready,
+    isAuthenticated,
     loading,
     error,
     cards,
@@ -204,13 +139,6 @@ export const useQuizDashboard = () => {
     setKeyword,
     setSubjectFilter,
     setGradeFilter,
-    activeTab,
-    goToOverview,
-    goToMyQuizzes,
-    overviewStats,
-    historyItems,
-    masteryItems,
-    goToDashboard,
     goToBuilder,
   };
 };

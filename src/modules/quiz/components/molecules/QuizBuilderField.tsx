@@ -1,5 +1,6 @@
 import { Select, Text } from '@/shared/components/atoms';
 import { DropdownOption } from '@/shared/components/atoms/Select';
+import { quizDashboardPanel } from '../../constants/quizDashboardStyles';
 
 interface QuizBuilderFieldProps {
   label: string;
@@ -28,6 +29,8 @@ export const QuizBuilderField = ({
         disabled={disabled}
         placeholder={placeholder}
         options={options}
+        className={quizDashboardPanel.selectControl}
+        hideErrorMessage
         onChange={(event) => onChange(event.target.value)}
       />
     </div>

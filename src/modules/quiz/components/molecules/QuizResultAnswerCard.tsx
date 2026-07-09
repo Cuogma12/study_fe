@@ -24,7 +24,7 @@ export const QuizResultAnswerCard = ({
   const correctValue = answer.options?.[answer.correct_answer] ?? '';
 
   return (
-    <section className="rounded-xl border border-slate-200 p-4">
+    <section className="rounded-xl border border-slate-300 p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <Text variant="body1" className="!font-semibold">
           {questionLabel}: {answer.question_text}

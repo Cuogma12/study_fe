@@ -1,5 +1,6 @@
 import { Input, Select } from '@/shared/components/atoms';
 import { DropdownOption } from '@/shared/components/atoms/Select';
+import { quizDashboardPanel } from '../../constants/quizDashboardStyles';
 
 interface QuizDashboardFiltersProps {
   keyword: string;
@@ -25,7 +26,7 @@ export const QuizDashboardFilters = ({
   onGradeChange,
 }: QuizDashboardFiltersProps) => {
   return (
-    <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-3">
+    <div className={`${quizDashboardPanel.filters} mt-4 grid gap-3 sm:grid-cols-3`}>
       <Select
         value={subjectFilter}
         options={subjectOptions}

@@ -2,85 +2,154 @@
 
 import { Button, Text } from '@/shared/components/atoms';
 import { useQuizPlay } from '../hooks/useQuizPlay';
-import { QuizPlayQuestionCard } from '../components/molecules/QuizPlayQuestionCard';
+import { QuizFormAlert } from '../components/molecules/QuizFormAlert';
+import { QuizPlayHeader } from '../components/organisms/QuizPlayHeader';
+import { QuizPlayFooter } from '../components/organisms/QuizPlayFooter';
+import { QuizPlayProgress } from '../components/molecules/QuizPlayProgress';
+import { QuizPlayOptionList } from '../components/molecules/QuizPlayOptionList';
+import { QuizPlayQuestionMap } from '../components/organisms/QuizPlayQuestionMap';
+import { quizPlayLayout } from '../constants/quizPlayStyles';
 
 export const QuizPlayPage = () => {
   const {
     t,
+    ready,
+    isAuthenticated,
+    loading,
     questions,
+    currentQuestion,
+    currentIndex,
     answers,
     answeredCount,
+    examTitle,
+    timeLabel,
+    questionProgressLabel,
+    percentLabel,
     totalQuestions,
     error,
     submitting,
     canSubmit,
+    canGoPrevious,
+    canGoNext,
     chooseAnswer,
+    goToPrevious,
+    goToNext,
+    goToQuestion,
     submitQuiz,
+    exitQuiz,
     backToBuilder,
   } = useQuizPlay();
 
-  if (!questions.length) {
+  if (!ready || !isAuthenticated) {
     return (
-      <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center">
-          <Text variant="h4" className="!font-bold">
-            {t('empty.title')}
+      <div className={quizPlayLayout.page}>
+        <main className="flex flex-1 items-center justify-center px-4 py-12">
+          <Text variant="body2" className="!text-slate-500">
+            {t('loading')}
           </Text>
-          <Text variant="body2" className="mt-2 !text-slate-500">
-            {t('empty.description')}
+        </main>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className={quizPlayLayout.page}>
+        <main className="flex flex-1 items-center justify-center px-4 py-12">
+          <Text variant="body2" className="!text-slate-500">
+            {t('loading')}
           </Text>
-          <Button className="mt-5" onClick={backToBuilder}>
-            {t('empty.back_action')}
-          </Button>
-        </div>
-      </main>
+        </main>
+      </div>
+    );
+  }
+
+  if (!questions.length || !currentQuestion) {
+    return (
+      <div className={quizPlayLayout.page}>
+        <main className="flex flex-1 items-center justify-center px-4 py-12">
+          <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <Text variant="h4" className="!font-bold">
+              {t('empty.title')}
+            </Text>
+            <Text variant="body2" className="mt-2 !text-slate-500">
+              {t('empty.description')}
+            </Text>
+            <Button className="mt-5" onClick={backToBuilder}>
+              {t('empty.back_action')}
+            </Button>
+          </div>
+        </main>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <Text variant="h4" className="!font-black">
-              {t('title')}
-            </Text>
-            <Text variant="body2" className="mt-1 !text-slate-500">
-              {t('progress', { answered: answeredCount, total: totalQuestions })}
-            </Text>
+    <div className={quizPlayLayout.page}>
+      <QuizPlayHeader examTitle={examTitle} timeLabel={timeLabel} onExit={exitQuiz} />
+
+      <main className={quizPlayLayout.main}>
+        <div className={quizPlayLayout.body}>
+          <div className={quizPlayLayout.content}>
+            <div className="flex justify-end text-right sm:hidden">
+              <Text variant="caption" className="!text-xs !text-slate-500">
+                {examTitle}
+              </Text>
+              <Text variant="body2" className="!font-bold !text-primary">
+                {timeLabel}
+              </Text>
+            </div>
+
+            <QuizPlayProgress
+              totalQuestions={totalQuestions}
+              answeredCount={answeredCount}
+              percentLabel={percentLabel}
+              questionProgressLabel={questionProgressLabel}
+            />
+
+            <div className={quizPlayLayout.questionCard}>
+              <Text variant="body1" className="!text-lg !leading-relaxed">
+                {currentQuestion.question_text}
+              </Text>
+            </div>
+
+            <QuizPlayOptionList
+              questionId={currentQuestion.id}
+              options={currentQuestion.options}
+              selectedAnswer={answers[currentQuestion.id]}
+              onChooseAnswer={chooseAnswer}
+            />
+
+            {error ? <QuizFormAlert message={error} /> : null}
           </div>
-          <Button variant="outline" size="sm" onClick={backToBuilder}>
-            {t('change_quiz')}
-          </Button>
-        </div>
 
-        <div className="mt-6 space-y-4">
-          {questions.map((question, index) => {
-            return (
-              <QuizPlayQuestionCard
-                key={question.id}
-                question={question}
-                index={index}
-                selectedAnswer={answers[question.id]}
-                questionLabel={t('question_label', { index: index + 1 })}
-                onChooseAnswer={chooseAnswer}
-              />
-            );
-          })}
+          <QuizPlayQuestionMap
+            questions={questions}
+            currentIndex={currentIndex}
+            answers={answers}
+            title={t('minimap.title')}
+            answeredSummary={t('minimap.answered', {
+              answered: answeredCount,
+              total: totalQuestions,
+            })}
+            onSelectQuestion={goToQuestion}
+          />
         </div>
+      </main>
 
-        {error ? (
-          <Text variant="body2" className="mt-4 !text-red-500">
-            {error}
-          </Text>
-        ) : null}
-
-        <div className="mt-6 flex justify-end">
-          <Button onClick={submitQuiz} disabled={!canSubmit} className="min-w-[180px]">
-            {submitting ? t('submitting') : t('submit')}
-          </Button>
-        </div>
-      </div>
-    </main>
+      <QuizPlayFooter
+        prevLabel={t('prev_question')}
+        nextLabel={t('next_question')}
+        submitLabel={t('submit')}
+        submittingLabel={t('submitting')}
+        canGoPrevious={canGoPrevious}
+        canGoNext={canGoNext}
+        canSubmit={canSubmit}
+        submitting={submitting}
+        onPrevious={goToPrevious}
+        onNext={goToNext}
+        onSubmit={submitQuiz}
+      />
+    </div>
   );
 };

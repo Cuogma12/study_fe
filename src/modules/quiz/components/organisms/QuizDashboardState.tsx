@@ -1,4 +1,5 @@
 import { Text } from '@/shared/components/atoms';
+import { QuizFormAlert } from '../molecules/QuizFormAlert';
 
 interface QuizDashboardStateProps {
   loading: boolean;
@@ -24,11 +25,7 @@ export const QuizDashboardState = ({
   }
 
   if (error) {
-    return (
-      <Text variant="body2" className="mt-4 !text-red-500">
-        {error}
-      </Text>
-    );
+    return <QuizFormAlert message={error} className="mt-4" />;
   }
 
   if (empty) {

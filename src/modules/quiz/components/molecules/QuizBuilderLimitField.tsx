@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Input, Select, Text } from '@/shared/components/atoms';
+import { Input, MaterialIcon, Select, Text } from '@/shared/components/atoms';
 import { DropdownOption } from '@/shared/components/atoms/Select';
+import { quizDashboardPanel } from '../../constants/quizDashboardStyles';
 
 interface QuizBuilderLimitFieldProps {
   label: string;
@@ -75,6 +76,8 @@ export const QuizBuilderLimitField = ({
           disabled={disabled}
           placeholder={customPlaceholder}
           options={presetOptions}
+          className={quizDashboardPanel.selectControl}
+          hideErrorMessage
           onChange={(event) => handleSelectChange(event.target.value)}
         />
         <Input
@@ -85,17 +88,24 @@ export const QuizBuilderLimitField = ({
           disabled={disabled}
           onChange={(event) => handleInputChange(event.target.value)}
           onBlur={handleInputBlur}
-          className="!py-3"
+          className={quizDashboardPanel.fieldControl}
+          hideErrorMessage
         />
       </div>
-      <Text variant="small" className="mt-1.5 !text-slate-500">
-        {hint}
-      </Text>
       {error ? (
-        <Text variant="small" className="mt-1 !text-red-500">
+        <Text
+          as="p"
+          variant="small"
+          className="mt-2 flex items-center gap-1.5 !text-rose-600 dark:!text-rose-400"
+          role="alert"
+        >
+          <MaterialIcon icon="error_outline" size="text-base" className="!text-inherit" />
           {error}
         </Text>
       ) : null}
+      <Text variant="small" className="mt-1.5 !text-slate-500">
+        {hint}
+      </Text>
     </div>
   );
 };
