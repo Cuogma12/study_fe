@@ -45,7 +45,7 @@ export const QuizHistoryItemCard = ({
   onViewResult,
   onContinue,
 }: QuizHistoryItemCardProps) => {
-  const topicLabel = item.topic_name || '—';
+  const topicLabel = item.title || item.set_title || item.topic_name || '—';
   const isInProgress = item.status === 'in_progress';
   const statusLabel = isInProgress ? statusInProgressLabel : statusSubmittedLabel;
 

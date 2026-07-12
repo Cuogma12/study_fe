@@ -15,12 +15,7 @@ import {
   TopicNode,
 } from '../services/topic.service';
 
-export type CreateQuestionField =
-  | 'subject_id'
-  | 'topic_id'
-  | 'grade_level'
-  | 'title'
-  | 'content';
+export type CreateQuestionField = 'subject_id' | 'topic_id' | 'grade_level' | 'title' | 'content';
 
 type FormState = {
   subject_id: string;
@@ -102,8 +97,11 @@ export const useQuestionForm = ({
   );
 
   const subjectOptions = useMemo(
-    () => subjects.map((s) => ({ label: s.name, value: s.id })),
-    [subjects]
+    () =>
+      subjects
+        .filter((s) => (topicsBySubject[s.id]?.length ?? 0) > 0)
+        .map((s) => ({ label: s.name, value: s.id })),
+    [subjects, topicsBySubject]
   );
 
   useEffect(() => {
@@ -431,8 +429,7 @@ export const useQuestionForm = ({
 
   const handleCancel = () => {
     if (isDirty) {
-      const message =
-        mode === 'edit' ? t('cancel_confirm_edit') : t('cancel_confirm');
+      const message = mode === 'edit' ? t('cancel_confirm_edit') : t('cancel_confirm');
       if (!window.confirm(message)) {
         return;
       }

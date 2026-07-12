@@ -458,13 +458,15 @@
   "quiz": {
     "dashboard": {
       "title": "Tổng quan quiz",
-      "my_quizzes_title": "Quiz Bank",
-      "bank_description": "Chọn bộ ôn tập theo môn và chủ đề để bắt đầu làm bài.",
-      "create_action": "Tạo bộ quiz",
-      "loading": "Đang tải danh sách quiz...",
-      "empty": "Không có bộ quiz phù hợp với bộ lọc hiện tại.",
+      "exam_sets_title": "Đề ôn tập",
+      "my_quizzes_title": "Đề ôn tập",
+      "bank_description": "Chọn đề có sẵn — giữa kì, cuối kì, THPT QG, ôn thi đại học.",
+      "create_action": "Tạo quiz tùy chỉnh",
+      "loading": "Đang tải danh sách đề...",
+      "empty": "Không có đề phù hợp với bộ lọc hiện tại.",
       "errors": {
-        "load_failed": "Không tải được danh sách quiz"
+        "load_failed": "Không tải được danh sách đề",
+        "start_failed": "Không thể bắt đầu làm đề"
       },
       "overview": {
         "stats": {
@@ -507,7 +509,9 @@
       },
       "sidebar": {
         "overview": "Trang chủ quiz",
-        "my_quizzes": "Quiz Bank",
+        "exam_sets": "Đề ôn tập",
+        "templates": "Tạo quiz tùy chỉnh",
+        "my_quizzes": "Đề ôn tập",
         "my_attempts": "Quiz của tôi",
         "statistics": "Thống kê",
         "classrooms": "Lớp học",
@@ -515,9 +519,20 @@
         "help_center": "Trung tâm trợ giúp"
       },
       "filters": {
-        "search_placeholder": "Tìm theo môn hoặc chủ đề...",
-        "all_subjects": "Tất cả môn",
-        "all_grades": "Tất cả lớp",
+        "labels": {
+          "set_type": "Loại đề",
+          "subject": "Môn học",
+          "grade": "Khối lớp",
+          "search": "Tìm kiếm"
+        },
+        "search_placeholder": "Nhập tên đề, môn hoặc chủ đề",
+        "all_subjects": "Tất cả",
+        "all_grades": "Tất cả",
+        "all_set_types": "Tất cả",
+        "set_type_midterm": "Ôn giữa kì",
+        "set_type_final": "Ôn cuối kì",
+        "set_type_thpt_qg": "THPT QG",
+        "set_type_university_prep": "Ôn đại học",
         "grade_10": "Lớp 10",
         "grade_11": "Lớp 11",
         "grade_12": "Lớp 12"
@@ -525,13 +540,30 @@
       "card": {
         "all_grades": "Mọi khối lớp",
         "question_count": "{count} câu hỏi",
-        "start_action": "Bắt đầu làm bài"
+        "duration_minutes": "{minutes} phút",
+        "start_action": "Bắt đầu làm bài",
+        "continue_action": "Tiếp tục làm",
+        "starting": "Đang mở đề..."
+      },
+      "pagination": {
+        "prev": "Trước",
+        "next": "Sau",
+        "summary": "Trang {page}/{total_pages}"
+      },
+      "loading_more": "Đang tải thêm đề...",
+      "end_of_list": "Đã hết danh sách đề",
+      "continue_confirm": {
+        "title": "Tiếp tục làm bài?",
+        "description": "Bạn đang làm dở đề này. Bạn có muốn tiếp tục không?",
+        "description_named": "Bạn đang làm dở đề \"{title}\". Bạn có muốn tiếp tục không?",
+        "confirm": "Tiếp tục làm",
+        "cancel": "Để sau"
       }
     },
     "history": {
       "title": "Quiz của tôi",
       "description": "Theo dõi quiz đang làm dở và các lần đã nộp bài.",
-      "create_action": "Tạo bộ quiz",
+      "create_action": "Tạo quiz tùy chỉnh",
       "loading": "Đang tải danh sách quiz...",
       "empty_in_progress": "Bạn chưa có quiz nào đang làm dở.",
       "empty_submitted": "Bạn chưa nộp bài quiz nào.",
@@ -560,14 +592,15 @@
       }
     },
     "builder": {
-      "title": "Tạo bộ quiz ôn tập",
-      "description": "Chọn thông tin phù hợp để tạo bộ câu hỏi luyện tập nhanh.",
+      "title": "Tạo quiz tùy chỉnh",
+      "description": "Chọn môn, khối lớp và chủ đề để hệ thống tạo bộ câu hỏi luyện tập ngẫu nhiên từ ngân hàng.",
       "loading": "Đang tải...",
       "fields": {
         "subject": "Môn học",
         "grade_level": "Khối lớp",
         "topic": "Chủ đề (tùy chọn)",
-        "limit": "Số câu hỏi"
+        "limit": "Số câu hỏi",
+        "title": "Tên quiz (tùy chọn)"
       },
       "placeholders": {
         "subject": "Chọn môn học",
@@ -575,8 +608,11 @@
         "topic": "Chọn chủ đề",
         "topic_subject_required": "Chọn môn học trước",
         "topic_grade_required": "Chọn khối lớp trước",
-        "limit_custom": "Tùy chỉnh"
+        "limit_custom": "Tùy chỉnh",
+        "title": "Ví dụ: Ôn logarit trước kiểm tra"
       },
+      "title_hint": "Để trống sẽ dùng tên mặc định theo môn / chủ đề / lớp.",
+      "title_duplicate_hint": "Bạn đã có {count} quiz cùng môn/chủ đề/lớp — nên đặt tên riêng để dễ phân biệt.",
       "limit_hint": "Chọn nhanh hoặc nhập số câu ({min}-{max})",
       "grade_options": {
         "grade_10": "Lớp 10",
@@ -592,6 +628,44 @@
         "load_failed": "Không tải được dữ liệu môn học/chủ đề",
         "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại",
         "limit_invalid": "Số câu hỏi phải từ {min} đến {max}"
+      },
+      "templates": {
+        "section_title": "Mẫu nhanh",
+        "section_description": "Chọn mẫu để tự điền form phía trên, rồi bấm bắt đầu làm quiz.",
+        "meta": "Lớp {grade} · {count} câu",
+        "math_10_quadratic": {
+          "title": "Toán 10 — Phương trình bậc hai",
+          "description": "Ôn 10 câu trắc nghiệm phương trình bậc hai cơ bản."
+        },
+        "math_12_logarithm": {
+          "title": "Toán 12 — Logarit",
+          "description": "Luyện 15 câu logarit mức THPT."
+        },
+        "math_12_review": {
+          "title": "Toán 12 — Ôn tổng hợp",
+          "description": "20 câu ngẫu nhiên toàn môn Toán lớp 12."
+        },
+        "physics_11_dc": {
+          "title": "Vật lý 11 — Dòng điện không đổi",
+          "description": "10 câu điện học cơ bản."
+        },
+        "chemistry_10_ion": {
+          "title": "Hóa 10 — Phản ứng ion",
+          "description": "10 câu phản ứng ion trong dung dịch."
+        },
+        "english_10_tense": {
+          "title": "Anh 10 — Thì hiện tại",
+          "description": "10 câu ngữ pháp thì hiện tại."
+        },
+        "history_12_world_war": {
+          "title": "Sử 12 — Chiến tranh thế giới",
+          "description": "15 câu lịch sử thế giới thế kỷ XX."
+        }
+      },
+      "ai": {
+        "title": "Tạo quiz bằng AI",
+        "description": "Mô tả chủ đề cần ôn — AI sẽ gợi ý bộ câu hỏi phù hợp với trình độ của bạn.",
+        "coming_soon": "Sắp ra mắt"
       }
     },
     "play": {

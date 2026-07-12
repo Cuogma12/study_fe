@@ -20,7 +20,6 @@ export const QuizHistoryPage = () => {
     page,
     totalPages,
     setPage,
-    goToBuilder,
     viewResult,
     continueQuiz,
   } = useQuizHistory();
@@ -38,25 +37,19 @@ export const QuizHistoryPage = () => {
   const emptyText = tab === 'in_progress' ? t('empty_in_progress') : t('empty_submitted');
 
   return (
-    <QuizDashboardLayout createActionText={t('create_action')} onCreate={goToBuilder}>
-      <QuizDashboardHeader
-        title={t('title')}
-        description={t('description')}
-        createActionText={t('create_action')}
-        hideCreateOnDesktop
-        onCreate={goToBuilder}
-      />
+    <QuizDashboardLayout>
+      <QuizDashboardHeader title={t('title')} description={t('description')} />
 
       <div className="mb-5 flex flex-wrap gap-2">
         <Button
-          variant={tab === 'in_progress' ? 'default' : 'outline'}
+          variant={tab === 'in_progress' ? 'primary' : 'outline'}
           size="sm"
           onClick={() => setTab('in_progress')}
         >
           {t('tabs.in_progress')}
         </Button>
         <Button
-          variant={tab === 'submitted' ? 'default' : 'outline'}
+          variant={tab === 'submitted' ? 'primary' : 'outline'}
           size="sm"
           onClick={() => setTab('submitted')}
         >
@@ -94,7 +87,12 @@ export const QuizHistoryPage = () => {
 
           {totalPages > 1 ? (
             <div className="flex items-center justify-between pt-2">
-              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page <= 1}
+                onClick={() => setPage(page - 1)}
+              >
                 {t('pagination.prev')}
               </Button>
               <Text variant="body2" className="!text-slate-500">

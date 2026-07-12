@@ -11,10 +11,16 @@ export const useQuizSidebarMenu = () => {
   const menus = useMemo(
     () => [
       {
-        key: 'bank',
-        label: t('my_quizzes'),
+        key: 'exam_sets',
+        label: t('exam_sets'),
         href: '/quiz',
-        icon: 'quiz',
+        icon: 'menu_book',
+      },
+      {
+        key: 'templates',
+        label: t('templates'),
+        href: '/quiz/new',
+        icon: 'tune',
       },
       {
         key: 'history',
@@ -29,8 +35,10 @@ export const useQuizSidebarMenu = () => {
   return menus.map((item) => ({
     ...item,
     isActive:
-      item.key === 'history'
-        ? Boolean(pathname?.includes('/quiz/history'))
-        : Boolean(pathname?.match(/\/quiz\/?$/)),
+      item.key === 'exam_sets'
+        ? Boolean(pathname?.match(/\/quiz\/?$/))
+        : item.key === 'templates'
+          ? Boolean(pathname?.includes('/quiz/new'))
+          : Boolean(pathname?.includes('/quiz/history')),
   }));
 };

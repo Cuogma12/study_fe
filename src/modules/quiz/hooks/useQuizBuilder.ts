@@ -13,11 +13,29 @@ import {
 } from '@/modules/questions/services/topic.service';
 import { quizService } from '../services/quiz.service';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
+import { QUIZ_BUILDER_TEMPLATE_DEFS } from '../constants/quizBuilderTemplates';
+import { findTopicIdBySlug } from '../utils/findTopicBySlug';
+import { QuizAttemptListItem } from '../types/quiz';
 
 const DEFAULT_LIMIT = 10;
 const LIMIT_OPTIONS = [5, 10, 15, 20];
 const MIN_LIMIT = 1;
 const MAX_LIMIT = 50;
+
+const buildAutoTitle = (
+  subjectName: string | undefined,
+  topicName: string | undefined,
+  gradeLevel: string
+) => {
+  const parts = [subjectName].filter(Boolean) as string[];
+  if (topicName) {
+    parts.push(topicName);
+  }
+  if (gradeLevel) {
+    parts.push(`Lớp ${gradeLevel}`);
+  }
+  return parts.join(' · ');
+};
 
 export const useQuizBuilder = () => {
   const t = useTranslations('quiz.builder');
@@ -33,11 +51,14 @@ export const useQuizBuilder = () => {
   const [subjectId, setSubjectId] = useState('');
   const [topicId, setTopicId] = useState('');
   const [gradeLevel, setGradeLevel] = useState('');
+  const [title, setTitle] = useState('');
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [limitError, setLimitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [activeTemplateKey, setActiveTemplateKey] = useState<string | null>(null);
+  const [recentAttempts, setRecentAttempts] = useState<QuizAttemptListItem[]>([]);
 
   useEffect(() => {
     const subjectFromQuery = searchParams.get('subject_id');
@@ -69,11 +90,17 @@ export const useQuizBuilder = () => {
       setSubjectsLoading(true);
       setLoadError(null);
       try {
-        const data = await subjectService.getSubjects();
+        const [data, attemptPage] = await Promise.all([
+          subjectService.getSubjects(),
+          quizService.getMyAttempts(1, 50).catch(() => null),
+        ]);
         if (cancelled) {
           return;
         }
         setSubjects(data);
+        if (attemptPage?.items) {
+          setRecentAttempts(attemptPage.items);
+        }
         const topicEntries = await Promise.all(
           data.map(async (subject) => {
             try {
@@ -106,8 +133,11 @@ export const useQuizBuilder = () => {
   }, [ready, isAuthenticated, t, tApiErrors]);
 
   const subjectOptions = useMemo(
-    () => subjects.map((item) => ({ label: item.name, value: item.id })),
-    [subjects]
+    () =>
+      subjects
+        .filter((item) => (topicsBySubject[item.id]?.length ?? 0) > 0)
+        .map((item) => ({ label: item.name, value: item.id })),
+    [subjects, topicsBySubject]
   );
 
   const gradeOptions = useMemo(
@@ -134,6 +164,73 @@ export const useQuizBuilder = () => {
     [t]
   );
 
+  const autoTitle = useMemo(() => {
+    const subjectName = subjects.find((item) => item.id === subjectId)?.name;
+    const topicName = topicOptions.find((item) => item.value === topicId)?.label?.replace(/^—+\s*/, '');
+    return buildAutoTitle(subjectName, topicName, gradeLevel);
+  }, [subjects, subjectId, topicOptions, topicId, gradeLevel]);
+
+  const similarAttemptCount = useMemo(() => {
+    if (!subjectId || !gradeLevel) {
+      return 0;
+    }
+    return recentAttempts.filter(
+      (item) =>
+        item.subject_id === subjectId &&
+        (item.topic_id ?? '') === (topicId || '') &&
+        String(item.grade_level ?? '') === gradeLevel
+    ).length;
+  }, [recentAttempts, subjectId, topicId, gradeLevel]);
+
+  const titleDuplicateHint =
+    similarAttemptCount > 0 && (!title.trim() || title.trim() === autoTitle)
+      ? t('title_duplicate_hint', { count: similarAttemptCount })
+      : null;
+
+  const templateItems = useMemo(() => {
+    return QUIZ_BUILDER_TEMPLATE_DEFS.map((def) => {
+      const subject = subjects.find((item) => item.slug === def.subjectSlug);
+      const matchedTopicId =
+        subject && def.topicSlug
+          ? findTopicIdBySlug(topicsBySubject[subject.id] ?? [], def.topicSlug)
+          : null;
+      const available = Boolean(subject && (!def.topicSlug || matchedTopicId));
+
+      return {
+        key: def.key,
+        subjectSlug: def.subjectSlug,
+        topicSlug: def.topicSlug,
+        gradeLevel: def.gradeLevel,
+        limit: def.limit,
+        icon: def.icon,
+        subjectId: subject?.id ?? '',
+        topicId: matchedTopicId ?? '',
+        available,
+        title: t(`templates.${def.key}.title`),
+        description: t(`templates.${def.key}.description`),
+        metaText: t('templates.meta', {
+          grade: def.gradeLevel,
+          count: def.limit,
+        }),
+      };
+    });
+  }, [subjects, topicsBySubject, t]);
+
+  const applyTemplate = (templateKey: string) => {
+    const template = templateItems.find((item) => item.key === templateKey);
+    if (!template || !template.available) {
+      return;
+    }
+    setSubjectId(template.subjectId);
+    setGradeLevel(String(template.gradeLevel));
+    setTopicId(template.topicId);
+    setLimit(template.limit);
+    setTitle(template.title);
+    setLimitError(null);
+    setSubmitError(null);
+    setActiveTemplateKey(templateKey);
+  };
+
   const isLimitValid = limit >= MIN_LIMIT && limit <= MAX_LIMIT;
   const canGenerate = Boolean(subjectId && gradeLevel && !submitting && isLimitValid);
 
@@ -141,23 +238,33 @@ export const useQuizBuilder = () => {
     setSubjectId(value);
     setTopicId('');
     setSubmitError(null);
+    setActiveTemplateKey(null);
   };
 
   const onGradeChange = (value: string) => {
     setGradeLevel(value);
     setTopicId('');
     setSubmitError(null);
+    setActiveTemplateKey(null);
   };
 
   const onTopicChange = (value: string) => {
     setTopicId(value);
     setSubmitError(null);
+    setActiveTemplateKey(null);
+  };
+
+  const onTitleChange = (value: string) => {
+    setTitle(value);
+    setSubmitError(null);
+    setActiveTemplateKey(null);
   };
 
   const onLimitChange = (value: number) => {
     setLimit(value);
     setLimitError(null);
     setSubmitError(null);
+    setActiveTemplateKey(null);
   };
 
   const validateLimit = () => {
@@ -180,6 +287,7 @@ export const useQuizBuilder = () => {
         topic_id: topicId || undefined,
         grade_level: Number(gradeLevel),
         limit,
+        title: title.trim() || undefined,
       });
       router.push(`/quiz/play?attempt_id=${generated.attempt_id}`);
     } catch (err: unknown) {
@@ -198,6 +306,9 @@ export const useQuizBuilder = () => {
     subjectId,
     topicId,
     gradeLevel,
+    title,
+    autoTitle,
+    titleDuplicateHint,
     limit,
     limitError,
     minLimit: MIN_LIMIT,
@@ -210,9 +321,13 @@ export const useQuizBuilder = () => {
     topicOptions,
     limitOptions,
     canGenerate,
+    templateItems,
+    activeTemplateKey,
+    applyTemplate,
     onSubjectChange,
     onGradeChange,
     onTopicChange,
+    onTitleChange,
     onLimitChange,
     generateQuiz,
   };

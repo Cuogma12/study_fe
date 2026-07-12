@@ -1,17 +1,21 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
+import { subjectService } from '@/shared/services/subject.service';
 import { quizService } from '../services/quiz.service';
-import { QuizBankItem } from '../types/quiz';
+import { QuizSetItem, QuizSetType } from '../types/quiz';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 
-const getGradeLabel = (value: string, t: ReturnType<typeof useTranslations>) => {
-  if (value === '10') return t('filters.grade_10');
-  if (value === '11') return t('filters.grade_11');
-  if (value === '12') return t('filters.grade_12');
+const PAGE_SIZE = 12;
+const KEYWORD_DEBOUNCE_MS = 350;
+
+const getGradeLabel = (value: number | null, t: ReturnType<typeof useTranslations>) => {
+  if (value === 10) return t('filters.grade_10');
+  if (value === 11) return t('filters.grade_11');
+  if (value === 12) return t('filters.grade_12');
   return t('card.all_grades');
 };
 
@@ -21,12 +25,84 @@ export const useQuizDashboard = () => {
   const router = useRouter();
   const { ready, isAuthenticated } = useRequireAuth();
 
-  const [bankItems, setBankItems] = useState<QuizBankItem[]>([]);
-  const [subjectFilter, setSubjectFilter] = useState('');
-  const [gradeFilter, setGradeFilter] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [sets, setSets] = useState<QuizSetItem[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [subjectFilter, setSubjectFilterState] = useState('');
+  const [gradeFilter, setGradeFilterState] = useState('');
+  const [setTypeFilter, setSetTypeFilterState] = useState('');
+  const [keyword, setKeywordState] = useState('');
+  const [debouncedKeyword, setDebouncedKeyword] = useState('');
+  const [subjectOptions, setSubjectOptions] = useState<{ label: string; value: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [startingSetId, setStartingSetId] = useState<string | null>(null);
+  const [continueConfirm, setContinueConfirm] = useState<{
+    setId: string;
+    attemptId: string;
+    title: string;
+  } | null>(null);
+
+  const loadMoreLockRef = useRef(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedKeyword(keyword.trim());
+    }, KEYWORD_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [keyword]);
+
+  useEffect(() => {
+    if (!ready || !isAuthenticated) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadSubjects = async () => {
+      try {
+        const subjects = await subjectService.getSubjects();
+        if (cancelled) return;
+        setSubjectOptions(
+          [{ label: t('filters.all_subjects'), value: '' }].concat(
+            subjects.map((item) => ({ label: item.name, value: item.id }))
+          )
+        );
+      } catch {
+        if (!cancelled) {
+          setSubjectOptions([{ label: t('filters.all_subjects'), value: '' }]);
+        }
+      }
+    };
+
+    loadSubjects();
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, isAuthenticated, t]);
+
+  const fetchPage = useCallback(
+    async (pageToLoad: number, append: boolean) => {
+      const data = await quizService.getQuizSets({
+        page: pageToLoad,
+        limit: PAGE_SIZE,
+        subject_id: subjectFilter || undefined,
+        grade_level: gradeFilter ? Number(gradeFilter) : undefined,
+        set_type: (setTypeFilter as QuizSetType) || undefined,
+        keyword: debouncedKeyword || undefined,
+      });
+
+      const items = data.items ?? [];
+      const totalPages = data.pagination?.total_pages ?? 1;
+
+      setSets((prev) => (append ? [...prev, ...items] : items));
+      setPage(pageToLoad);
+      setHasMore(pageToLoad < totalPages);
+    },
+    [subjectFilter, gradeFilter, setTypeFilter, debouncedKeyword]
+  );
 
   useEffect(() => {
     if (!ready) {
@@ -39,16 +115,18 @@ export const useQuizDashboard = () => {
 
     let cancelled = false;
 
-    const loadData = async () => {
+    const loadFirstPage = async () => {
       setLoading(true);
       setError(null);
+      setHasMore(true);
+      loadMoreLockRef.current = false;
       try {
-        const data = await quizService.getQuizBank('all');
-        if (cancelled) return;
-        setBankItems(data.items ?? []);
+        await fetchPage(1, false);
       } catch (err: unknown) {
         if (!cancelled) {
           setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
+          setSets([]);
+          setHasMore(false);
         }
       } finally {
         if (!cancelled) {
@@ -57,88 +135,168 @@ export const useQuizDashboard = () => {
       }
     };
 
-    loadData();
+    loadFirstPage();
     return () => {
       cancelled = true;
     };
-  }, [ready, isAuthenticated, t, tApiErrors]);
+  }, [ready, isAuthenticated, fetchPage, t, tApiErrors]);
 
-  const subjectOptions = useMemo(() => {
-    const map = new Map<string, string>();
-    bankItems.forEach((item) => {
-      map.set(item.subject_id, item.subject_name);
-    });
-    return [{ label: t('filters.all_subjects'), value: '' }].concat(
-      Array.from(map.entries()).map(([value, label]) => ({ label, value }))
+  const loadMore = useCallback(async () => {
+    if (!hasMore || loading || loadingMore || loadMoreLockRef.current) {
+      return;
+    }
+
+    loadMoreLockRef.current = true;
+    setLoadingMore(true);
+    setError(null);
+    try {
+      await fetchPage(page + 1, true);
+    } catch (err: unknown) {
+      setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
+    } finally {
+      setLoadingMore(false);
+      loadMoreLockRef.current = false;
+    }
+  }, [fetchPage, hasMore, loading, loadingMore, page, t, tApiErrors]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore || loading) {
+      return;
+    }
+
+    const scrollRoot =
+      (sentinel.closest('.overflow-y-auto') as Element | null) ??
+      (sentinel.closest('[class*="overflow-y-auto"]') as Element | null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          void loadMore();
+        }
+      },
+      {
+        root: scrollRoot,
+        rootMargin: '240px 0px',
+      }
     );
-  }, [bankItems, t]);
 
-  const gradeOptions = useMemo(() => {
-    const grades = new Set<number>();
-    bankItems.forEach((item) => {
-      (item.grade_levels || []).forEach((grade) => grades.add(Number(grade)));
-    });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore, loading, sets.length]);
 
-    const fixedGrades = [10, 11, 12].filter((grade) => grades.has(grade));
-
-    return [{ label: t('filters.all_grades'), value: '' }].concat(
-      fixedGrades.map((grade) => ({
-        label: t(`filters.grade_${grade}` as 'filters.grade_10'),
-        value: String(grade),
-      }))
-    );
-  }, [bankItems, t]);
-
-  const cards = useMemo(() => {
-    const normalizedKeyword = keyword.trim().toLowerCase();
-
-    return bankItems
-      .filter((item) => (subjectFilter ? item.subject_id === subjectFilter : true))
-      .filter((item) =>
-        gradeFilter ? (item.grade_levels || []).map(Number).includes(Number(gradeFilter)) : true
-      )
-      .filter((item) =>
-        normalizedKeyword
-          ? item.topic_name.toLowerCase().includes(normalizedKeyword) ||
-            item.subject_name.toLowerCase().includes(normalizedKeyword)
-          : true
-      )
-      .map((item) => ({
-        id: `${item.subject_id}-${item.topic_id}`,
-        subjectId: item.subject_id,
+  const cards = useMemo(
+    () =>
+      sets.map((item) => ({
+        id: item.set_id,
+        setId: item.set_id,
+        title: item.title,
         subjectName: item.subject_name,
-        topicId: item.topic_id,
         topicName: item.topic_name,
-        gradeValue: gradeFilter ? Number(gradeFilter) : null,
-        gradeText: getGradeLabel(gradeFilter, t),
+        setType: item.set_type,
+        gradeLevel: item.grade_level,
+        gradeText: getGradeLabel(item.grade_level, t),
+        examYear: item.exam_year,
         questionCount: item.question_count,
-      }));
-  }, [bankItems, gradeFilter, keyword, subjectFilter, t]);
+        durationMinutes: item.duration_minutes,
+        hasInProgress: item.has_in_progress_attempt,
+        inProgressAttemptId: item.in_progress_attempt_id,
+      })),
+    [sets, t]
+  );
 
-  const goToBuilder = (subjectId?: string, topicId?: string, gradeValue?: number | null) => {
-    const params = new URLSearchParams();
-    if (subjectId) params.set('subject_id', subjectId);
-    if (topicId) params.set('topic_id', topicId);
-    if (gradeValue) params.set('grade_level', String(gradeValue));
-    const query = params.toString();
-    router.push(query ? `/quiz/new?${query}` : '/quiz/new');
-  };
+  const gradeOptions = useMemo(
+    () => [
+      { label: t('filters.all_grades'), value: '' },
+      { label: t('filters.grade_10'), value: '10' },
+      { label: t('filters.grade_11'), value: '11' },
+      { label: t('filters.grade_12'), value: '12' },
+    ],
+    [t]
+  );
+
+  const setTypeOptions = useMemo(
+    () => [
+      { label: t('filters.all_set_types'), value: '' },
+      { label: t('filters.set_type_midterm'), value: 'midterm' },
+      { label: t('filters.set_type_final'), value: 'final' },
+      { label: t('filters.set_type_thpt_qg'), value: 'thpt_qg' },
+      { label: t('filters.set_type_university_prep'), value: 'university_prep' },
+    ],
+    [t]
+  );
+
+  const startSet = useCallback(
+    async (setId: string, inProgressAttemptId?: string | null, setTitle?: string) => {
+      if (startingSetId) {
+        return;
+      }
+
+      if (inProgressAttemptId) {
+        setContinueConfirm({
+          setId,
+          attemptId: inProgressAttemptId,
+          title: setTitle ?? '',
+        });
+        return;
+      }
+
+      setStartingSetId(setId);
+      setError(null);
+      try {
+        const started = await quizService.startQuizSet(setId);
+        router.push(`/quiz/play?attempt_id=${started.attempt_id}`);
+      } catch (err: unknown) {
+        setError(resolveApiErrorMessage(err, tApiErrors, t('errors.start_failed')));
+      } finally {
+        setStartingSetId(null);
+      }
+    },
+    [router, startingSetId, t, tApiErrors]
+  );
+
+  const cancelContinue = useCallback(() => {
+    if (startingSetId) {
+      return;
+    }
+    setContinueConfirm(null);
+  }, [startingSetId]);
+
+  const confirmContinue = useCallback(() => {
+    if (!continueConfirm) {
+      return;
+    }
+    const attemptId = continueConfirm.attemptId;
+    setContinueConfirm(null);
+    setStartingSetId(continueConfirm.setId);
+    router.push(`/quiz/play?attempt_id=${attemptId}`);
+  }, [continueConfirm, router]);
 
   return {
     t,
     ready,
     isAuthenticated,
     loading,
+    loadingMore,
+    hasMore,
     error,
     cards,
     keyword,
     subjectFilter,
     gradeFilter,
+    setTypeFilter,
     subjectOptions,
     gradeOptions,
-    setKeyword,
-    setSubjectFilter,
-    setGradeFilter,
-    goToBuilder,
+    setTypeOptions,
+    startingSetId,
+    continueConfirm,
+    sentinelRef,
+    setKeyword: setKeywordState,
+    setSubjectFilter: setSubjectFilterState,
+    setGradeFilter: setGradeFilterState,
+    setSetTypeFilter: setSetTypeFilterState,
+    startSet,
+    confirmContinue,
+    cancelContinue,
   };
 };

@@ -26,6 +26,7 @@ export const useQuizPlay = () => {
   const attemptId = searchParams.get('attempt_id') ?? '';
 
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [setTitle, setSetTitle] = useState('');
   const [gradeLevel, setGradeLevel] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,6 +60,7 @@ export const useQuizPlay = () => {
           return;
         }
         setQuestions(data.questions ?? []);
+        setSetTitle(data.title || data.set_title || '');
         setGradeLevel(data.grade_level ? String(data.grade_level) : '');
         const savedAnswers = Object.fromEntries(
           (data.saved_answers ?? []).map((item) => [item.quiz_question_id, item.selected_answer])
@@ -117,16 +119,19 @@ export const useQuizPlay = () => {
   const answeredCount = Object.keys(answers).length;
   const totalQuestions = questions.length;
   const currentQuestion = questions[currentIndex];
-  const canSubmit = Boolean(attemptId) && totalQuestions > 0 && answeredCount === totalQuestions && !submitting;
+  const canSubmit =
+    Boolean(attemptId) && totalQuestions > 0 && answeredCount === totalQuestions && !submitting;
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalQuestions - 1;
   const answeredPercent =
     totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
 
-  const examTitle = useMemo(
-    () => (gradeLevel ? t('exam_title_grade', { grade: gradeLevel }) : t('exam_title_default')),
-    [gradeLevel, t]
-  );
+  const examTitle = useMemo(() => {
+    if (setTitle) {
+      return setTitle;
+    }
+    return gradeLevel ? t('exam_title_grade', { grade: gradeLevel }) : t('exam_title_default');
+  }, [gradeLevel, setTitle, t]);
 
   const timeLabel = t('time_remaining', { time: formatTime(secondsLeft) });
   const questionProgressLabel = t('question_progress', {

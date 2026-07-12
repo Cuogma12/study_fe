@@ -1,23 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, MaterialIcon, Text } from '@/shared/components/atoms';
+import { MaterialIcon, Text } from '@/shared/components/atoms';
 import { useQuizSidebarMenu } from '../../hooks/useQuizSidebarMenu';
 
-interface QuizDashboardSidebarProps {
-  createActionText: string;
-  onCreate: () => void;
-}
-
-export const QuizDashboardSidebar = ({ createActionText, onCreate }: QuizDashboardSidebarProps) => {
+export const QuizDashboardSidebar = () => {
   const menus = useQuizSidebarMenu();
 
   return (
     <aside className="hidden h-full w-64 shrink-0 flex-col border-r border-gray-300 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 lg:flex">
-      <Button onClick={onCreate} className="mb-4 w-full shadow-sm">
-        {createActionText}
-      </Button>
-
       <nav className="flex flex-col gap-1">
         {menus.map((menu) => (
           <Link
@@ -30,7 +21,10 @@ export const QuizDashboardSidebar = ({ createActionText, onCreate }: QuizDashboa
             }`}
           >
             <MaterialIcon icon={menu.icon} />
-            <Text variant="body2" className={`!font-semibold ${menu.isActive ? '!text-primary' : ''}`}>
+            <Text
+              variant="body2"
+              className={`!font-semibold ${menu.isActive ? '!text-primary' : ''}`}
+            >
               {menu.label}
             </Text>
           </Link>

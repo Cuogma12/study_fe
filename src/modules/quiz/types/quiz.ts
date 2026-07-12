@@ -1,3 +1,45 @@
+export type QuizSetType = 'midterm' | 'final' | 'thpt_qg' | 'university_prep';
+
+export interface QuizSetItem {
+  set_id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  set_type: QuizSetType;
+  subject_id: string;
+  topic_id: string | null;
+  subject_name: string;
+  topic_name: string;
+  grade_level: number | null;
+  exam_year: number | null;
+  duration_minutes: number | null;
+  question_count: number;
+  has_in_progress_attempt: boolean;
+  in_progress_attempt_id: string | null;
+}
+
+export interface QuizSetListResponse {
+  items: QuizSetItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+  };
+}
+
+export interface StartQuizSetResponse {
+  attempt_id: string;
+  set_id: string;
+  set_title: string;
+  subject_id: string;
+  topic_id: string | null;
+  grade_level: number | null;
+  status: QuizAttemptStatus;
+  total_questions: number;
+  resumed: boolean;
+}
+
 export type QuizAttemptStatus = 'in_progress' | 'submitted';
 
 export interface QuizQuestion {
@@ -15,10 +57,12 @@ export interface GenerateQuizPayload {
   topic_id?: string;
   grade_level?: number;
   limit: number;
+  title?: string;
 }
 
 export interface GenerateQuizResponse {
   attempt_id: string;
+  title: string | null;
   subject_id: string;
   topic_id: string | null;
   grade_level: number | null;
@@ -29,6 +73,9 @@ export interface GenerateQuizResponse {
 
 export interface QuizAttemptPlayResponse {
   attempt_id: string;
+  set_id: string | null;
+  set_title: string | null;
+  title: string | null;
   subject_id: string;
   topic_id: string | null;
   grade_level: number | null;
@@ -99,6 +146,9 @@ export interface QuizBankResponse {
 
 export interface QuizAttemptListItem {
   attempt_id: string;
+  set_id: string | null;
+  set_title: string | null;
+  title: string | null;
   subject_id: string;
   topic_id: string | null;
   subject_name: string;

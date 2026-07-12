@@ -8,12 +8,32 @@ import {
   QuizAttemptResult,
   QuizAttemptListResponse,
   QuizAttemptStatus,
+  QuizSetListResponse,
+  QuizSetType,
+  StartQuizSetResponse,
   SubmitQuizPayload,
   SubmitQuizAnswerPayload,
   SubmitQuizResponse,
 } from '../types/quiz';
 
 export const quizService = {
+  getQuizSets: async (params?: {
+    page?: number;
+    limit?: number;
+    subject_id?: string;
+    grade_level?: number;
+    set_type?: QuizSetType;
+    keyword?: string;
+  }): Promise<QuizSetListResponse> => {
+    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.SETS, { params });
+    return res.data;
+  },
+
+  startQuizSet: async (setId: string): Promise<StartQuizSetResponse> => {
+    const res = await axiosClient.post(API_ENDPOINTS.QUIZ.SET_START(setId));
+    return res.data;
+  },
+
   getQuizBank: async (scope: 'all' | 'my' = 'all'): Promise<QuizBankResponse> => {
     const res = await axiosClient.get(API_ENDPOINTS.QUIZ.BANK, {
       params: { scope },
