@@ -3,12 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
+import { resolveApiErrorMessage, extractApiErrorCode } from '@/shared/utils/resolveApiErrorMessage';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { quizService } from '../services/quiz.service';
 import { QuizQuestion } from '../types/quiz';
-
-const SECONDS_PER_QUESTION = 180;
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -33,8 +31,17 @@ export const useQuizPlay = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [secondsLeft, setSecondsLeft] = useState(600);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [deadlineAt, setDeadlineAt] = useState<number | null>(null);
   const saveTimerRef = useRef<number | null>(null);
+  const autoSubmitLockRef = useRef(false);
+
+  const goToResult = useCallback(
+    (id: string) => {
+      router.push(`/quiz/attempts/${id}/result`);
+    },
+    [router]
+  );
 
   useEffect(() => {
     if (!ready) {
@@ -54,9 +61,14 @@ export const useQuizPlay = () => {
     const loadAttempt = async () => {
       setLoading(true);
       setError(null);
+      autoSubmitLockRef.current = false;
       try {
         const data = await quizService.getAttemptPlay(attemptId);
         if (cancelled) {
+          return;
+        }
+        if (data.timed_out) {
+          goToResult(data.attempt_id);
           return;
         }
         setQuestions(data.questions ?? []);
@@ -66,10 +78,17 @@ export const useQuizPlay = () => {
           (data.saved_answers ?? []).map((item) => [item.quiz_question_id, item.selected_answer])
         );
         setAnswers(savedAnswers);
-        setSecondsLeft(Math.max((data.questions?.length ?? 0) * SECONDS_PER_QUESTION, 600));
+        const remaining = data.remaining_seconds ?? 0;
+        setSecondsLeft(remaining);
+        setDeadlineAt(Date.now() + remaining * 1000);
         setCurrentIndex(0);
       } catch (err: unknown) {
         if (!cancelled) {
+          const code = extractApiErrorCode(err);
+          if (code === 'STD_QIZ_016' || code === 'STD_QIZ_009') {
+            goToResult(attemptId);
+            return;
+          }
           setError(resolveApiErrorMessage(err, tApiErrors, t('errors.load_failed')));
         }
       } finally {
@@ -83,17 +102,56 @@ export const useQuizPlay = () => {
     return () => {
       cancelled = true;
     };
-  }, [ready, isAuthenticated, attemptId, t, tApiErrors]);
+  }, [ready, isAuthenticated, attemptId, t, tApiErrors, goToResult]);
 
-  useEffect(() => {
-    if (!questions.length) {
+  const submitOnTimeout = useCallback(async () => {
+    if (!attemptId || autoSubmitLockRef.current || submitting) {
       return;
     }
-    const timerId = window.setInterval(() => {
-      setSecondsLeft((prev) => Math.max(prev - 1, 0));
-    }, 1000);
+    autoSubmitLockRef.current = true;
+    setSubmitting(true);
+    try {
+      const play = await quizService.getAttemptPlay(attemptId);
+      if (play.timed_out) {
+        goToResult(play.attempt_id);
+        return;
+      }
+      if (typeof play.remaining_seconds === 'number' && play.remaining_seconds > 0) {
+        setSecondsLeft(play.remaining_seconds);
+        setDeadlineAt(Date.now() + play.remaining_seconds * 1000);
+        autoSubmitLockRef.current = false;
+        return;
+      }
+      goToResult(attemptId);
+    } catch (err: unknown) {
+      const code = extractApiErrorCode(err);
+      if (code === 'STD_QIZ_016' || code === 'STD_QIZ_009') {
+        goToResult(attemptId);
+        return;
+      }
+      goToResult(attemptId);
+    } finally {
+      setSubmitting(false);
+    }
+  }, [attemptId, submitting, goToResult]);
+
+  useEffect(() => {
+    if (!deadlineAt || !questions.length) {
+      return;
+    }
+
+    const tick = () => {
+      const remaining = Math.max(0, Math.floor((deadlineAt - Date.now()) / 1000));
+      setSecondsLeft(remaining);
+      if (remaining <= 0) {
+        void submitOnTimeout();
+      }
+    };
+
+    tick();
+    const timerId = window.setInterval(tick, 1000);
     return () => window.clearInterval(timerId);
-  }, [questions.length]);
+  }, [deadlineAt, questions.length, submitOnTimeout]);
 
   const persistAnswers = useCallback(
     (nextAnswers: Record<string, string>, questionId: string, option: string) => {
@@ -108,12 +166,15 @@ export const useQuizPlay = () => {
           await quizService.saveAttemptAnswers(attemptId, [
             { quiz_question_id: questionId, selected_answer: option },
           ]);
-        } catch {
-          // Silent fail for autosave; user can still submit all answers at once.
+        } catch (err: unknown) {
+          const code = extractApiErrorCode(err);
+          if (code === 'STD_QIZ_016') {
+            goToResult(attemptId);
+          }
         }
       }, 400);
     },
-    [attemptId]
+    [attemptId, goToResult]
   );
 
   const answeredCount = Object.keys(answers).length;
@@ -141,6 +202,9 @@ export const useQuizPlay = () => {
   const percentLabel = t('percent_complete', { percent: answeredPercent });
 
   const chooseAnswer = (questionId: string, option: string) => {
+    if (secondsLeft <= 0 || submitting) {
+      return;
+    }
     setAnswers((prev) => {
       const next = { ...prev, [questionId]: option };
       persistAnswers(next, questionId, option);
@@ -181,8 +245,13 @@ export const useQuizPlay = () => {
           selected_answer: answers[question.id],
         })),
       });
-      router.push(`/quiz/attempts/${result.attempt_id}/result`);
+      goToResult(result.attempt_id);
     } catch (err: unknown) {
+      const code = extractApiErrorCode(err);
+      if (code === 'STD_QIZ_016' || code === 'STD_QIZ_009') {
+        goToResult(attemptId);
+        return;
+      }
       setError(resolveApiErrorMessage(err, tApiErrors, t('errors.submit_failed')));
     } finally {
       setSubmitting(false);

@@ -98,7 +98,15 @@
     "STD_QIZ_005": "Câu hỏi quiz không hợp lệ",
     "STD_QIZ_006": "Không tìm thấy lượt làm bài",
     "STD_QIZ_007": "Bạn không có quyền xem kết quả này",
-    "STD_QIZ_008": "Vui lòng chọn đáp án trước khi nộp bài"
+    "STD_QIZ_008": "Vui lòng chọn đáp án trước khi nộp bài",
+    "STD_QIZ_009": "Bài quiz này đã được nộp",
+    "STD_QIZ_010": "Bài quiz không còn ở trạng thái đang làm",
+    "STD_QIZ_011": "Vui lòng trả lời đủ tất cả câu hỏi",
+    "STD_QIZ_012": "Bài quiz chưa được nộp",
+    "STD_QIZ_013": "Không tìm thấy đề ôn tập",
+    "STD_QIZ_014": "Đề ôn tập chưa được xuất bản",
+    "STD_QIZ_015": "Đề ôn tập chưa có câu hỏi",
+    "STD_QIZ_016": "Đã hết thời gian làm bài. Hệ thống đã nộp bài giúp bạn."
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",

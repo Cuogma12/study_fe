@@ -73,17 +73,21 @@ export interface GenerateQuizResponse {
 
 export interface QuizAttemptPlayResponse {
   attempt_id: string;
-  set_id: string | null;
-  set_title: string | null;
-  title: string | null;
-  subject_id: string;
-  topic_id: string | null;
-  grade_level: number | null;
+  set_id?: string | null;
+  set_title?: string | null;
+  title?: string | null;
+  subject_id?: string;
+  topic_id?: string | null;
+  grade_level?: number | null;
   status: QuizAttemptStatus;
-  total_questions: number;
-  answered_count: number;
-  questions: QuizQuestion[];
-  saved_answers: SubmitQuizAnswerPayload[];
+  total_questions?: number;
+  answered_count?: number;
+  questions?: QuizQuestion[];
+  saved_answers?: SubmitQuizAnswerPayload[];
+  started_at?: string | null;
+  duration_minutes?: number | null;
+  remaining_seconds?: number | null;
+  timed_out?: boolean;
 }
 
 export interface SubmitQuizAnswerPayload {
