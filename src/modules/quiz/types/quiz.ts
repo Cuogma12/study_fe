@@ -1,5 +1,7 @@
 export type QuizSetType = 'midterm' | 'final' | 'thpt_qg' | 'university_prep';
 
+export type QuizAttemptMode = 'practice' | 'exam';
+
 export interface QuizSetItem {
   set_id: string;
   slug: string;
@@ -35,8 +37,11 @@ export interface StartQuizSetResponse {
   subject_id: string;
   topic_id: string | null;
   grade_level: number | null;
+  mode: QuizAttemptMode;
   status: QuizAttemptStatus;
   total_questions: number;
+  duration_minutes?: number | null;
+  remaining_seconds?: number | null;
   resumed: boolean;
 }
 
@@ -58,6 +63,7 @@ export interface GenerateQuizPayload {
   grade_level?: number;
   limit: number;
   title?: string;
+  mode: QuizAttemptMode;
 }
 
 export interface GenerateQuizResponse {
@@ -66,13 +72,26 @@ export interface GenerateQuizResponse {
   subject_id: string;
   topic_id: string | null;
   grade_level: number | null;
+  mode: QuizAttemptMode;
   status: QuizAttemptStatus;
   total_questions: number;
+  duration_minutes?: number | null;
+  remaining_seconds?: number | null;
   questions: QuizQuestion[];
+}
+
+export interface QuizSavedAnswer {
+  quiz_question_id: string;
+  selected_answer: string;
+  revealed?: boolean;
+  is_correct?: boolean;
+  correct_answer?: string | null;
+  explanation?: string | null;
 }
 
 export interface QuizAttemptPlayResponse {
   attempt_id: string;
+  mode?: QuizAttemptMode;
   set_id?: string | null;
   set_title?: string | null;
   title?: string | null;
@@ -83,7 +102,7 @@ export interface QuizAttemptPlayResponse {
   total_questions?: number;
   answered_count?: number;
   questions?: QuizQuestion[];
-  saved_answers?: SubmitQuizAnswerPayload[];
+  saved_answers?: QuizSavedAnswer[];
   started_at?: string | null;
   duration_minutes?: number | null;
   remaining_seconds?: number | null;
@@ -93,6 +112,21 @@ export interface QuizAttemptPlayResponse {
 export interface SubmitQuizAnswerPayload {
   quiz_question_id: string;
   selected_answer: string;
+}
+
+export interface CheckQuizAnswerPayload {
+  quiz_question_id: string;
+  selected_answer?: string;
+}
+
+export interface CheckQuizAnswerResponse {
+  quiz_question_id: string;
+  selected_answer: string;
+  is_correct: boolean;
+  correct_answer: string;
+  explanation: string | null;
+  revealed: boolean;
+  revealed_at: string;
 }
 
 export interface SubmitQuizPayload {

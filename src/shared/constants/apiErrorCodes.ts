@@ -47,6 +47,14 @@ export const API_ERROR_CODES = {
     SET_EMPTY: 'STD_QIZ_015',
     ATTEMPT_TIMED_OUT: 'STD_QIZ_016',
   },
+  AI: {
+    CONVERSATION_NOT_FOUND: 'STD_AI_001',
+    FORBIDDEN: 'STD_AI_002',
+    MODE_NOT_AVAILABLE: 'STD_AI_003',
+    LLM_NOT_CONFIGURED: 'STD_AI_004',
+    LLM_FAILED: 'STD_AI_005',
+    QUESTION_NOT_FOUND: 'STD_AI_006',
+  },
 } as const;
 
 export type ApiErrorCode = (typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES][keyof (typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]];

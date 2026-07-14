@@ -6,7 +6,13 @@ import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage, extractApiErrorCode } from '@/shared/utils/resolveApiErrorMessage';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { quizService } from '../services/quiz.service';
-import { QuizQuestion } from '../types/quiz';
+import { QuizAttemptMode, QuizQuestion, QuizSavedAnswer } from '../types/quiz';
+
+export interface QuizRevealState {
+  is_correct: boolean;
+  correct_answer: string;
+  explanation: string | null;
+}
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -24,17 +30,22 @@ export const useQuizPlay = () => {
   const attemptId = searchParams.get('attempt_id') ?? '';
 
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [mode, setMode] = useState<QuizAttemptMode>('exam');
   const [setTitle, setSetTitle] = useState('');
   const [gradeLevel, setGradeLevel] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [reveals, setReveals] = useState<Record<string, QuizRevealState>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [deadlineAt, setDeadlineAt] = useState<number | null>(null);
   const saveTimerRef = useRef<number | null>(null);
   const autoSubmitLockRef = useRef(false);
+
+  const isPractice = mode === 'practice';
 
   const goToResult = useCallback(
     (id: string) => {
@@ -42,6 +53,23 @@ export const useQuizPlay = () => {
     },
     [router]
   );
+
+  const applySavedAnswers = useCallback((saved: QuizSavedAnswer[] | undefined) => {
+    const nextAnswers: Record<string, string> = {};
+    const nextReveals: Record<string, QuizRevealState> = {};
+    for (const item of saved ?? []) {
+      nextAnswers[item.quiz_question_id] = item.selected_answer;
+      if (item.revealed && item.correct_answer != null && typeof item.is_correct === 'boolean') {
+        nextReveals[item.quiz_question_id] = {
+          is_correct: item.is_correct,
+          correct_answer: item.correct_answer,
+          explanation: item.explanation ?? null,
+        };
+      }
+    }
+    setAnswers(nextAnswers);
+    setReveals(nextReveals);
+  }, []);
 
   useEffect(() => {
     if (!ready) {
@@ -71,16 +99,20 @@ export const useQuizPlay = () => {
           goToResult(data.attempt_id);
           return;
         }
+        const nextMode: QuizAttemptMode = data.mode === 'practice' ? 'practice' : 'exam';
+        setMode(nextMode);
         setQuestions(data.questions ?? []);
         setSetTitle(data.title || data.set_title || '');
         setGradeLevel(data.grade_level ? String(data.grade_level) : '');
-        const savedAnswers = Object.fromEntries(
-          (data.saved_answers ?? []).map((item) => [item.quiz_question_id, item.selected_answer])
-        );
-        setAnswers(savedAnswers);
-        const remaining = data.remaining_seconds ?? 0;
-        setSecondsLeft(remaining);
-        setDeadlineAt(Date.now() + remaining * 1000);
+        applySavedAnswers(data.saved_answers);
+        if (nextMode === 'exam') {
+          const remaining = data.remaining_seconds ?? 0;
+          setSecondsLeft(remaining);
+          setDeadlineAt(Date.now() + remaining * 1000);
+        } else {
+          setSecondsLeft(0);
+          setDeadlineAt(null);
+        }
         setCurrentIndex(0);
       } catch (err: unknown) {
         if (!cancelled) {
@@ -102,10 +134,10 @@ export const useQuizPlay = () => {
     return () => {
       cancelled = true;
     };
-  }, [ready, isAuthenticated, attemptId, t, tApiErrors, goToResult]);
+  }, [ready, isAuthenticated, attemptId, t, tApiErrors, goToResult, applySavedAnswers]);
 
   const submitOnTimeout = useCallback(async () => {
-    if (!attemptId || autoSubmitLockRef.current || submitting) {
+    if (!attemptId || autoSubmitLockRef.current || submitting || isPractice) {
       return;
     }
     autoSubmitLockRef.current = true;
@@ -133,10 +165,10 @@ export const useQuizPlay = () => {
     } finally {
       setSubmitting(false);
     }
-  }, [attemptId, submitting, goToResult]);
+  }, [attemptId, submitting, goToResult, isPractice]);
 
   useEffect(() => {
-    if (!deadlineAt || !questions.length) {
+    if (isPractice || !deadlineAt || !questions.length) {
       return;
     }
 
@@ -151,10 +183,10 @@ export const useQuizPlay = () => {
     tick();
     const timerId = window.setInterval(tick, 1000);
     return () => window.clearInterval(timerId);
-  }, [deadlineAt, questions.length, submitOnTimeout]);
+  }, [deadlineAt, questions.length, submitOnTimeout, isPractice]);
 
   const persistAnswers = useCallback(
-    (nextAnswers: Record<string, string>, questionId: string, option: string) => {
+    (questionId: string, option: string) => {
       if (!attemptId) {
         return;
       }
@@ -180,6 +212,11 @@ export const useQuizPlay = () => {
   const answeredCount = Object.keys(answers).length;
   const totalQuestions = questions.length;
   const currentQuestion = questions[currentIndex];
+  const currentReveal = currentQuestion ? reveals[currentQuestion.id] : undefined;
+  const currentSelected = currentQuestion ? answers[currentQuestion.id] : undefined;
+  const canCheckCurrent =
+    isPractice &&
+    Boolean(currentQuestion && currentSelected && !currentReveal && !checking && !submitting);
   const canSubmit =
     Boolean(attemptId) && totalQuestions > 0 && answeredCount === totalQuestions && !submitting;
   const canGoPrevious = currentIndex > 0;
@@ -194,7 +231,9 @@ export const useQuizPlay = () => {
     return gradeLevel ? t('exam_title_grade', { grade: gradeLevel }) : t('exam_title_default');
   }, [gradeLevel, setTitle, t]);
 
-  const timeLabel = t('time_remaining', { time: formatTime(secondsLeft) });
+  const timeLabel = isPractice
+    ? t('practice_mode_label')
+    : t('time_remaining', { time: formatTime(secondsLeft) });
   const questionProgressLabel = t('question_progress', {
     current: currentIndex + 1,
     total: totalQuestions,
@@ -202,15 +241,51 @@ export const useQuizPlay = () => {
   const percentLabel = t('percent_complete', { percent: answeredPercent });
 
   const chooseAnswer = (questionId: string, option: string) => {
-    if (secondsLeft <= 0 || submitting) {
+    if (submitting || checking) {
+      return;
+    }
+    if (!isPractice && secondsLeft <= 0) {
+      return;
+    }
+    if (reveals[questionId]) {
       return;
     }
     setAnswers((prev) => {
       const next = { ...prev, [questionId]: option };
-      persistAnswers(next, questionId, option);
+      persistAnswers(questionId, option);
       return next;
     });
     setError(null);
+  };
+
+  const checkCurrentAnswer = async () => {
+    if (!canCheckCurrent || !attemptId || !currentQuestion || !currentSelected) {
+      return;
+    }
+    setChecking(true);
+    setError(null);
+    try {
+      const result = await quizService.checkAnswer(attemptId, {
+        quiz_question_id: currentQuestion.id,
+        selected_answer: currentSelected,
+      });
+      setAnswers((prev) => ({
+        ...prev,
+        [result.quiz_question_id]: result.selected_answer,
+      }));
+      setReveals((prev) => ({
+        ...prev,
+        [result.quiz_question_id]: {
+          is_correct: result.is_correct,
+          correct_answer: result.correct_answer,
+          explanation: result.explanation,
+        },
+      }));
+    } catch (err: unknown) {
+      setError(resolveApiErrorMessage(err, tApiErrors, t('errors.check_failed')));
+    } finally {
+      setChecking(false);
+    }
   };
 
   const goToPrevious = () => {
@@ -272,11 +347,15 @@ export const useQuizPlay = () => {
     isAuthenticated,
     attemptId,
     loading,
+    mode,
+    isPractice,
     gradeLevel,
     questions,
     currentQuestion,
     currentIndex,
     answers,
+    reveals,
+    currentReveal,
     answeredCount,
     totalQuestions,
     examTitle,
@@ -286,10 +365,13 @@ export const useQuizPlay = () => {
     answeredPercent,
     error,
     submitting,
+    checking,
     canSubmit,
+    canCheckCurrent,
     canGoPrevious,
     canGoNext,
     chooseAnswer,
+    checkCurrentAnswer,
     goToPrevious,
     goToNext,
     goToQuestion,

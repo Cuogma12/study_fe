@@ -6,6 +6,7 @@ import { QuizBuilderField } from '../components/molecules/QuizBuilderField';
 import { QuizBuilderLimitField } from '../components/molecules/QuizBuilderLimitField';
 import { QuizBuilderTitleField } from '../components/molecules/QuizBuilderTitleField';
 import { QuizFormAlert } from '../components/molecules/QuizFormAlert';
+import { QuizModeSelectModal } from '../components/molecules/QuizModeSelectModal';
 import { QuizDashboardHeader } from '../components/organisms/QuizDashboardHeader';
 import { QuizBuilderQuickPick } from '../components/organisms/QuizBuilderQuickPick';
 import { QuizDashboardLayout } from '../components/organisms/QuizDashboardLayout';
@@ -30,6 +31,7 @@ export const QuizBuilderPage = () => {
     loadError,
     submitError,
     submitting,
+    modeConfirmOpen,
     subjectOptions,
     gradeOptions,
     topicOptions,
@@ -43,6 +45,8 @@ export const QuizBuilderPage = () => {
     onTopicChange,
     onTitleChange,
     onLimitChange,
+    openModeSelect,
+    cancelModeSelect,
     generateQuiz,
   } = useQuizBuilder();
 
@@ -124,7 +128,7 @@ export const QuizBuilderPage = () => {
         <div className="mt-6 border-t border-gray-200 pt-5 dark:border-slate-700">
           {submitError ? <QuizFormAlert message={submitError} className="mb-4" /> : null}
           <div className="flex justify-end">
-            <Button onClick={generateQuiz} disabled={!canGenerate} className="min-w-[180px]">
+            <Button onClick={openModeSelect} disabled={!canGenerate} className="min-w-[180px]">
               {submitting ? t('actions.generating') : t('actions.generate')}
             </Button>
           </div>
@@ -140,6 +144,21 @@ export const QuizBuilderPage = () => {
         aiDescription={t('ai.description')}
         aiBadgeText={t('ai.coming_soon')}
         onSelectTemplate={applyTemplate}
+      />
+
+      <QuizModeSelectModal
+        open={modeConfirmOpen}
+        title={t('mode_select.title')}
+        description={t('mode_select.description')}
+        practiceTitle={t('mode_select.practice_title')}
+        practiceDescription={t('mode_select.practice_description')}
+        examTitle={t('mode_select.exam_title')}
+        examDescription={t('mode_select.exam_description')}
+        cancelText={t('mode_select.cancel')}
+        confirming={submitting}
+        onSelectPractice={() => void generateQuiz('practice')}
+        onSelectExam={() => void generateQuiz('exam')}
+        onCancel={cancelModeSelect}
       />
     </QuizDashboardLayout>
   );

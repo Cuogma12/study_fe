@@ -103,7 +103,7 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
         />
       </div>
 
-      <QuestionAiSidebar />
+      <QuestionAiSidebar questionId={question.id} questionTitle={question.title} />
     </main>
   );
 };

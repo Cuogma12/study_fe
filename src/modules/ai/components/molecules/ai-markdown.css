@@ -1,0 +1,13 @@
+.ai-md .katex {
+  font-size: 1.05em;
+}
+
+.ai-md--user .katex {
+  color: #fff;
+}
+
+.ai-md .katex-display {
+  margin: 0.6em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

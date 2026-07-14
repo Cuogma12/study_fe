@@ -1,9 +1,12 @@
 import { API_ENDPOINTS } from '@/shared/constants/api';
 import axiosClient from '@/shared/utils/axiosClient';
 import {
+  CheckQuizAnswerPayload,
+  CheckQuizAnswerResponse,
   GenerateQuizPayload,
   GenerateQuizResponse,
   QuizBankResponse,
+  QuizAttemptMode,
   QuizAttemptPlayResponse,
   QuizAttemptResult,
   QuizAttemptListResponse,
@@ -29,8 +32,11 @@ export const quizService = {
     return res.data;
   },
 
-  startQuizSet: async (setId: string): Promise<StartQuizSetResponse> => {
-    const res = await axiosClient.post(API_ENDPOINTS.QUIZ.SET_START(setId));
+  startQuizSet: async (
+    setId: string,
+    mode: QuizAttemptMode = 'exam'
+  ): Promise<StartQuizSetResponse> => {
+    const res = await axiosClient.post(API_ENDPOINTS.QUIZ.SET_START(setId), { mode });
     return res.data;
   },
 
@@ -58,6 +64,14 @@ export const quizService = {
     const res = await axiosClient.patch(API_ENDPOINTS.QUIZ.ATTEMPT_ANSWERS(attemptId), {
       answers,
     });
+    return res.data;
+  },
+
+  checkAnswer: async (
+    attemptId: string,
+    payload: CheckQuizAnswerPayload
+  ): Promise<CheckQuizAnswerResponse> => {
+    const res = await axiosClient.post(API_ENDPOINTS.QUIZ.ATTEMPT_CHECK_ANSWER(attemptId), payload);
     return res.data;
   },
 

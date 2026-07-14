@@ -15,7 +15,7 @@ import { quizService } from '../services/quiz.service';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { QUIZ_BUILDER_TEMPLATE_DEFS } from '../constants/quizBuilderTemplates';
 import { findTopicIdBySlug } from '../utils/findTopicBySlug';
-import { QuizAttemptListItem } from '../types/quiz';
+import { QuizAttemptListItem, QuizAttemptMode } from '../types/quiz';
 
 const DEFAULT_LIMIT = 10;
 const LIMIT_OPTIONS = [5, 10, 15, 20];
@@ -59,6 +59,7 @@ export const useQuizBuilder = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [activeTemplateKey, setActiveTemplateKey] = useState<string | null>(null);
   const [recentAttempts, setRecentAttempts] = useState<QuizAttemptListItem[]>([]);
+  const [modeConfirmOpen, setModeConfirmOpen] = useState(false);
 
   useEffect(() => {
     const subjectFromQuery = searchParams.get('subject_id');
@@ -275,7 +276,22 @@ export const useQuizBuilder = () => {
     return true;
   };
 
-  const generateQuiz = async () => {
+  const openModeSelect = () => {
+    if (!canGenerate || !validateLimit()) {
+      return;
+    }
+    setSubmitError(null);
+    setModeConfirmOpen(true);
+  };
+
+  const cancelModeSelect = () => {
+    if (submitting) {
+      return;
+    }
+    setModeConfirmOpen(false);
+  };
+
+  const generateQuiz = async (mode: QuizAttemptMode) => {
     if (!canGenerate || !validateLimit()) {
       return;
     }
@@ -288,7 +304,9 @@ export const useQuizBuilder = () => {
         grade_level: Number(gradeLevel),
         limit,
         title: title.trim() || undefined,
+        mode,
       });
+      setModeConfirmOpen(false);
       router.push(`/quiz/play?attempt_id=${generated.attempt_id}`);
     } catch (err: unknown) {
       setSubmitError(resolveApiErrorMessage(err, tApiErrors, t('errors.generate_failed')));
@@ -316,6 +334,7 @@ export const useQuizBuilder = () => {
     loadError,
     submitError,
     submitting,
+    modeConfirmOpen,
     subjectOptions,
     gradeOptions,
     topicOptions,
@@ -329,6 +348,8 @@ export const useQuizBuilder = () => {
     onTopicChange,
     onTitleChange,
     onLimitChange,
+    openModeSelect,
+    cancelModeSelect,
     generateQuiz,
   };
 };

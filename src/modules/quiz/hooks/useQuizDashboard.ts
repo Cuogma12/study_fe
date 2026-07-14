@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { subjectService } from '@/shared/services/subject.service';
 import { quizService } from '../services/quiz.service';
-import { QuizSetItem, QuizSetType } from '../types/quiz';
+import { QuizAttemptMode, QuizSetItem, QuizSetType } from '../types/quiz';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 
 const PAGE_SIZE = 12;
@@ -41,6 +41,10 @@ export const useQuizDashboard = () => {
   const [continueConfirm, setContinueConfirm] = useState<{
     setId: string;
     attemptId: string;
+    title: string;
+  } | null>(null);
+  const [modeConfirm, setModeConfirm] = useState<{
+    setId: string;
     title: string;
   } | null>(null);
 
@@ -241,10 +245,33 @@ export const useQuizDashboard = () => {
         return;
       }
 
+      setModeConfirm({
+        setId,
+        title: setTitle ?? '',
+      });
+    },
+    [startingSetId]
+  );
+
+  const cancelModeSelect = useCallback(() => {
+    if (startingSetId) {
+      return;
+    }
+    setModeConfirm(null);
+  }, [startingSetId]);
+
+  const confirmMode = useCallback(
+    async (mode: QuizAttemptMode) => {
+      if (!modeConfirm || startingSetId) {
+        return;
+      }
+
+      const { setId } = modeConfirm;
       setStartingSetId(setId);
       setError(null);
       try {
-        const started = await quizService.startQuizSet(setId);
+        const started = await quizService.startQuizSet(setId, mode);
+        setModeConfirm(null);
         router.push(`/quiz/play?attempt_id=${started.attempt_id}`);
       } catch (err: unknown) {
         setError(resolveApiErrorMessage(err, tApiErrors, t('errors.start_failed')));
@@ -252,7 +279,7 @@ export const useQuizDashboard = () => {
         setStartingSetId(null);
       }
     },
-    [router, startingSetId, t, tApiErrors]
+    [modeConfirm, router, startingSetId, t, tApiErrors]
   );
 
   const cancelContinue = useCallback(() => {
@@ -290,6 +317,7 @@ export const useQuizDashboard = () => {
     setTypeOptions,
     startingSetId,
     continueConfirm,
+    modeConfirm,
     sentinelRef,
     setKeyword: setKeywordState,
     setSubjectFilter: setSubjectFilterState,
@@ -298,5 +326,7 @@ export const useQuizDashboard = () => {
     startSet,
     confirmContinue,
     cancelContinue,
+    confirmMode,
+    cancelModeSelect,
   };
 };

@@ -45,6 +45,13 @@ export const API_ENDPOINTS = {
     ATTEMPT_RESULT: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/result`,
     ATTEMPT_PLAY: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/play`,
     ATTEMPT_ANSWERS: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/answers`,
+    ATTEMPT_CHECK_ANSWER: (attemptId: string) =>
+      `${API_V1}/quiz/attempts/${attemptId}/check-answer`,
     ATTEMPTS: `${API_V1}/quiz/attempts`,
+  },
+  AI: {
+    CONVERSATIONS: `${API_V1}/ai/conversations`,
+    CONVERSATION: (id: string) => `${API_V1}/ai/conversations/${id}`,
+    MESSAGES: (id: string) => `${API_V1}/ai/conversations/${id}/messages`,
   },
 } as const;

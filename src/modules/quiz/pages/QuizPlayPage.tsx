@@ -16,10 +16,12 @@ export const QuizPlayPage = () => {
     ready,
     isAuthenticated,
     loading,
+    isPractice,
     questions,
     currentQuestion,
     currentIndex,
     answers,
+    currentReveal,
     answeredCount,
     examTitle,
     timeLabel,
@@ -28,10 +30,13 @@ export const QuizPlayPage = () => {
     totalQuestions,
     error,
     submitting,
+    checking,
     canSubmit,
+    canCheckCurrent,
     canGoPrevious,
     canGoNext,
     chooseAnswer,
+    checkCurrentAnswer,
     goToPrevious,
     goToNext,
     goToQuestion,
@@ -117,8 +122,49 @@ export const QuizPlayPage = () => {
               questionId={currentQuestion.id}
               options={currentQuestion.options}
               selectedAnswer={answers[currentQuestion.id]}
+              locked={Boolean(currentReveal)}
+              showResult={Boolean(currentReveal)}
+              correctAnswer={currentReveal?.correct_answer}
               onChooseAnswer={chooseAnswer}
             />
+
+            {isPractice ? (
+              <div className="flex flex-col gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!canCheckCurrent}
+                  onClick={() => void checkCurrentAnswer()}
+                  className="self-start !h-11 gap-2 !px-5"
+                >
+                  {checking ? t('checking') : t('check_answer')}
+                  <span className="material-symbols-outlined text-[20px]">fact_check</span>
+                </Button>
+
+                {currentReveal ? (
+                  <div
+                    className={`${quizPlayLayout.feedbackBox} ${
+                      currentReveal.is_correct
+                        ? quizPlayLayout.feedbackCorrect
+                        : quizPlayLayout.feedbackWrong
+                    }`}
+                  >
+                    <p className="font-semibold">
+                      {currentReveal.is_correct
+                        ? t('feedback.correct')
+                        : t('feedback.incorrect', {
+                            answer: currentReveal.correct_answer,
+                          })}
+                    </p>
+                    {currentReveal.explanation ? (
+                      <p className="mt-1 opacity-90">
+                        {t('feedback.explanation', { text: currentReveal.explanation })}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
 
             {error ? <QuizFormAlert message={error} /> : null}
           </div>

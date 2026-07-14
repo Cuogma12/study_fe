@@ -106,7 +106,16 @@
     "STD_QIZ_013": "Không tìm thấy đề ôn tập",
     "STD_QIZ_014": "Đề ôn tập chưa được xuất bản",
     "STD_QIZ_015": "Đề ôn tập chưa có câu hỏi",
-    "STD_QIZ_016": "Đã hết thời gian làm bài. Hệ thống đã nộp bài giúp bạn."
+    "STD_QIZ_016": "Đã hết thời gian làm bài. Hệ thống đã nộp bài giúp bạn.",
+    "STD_QIZ_017": "Chỉ dùng được ở chế độ ôn tập",
+    "STD_QIZ_018": "Vui lòng chọn đáp án trước khi xem kết quả",
+    "STD_QIZ_019": "Câu hỏi này đã hiện kết quả, không thể đổi đáp án",
+    "STD_AI_001": "Không tìm thấy cuộc trò chuyện AI",
+    "STD_AI_002": "Bạn không có quyền truy cập cuộc trò chuyện này",
+    "STD_AI_003": "Chế độ AI này chưa được hỗ trợ",
+    "STD_AI_004": "Trợ lý AI chưa được cấu hình. Thử lại sau.",
+    "STD_AI_005": "Không gọi được AI. Thử lại sau.",
+    "STD_AI_006": "Không tìm thấy câu hỏi để gắn ngữ cảnh"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -218,8 +227,9 @@
     "right_sidebar": {
       "ai_assistant": "Trợ lý học tập AI",
       "online": "Đang trực tuyến",
-      "ai_welcome": "Chào bạn! Tôi có thể giúp bạn giải bài tập hoặc giải thích kiến thức ngay bây giờ. Bạn cần hỗ trợ gì không?",
-      "ai_placeholder": "Hỏi AI bất cứ điều gì...",
+      "ai_welcome": "Sẵn sàng gợi ý từng bước khi làm bài. Chọn chế độ bên dưới để bắt đầu.",
+      "open_tutor": "Mở gia sư AI",
+      "open_hub": "Xem AI Hub",
       "trending": "Xu hướng thảo luận",
       "leaderboard": "Bảng xếp hạng tuần"
     },
@@ -358,14 +368,18 @@
     "no_replies": "Chưa có phản hồi",
     "submit_error": "Không gửi được. Thử lại sau.",
     "ai": {
-      "title": "Hỏi đáp cùng AI",
+      "title": "Gia sư AI",
       "online": "Trực tuyến",
-      "welcome": "Xin chào! Mình có thể giúp bạn hiểu thêm về bài này. (Tính năng AI đang phát triển — hiện chỉ là giao diện demo.)",
-      "suggestions": "Đề xuất câu hỏi",
-      "suggestion_1": "Giải thích lại bước chính của bài",
+      "welcome": "Mình đã gắn ngữ cảnh bài này. Hỏi ngay tại đây, hoặc mở màn lớn để chat rộng hơn.",
+      "suggestions": "Gợi ý nhanh",
+      "suggestion_1": "Giải thích bước chính",
       "suggestion_2": "Cho ví dụ tương tự",
-      "placeholder": "Hỏi AI thêm về bài tập này...",
-      "disclaimer": "AI có thể trả lời sai, hãy kiểm tra lại thông tin quan trọng."
+      "placeholder": "Hỏi về bài này...",
+      "disclaimer": "AI có thể sai — nên kiểm chứng lại.",
+      "open_tutor": "Mở gia sư AI",
+      "open_fullscreen": "Màn lớn",
+      "login_required": "Đăng nhập để chat với gia sư AI về bài này.",
+      "login_action": "Đăng nhập"
     }
   },
   "login_history": {
@@ -566,6 +580,16 @@
         "description_named": "Bạn đang làm dở đề \"{title}\". Bạn có muốn tiếp tục không?",
         "confirm": "Tiếp tục làm",
         "cancel": "Để sau"
+      },
+      "mode_select": {
+        "title": "Chọn chế độ làm bài",
+        "description": "Ôn tập có thể xem đúng/sai từng câu. Kiểm tra có đồng hồ và chỉ xem kết quả khi nộp bài.",
+        "description_named": "Chọn chế độ cho đề \"{title}\".",
+        "practice_title": "Ôn tập",
+        "practice_description": "Chọn đáp án → Hiện kết quả từng câu → khóa đáp án. Không đếm giờ.",
+        "exam_title": "Kiểm tra",
+        "exam_description": "Làm như thi thật: có thời gian, nộp bài mới xem điểm.",
+        "cancel": "Hủy"
       }
     },
     "history": {
@@ -632,6 +656,15 @@
         "generate": "Bắt đầu làm quiz",
         "generating": "Đang tạo bộ đề..."
       },
+      "mode_select": {
+        "title": "Chọn chế độ làm bài",
+        "description": "Ôn tập có thể xem đúng/sai từng câu. Kiểm tra có đồng hồ và chỉ xem kết quả khi nộp bài.",
+        "practice_title": "Ôn tập",
+        "practice_description": "Chọn đáp án → Hiện kết quả từng câu → khóa đáp án. Không đếm giờ.",
+        "exam_title": "Kiểm tra",
+        "exam_description": "Làm như thi thật: có thời gian, nộp bài mới xem điểm.",
+        "cancel": "Hủy"
+      },
       "errors": {
         "load_failed": "Không tải được dữ liệu môn học/chủ đề",
         "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại",
@@ -682,6 +715,14 @@
       "exam_title_default": "Bài ôn tập",
       "exam_title_grade": "Bài ôn tập lớp {grade}",
       "time_remaining": "Thời gian còn lại: {time}",
+      "practice_mode_label": "Chế độ ôn tập",
+      "check_answer": "Hiện kết quả",
+      "checking": "Đang kiểm tra...",
+      "feedback": {
+        "correct": "Chính xác!",
+        "incorrect": "Chưa đúng. Đáp án đúng là {answer}.",
+        "explanation": "Giải thích: {text}"
+      },
       "question_progress": "Câu {current}/{total}",
       "percent_complete": "{percent}% hoàn thành",
       "prev_question": "Câu trước",
@@ -707,7 +748,8 @@
       },
       "errors": {
         "load_failed": "Không tải được bài quiz",
-        "submit_failed": "Nộp bài thất bại, vui lòng thử lại"
+        "submit_failed": "Nộp bài thất bại, vui lòng thử lại",
+        "check_failed": "Không kiểm tra được đáp án, vui lòng thử lại"
       }
     },
     "result": {
@@ -735,6 +777,69 @@
         "retry": "Thử lại",
         "back_builder": "Quay lại tạo quiz"
       }
+    }
+  },
+  "ai": {
+    "hub": {
+      "title": "AI Hub",
+      "subtitle": "Nâng tầm trải nghiệm học tập với trợ lý trí tuệ nhân tạo thông minh.",
+      "login_required": "Đăng nhập để dùng trợ lý AI.",
+      "login_action": "Đăng nhập",
+      "back_hub": "Về AI Hub",
+      "coming_soon": "Sắp ra mắt",
+      "active_badge": "Đang hoạt động",
+      "start_action": "Bắt đầu ngay",
+      "unavailable": "Chưa khả dụng",
+      "modes": {
+        "tutor": {
+          "title": "Tutor Q&A",
+          "description": "Hỏi đáp trực tiếp với trợ lý AI về bất kỳ môn học nào. Giải đáp thắc mắc ngay lập tức."
+        },
+        "explain_quiz": {
+          "title": "Quiz Explainer",
+          "description": "Phân tích sâu các câu hỏi sai trong bài kiểm tra và hướng dẫn phương pháp giải chi tiết."
+        },
+        "generate_quiz": {
+          "title": "AI Quiz Generator",
+          "description": "Tự động tạo bộ câu hỏi ôn tập theo môn / chủ đề hoặc từ tài liệu của bạn."
+        }
+      },
+      "teasers": {
+        "tech_title": "Công nghệ tiên tiến",
+        "tech_description": "Hệ thống sử dụng mô hình ngôn ngữ lớn để hỗ trợ giải thích và gợi ý học tập chính xác hơn.",
+        "personal_title": "Cá nhân hóa tối đa",
+        "personal_description": "Ngữ cảnh câu hỏi trên diễn đàn được gắn vào cuộc trò chuyện để trợ lý hiểu đúng bài bạn đang học."
+      },
+      "stats": {
+        "questions_value": "500k+",
+        "questions_label": "Câu hỏi đã giải",
+        "satisfaction_value": "98%",
+        "satisfaction_label": "Độ hài lòng",
+        "support_value": "24/7",
+        "support_label": "Hỗ trợ tức thì",
+        "subjects_value": "50+",
+        "subjects_label": "Môn học hỗ trợ"
+      }
+    },
+    "chat": {
+      "title": "Gia sư AI",
+      "online": "Online",
+      "back": "Quay lại",
+      "context_banner": "Đang kết nối với câu hỏi: {title}",
+      "context_banner_fallback": "Đang kết nối với câu hỏi trên diễn đàn",
+      "welcome_title": "Xin chào! Mình là Gia sư AI.",
+      "welcome": "Mình ở đây để giúp bạn hiểu bài tập rõ hơn. Bạn muốn bắt đầu từ đâu?",
+      "welcome_with_question": "Mình ở đây để giúp bạn hiểu rõ hơn về bài bạn đang xem. Bạn muốn bắt đầu từ đâu?",
+      "placeholder": "Hỏi Gia sư AI...",
+      "send": "Gửi",
+      "sending": "Đang gửi...",
+      "thinking": "AI đang suy nghĩ...",
+      "disclaimer": "AI có thể mắc sai sót. Hãy kiểm chứng lại thông tin quan trọng.",
+      "load_error": "Không tải được cuộc trò chuyện. Thử lại sau.",
+      "send_error": "Không gửi được tin nhắn. Thử lại sau.",
+      "empty_hint": "Bắt đầu bằng một câu hỏi ngắn về bài tập.",
+      "suggestion_1": "Giải thích thêm về lý thuyết",
+      "suggestion_2": "Cho ví dụ thực tế"
     }
   }
 }
