@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
     SETS: `${API_V1}/quiz/sets`,
     SET_START: (setId: string) => `${API_V1}/quiz/sets/${setId}/start`,
     GENERATE: `${API_V1}/quiz/generate`,
+    GENERATE_AI: `${API_V1}/quiz/generate-ai`,
     SUBMIT: `${API_V1}/quiz/submit`,
     ATTEMPT_RESULT: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/result`,
     ATTEMPT_PLAY: (attemptId: string) => `${API_V1}/quiz/attempts/${attemptId}/play`,

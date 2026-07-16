@@ -16,6 +16,7 @@ export const useAiHubPage = () => {
   const isTutorMode = mode === 'tutor';
 
   const startTutor = () => navigateTo('/ai?mode=tutor');
+  const startGenerateQuiz = () => navigateTo('/quiz/new');
   const goLogin = () => navigateTo('/login');
 
   const hubStats = [
@@ -45,6 +46,7 @@ export const useAiHubPage = () => {
     questionId,
     hubStats,
     startTutor,
+    startGenerateQuiz,
     goLogin,
   };
 };

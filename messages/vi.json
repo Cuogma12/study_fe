@@ -110,6 +110,7 @@
     "STD_QIZ_017": "Chỉ dùng được ở chế độ ôn tập",
     "STD_QIZ_018": "Vui lòng chọn đáp án trước khi xem kết quả",
     "STD_QIZ_019": "Câu hỏi này đã hiện kết quả, không thể đổi đáp án",
+    "STD_QIZ_020": "AI không tạo được bộ câu hỏi hợp lệ. Thử lại hoặc giảm số câu.",
     "STD_AI_001": "Không tìm thấy cuộc trò chuyện AI",
     "STD_AI_002": "Bạn không có quyền truy cập cuộc trò chuyện này",
     "STD_AI_003": "Chế độ AI này chưa được hỗ trợ",
@@ -603,6 +604,20 @@
         "in_progress": "Chưa làm xong",
         "submitted": "Đã nộp bài"
       },
+      "filters": {
+        "mode": "Chế độ",
+        "subject": "Môn học",
+        "grade": "Khối lớp",
+        "search_placeholder": "Tìm theo tên đề / quiz...",
+        "all_modes": "Tất cả chế độ",
+        "all_subjects": "Tất cả môn",
+        "all_grades": "Tất cả khối",
+        "mode_practice": "Ôn tập",
+        "mode_exam": "Kiểm tra",
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12"
+      },
       "errors": {
         "load_failed": "Không tải được danh sách quiz"
       },
@@ -614,6 +629,8 @@
         "updated_at": "Cập nhật lúc",
         "status_in_progress": "Đang làm",
         "status_submitted": "Đã nộp",
+        "mode_practice": "Ôn tập",
+        "mode_exam": "Kiểm tra",
         "view_result": "Xem kết quả",
         "continue": "Tiếp tục làm"
       },
@@ -654,7 +671,7 @@
       "question_count_suffix": "câu",
       "actions": {
         "generate": "Bắt đầu làm quiz",
-        "generating": "Đang tạo bộ đề..."
+        "generating": "Đang chuẩn bị đề..."
       },
       "mode_select": {
         "title": "Chọn chế độ làm bài",
@@ -668,6 +685,7 @@
       "errors": {
         "load_failed": "Không tải được dữ liệu môn học/chủ đề",
         "generate_failed": "Không tạo được bộ quiz, vui lòng thử lại",
+        "generate_ai_failed": "AI không tạo được bộ câu hỏi. Thử lại sau.",
         "limit_invalid": "Số câu hỏi phải từ {min} đến {max}"
       },
       "templates": {
@@ -705,8 +723,17 @@
       },
       "ai": {
         "title": "Tạo quiz bằng AI",
-        "description": "Mô tả chủ đề cần ôn — AI sẽ gợi ý bộ câu hỏi phù hợp với trình độ của bạn.",
-        "coming_soon": "Sắp ra mắt"
+        "description": "Dùng môn / chủ đề / lớp ở form trên. AI tạo MCQ theo batch rồi gộp đủ số câu bạn chọn, lưu ngân hàng và làm ngay.",
+        "action": "Tạo bằng AI",
+        "generating": "AI đang soạn đề...",
+        "wait_title": "AI đang soạn đề cho bạn",
+        "wait_subtitle": "Chờ một chút nhé — đề xong là vào làm liền!",
+        "wait_question_count": "Mục tiêu: {count} câu hỏi trắc nghiệm",
+        "wait_tip_1": "Đang nghĩ câu hỏi hay ho theo môn và chủ đề bạn chọn...",
+        "wait_tip_2": "Soạn đáp án A–D và giải thích ngắn cho từng câu.",
+        "wait_tip_3": "Đề nhiều câu sẽ được tạo từng lượt nhỏ rồi gộp lại — hơi lâu một tí là bình thường.",
+        "wait_tip_4": "Xong rồi sẽ lưu vào ngân hàng đề và chuyển bạn sang màn làm bài.",
+        "wait_tip_5": "Trong lúc chờ, hít thở sâu một nhịp — sắp ôn thôi!"
       }
     },
     "play": {
@@ -801,7 +828,7 @@
         },
         "generate_quiz": {
           "title": "AI Quiz Generator",
-          "description": "Tự động tạo bộ câu hỏi ôn tập theo môn / chủ đề hoặc từ tài liệu của bạn."
+          "description": "Tạo câu hỏi ôn tập theo môn / chủ đề, lưu vào ngân hàng và làm ngay trên trang tạo quiz."
         }
       },
       "teasers": {

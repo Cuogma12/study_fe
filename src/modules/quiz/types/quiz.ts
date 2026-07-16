@@ -77,6 +77,7 @@ export interface GenerateQuizResponse {
   total_questions: number;
   duration_minutes?: number | null;
   remaining_seconds?: number | null;
+  source?: 'ai' | 'seed';
   questions: QuizQuestion[];
 }
 
@@ -192,6 +193,7 @@ export interface QuizAttemptListItem {
   subject_name: string;
   topic_name: string;
   grade_level: number | null;
+  mode: QuizAttemptMode;
   status: QuizAttemptStatus;
   total_questions: number;
   answered_count: number;
@@ -201,6 +203,16 @@ export interface QuizAttemptListItem {
   created_at: string | null;
   updated_at: string | null;
   submitted_at: string | null;
+}
+
+export interface QuizMyAttemptsQuery {
+  page?: number;
+  limit?: number;
+  status?: QuizAttemptStatus;
+  mode?: QuizAttemptMode;
+  subject_id?: string;
+  grade_level?: number;
+  keyword?: string;
 }
 
 export interface QuizAttemptListResponse {

@@ -10,7 +10,7 @@ import {
   QuizAttemptPlayResponse,
   QuizAttemptResult,
   QuizAttemptListResponse,
-  QuizAttemptStatus,
+  QuizMyAttemptsQuery,
   QuizSetListResponse,
   QuizSetType,
   StartQuizSetResponse,
@@ -52,6 +52,11 @@ export const quizService = {
     return res.data;
   },
 
+  generateQuizAi: async (payload: GenerateQuizPayload): Promise<GenerateQuizResponse> => {
+    const res = await axiosClient.post(API_ENDPOINTS.QUIZ.GENERATE_AI, payload);
+    return res.data;
+  },
+
   getAttemptPlay: async (attemptId: string): Promise<QuizAttemptPlayResponse> => {
     const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPT_PLAY(attemptId));
     return res.data;
@@ -86,13 +91,15 @@ export const quizService = {
   },
 
   getMyAttempts: async (
-    page = 1,
+    pageOrQuery: number | QuizMyAttemptsQuery = 1,
     limit = 10,
-    status?: QuizAttemptStatus
+    status?: QuizMyAttemptsQuery['status']
   ): Promise<QuizAttemptListResponse> => {
-    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPTS, {
-      params: { page, limit, status },
-    });
+    const params: QuizMyAttemptsQuery =
+      typeof pageOrQuery === 'object'
+        ? pageOrQuery
+        : { page: pageOrQuery, limit, status };
+    const res = await axiosClient.get(API_ENDPOINTS.QUIZ.ATTEMPTS, { params });
     return res.data;
   },
 };

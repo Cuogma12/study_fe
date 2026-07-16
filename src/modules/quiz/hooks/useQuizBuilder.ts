@@ -14,6 +14,7 @@ import {
 import { quizService } from '../services/quiz.service';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { QUIZ_BUILDER_TEMPLATE_DEFS } from '../constants/quizBuilderTemplates';
+import { clampQuizAiLimit } from '../constants/quizAi';
 import { findTopicIdBySlug } from '../utils/findTopicBySlug';
 import { QuizAttemptListItem, QuizAttemptMode } from '../types/quiz';
 
@@ -60,6 +61,7 @@ export const useQuizBuilder = () => {
   const [activeTemplateKey, setActiveTemplateKey] = useState<string | null>(null);
   const [recentAttempts, setRecentAttempts] = useState<QuizAttemptListItem[]>([]);
   const [modeConfirmOpen, setModeConfirmOpen] = useState(false);
+  const [generateSource, setGenerateSource] = useState<'seed' | 'ai'>('seed');
 
   useEffect(() => {
     const subjectFromQuery = searchParams.get('subject_id');
@@ -280,6 +282,16 @@ export const useQuizBuilder = () => {
     if (!canGenerate || !validateLimit()) {
       return;
     }
+    setGenerateSource('seed');
+    setSubmitError(null);
+    setModeConfirmOpen(true);
+  };
+
+  const openAiModeSelect = () => {
+    if (!canGenerate || !validateLimit()) {
+      return;
+    }
+    setGenerateSource('ai');
     setSubmitError(null);
     setModeConfirmOpen(true);
   };
@@ -295,21 +307,32 @@ export const useQuizBuilder = () => {
     if (!canGenerate || !validateLimit()) {
       return;
     }
+    const source = generateSource;
+    setModeConfirmOpen(false);
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const generated = await quizService.generateQuiz({
+      const payload = {
         subject_id: subjectId,
         topic_id: topicId || undefined,
         grade_level: Number(gradeLevel),
-        limit,
+        limit: source === 'ai' ? clampQuizAiLimit(limit) : limit,
         title: title.trim() || undefined,
         mode,
-      });
-      setModeConfirmOpen(false);
+      };
+      const generated =
+        source === 'ai'
+          ? await quizService.generateQuizAi(payload)
+          : await quizService.generateQuiz(payload);
       router.push(`/quiz/play?attempt_id=${generated.attempt_id}`);
     } catch (err: unknown) {
-      setSubmitError(resolveApiErrorMessage(err, tApiErrors, t('errors.generate_failed')));
+      setSubmitError(
+        resolveApiErrorMessage(
+          err,
+          tApiErrors,
+          source === 'ai' ? t('errors.generate_ai_failed') : t('errors.generate_failed')
+        )
+      );
     } finally {
       setSubmitting(false);
     }
@@ -335,6 +358,7 @@ export const useQuizBuilder = () => {
     submitError,
     submitting,
     modeConfirmOpen,
+    generateSource,
     subjectOptions,
     gradeOptions,
     topicOptions,
@@ -349,6 +373,7 @@ export const useQuizBuilder = () => {
     onTitleChange,
     onLimitChange,
     openModeSelect,
+    openAiModeSelect,
     cancelModeSelect,
     generateQuiz,
   };

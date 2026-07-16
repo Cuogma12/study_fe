@@ -15,6 +15,7 @@ const AiHubPageInner = () => {
     questionId,
     hubStats,
     startTutor,
+    startGenerateQuiz,
     goLogin,
   } = useAiHubPage();
 
@@ -67,6 +68,7 @@ const AiHubPageInner = () => {
       personalDescription={t('teasers.personal_description')}
       stats={hubStats}
       onStartTutor={startTutor}
+      onStartGenerateQuiz={startGenerateQuiz}
     />
   );
 };

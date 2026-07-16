@@ -11,6 +11,8 @@ interface QuizHistoryItemCardProps {
   createdLabel: string;
   statusInProgressLabel: string;
   statusSubmittedLabel: string;
+  modePracticeLabel: string;
+  modeExamLabel: string;
   viewResultText: string;
   continueText: string;
   onViewResult: (attemptId: string) => void;
@@ -40,6 +42,8 @@ export const QuizHistoryItemCard = ({
   createdLabel,
   statusInProgressLabel,
   statusSubmittedLabel,
+  modePracticeLabel,
+  modeExamLabel,
   viewResultText,
   continueText,
   onViewResult,
@@ -47,7 +51,9 @@ export const QuizHistoryItemCard = ({
 }: QuizHistoryItemCardProps) => {
   const topicLabel = item.title || item.set_title || item.topic_name || '—';
   const isInProgress = item.status === 'in_progress';
+  const isPractice = item.mode === 'practice';
   const statusLabel = isInProgress ? statusInProgressLabel : statusSubmittedLabel;
+  const modeLabel = isPractice ? modePracticeLabel : modeExamLabel;
 
   return (
     <article className={`${quizDashboardPanel.shell} ${quizDashboardPanel.shellHover}`}>
@@ -60,6 +66,17 @@ export const QuizHistoryItemCard = ({
               className="rounded-full border border-slate-300 bg-slate-50 px-2.5 py-1 !text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:!text-slate-300"
             >
               {item.subject_name}
+            </Text>
+            <Text
+              as="span"
+              variant="small"
+              className={`rounded-full border px-2.5 py-1 ${
+                isPractice
+                  ? 'border-sky-200 bg-sky-50 !text-sky-700 dark:border-sky-900/40 dark:bg-sky-950/30 dark:!text-sky-300'
+                  : 'border-violet-200 bg-violet-50 !text-violet-700 dark:border-violet-900/40 dark:bg-violet-950/30 dark:!text-violet-300'
+              }`}
+            >
+              {modeLabel}
             </Text>
             <Text
               as="span"

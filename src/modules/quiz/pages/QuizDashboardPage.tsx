@@ -2,7 +2,6 @@
 
 import { Text } from '@/shared/components/atoms';
 import { QuizContinueConfirmModal } from '../components/molecules/QuizContinueConfirmModal';
-import { QuizModeSelectModal } from '../components/molecules/QuizModeSelectModal';
 import { QuizDashboardFilters } from '../components/molecules/QuizDashboardFilters';
 import { QuizDashboardGrid } from '../components/organisms/QuizDashboardGrid';
 import { QuizDashboardHeader } from '../components/organisms/QuizDashboardHeader';
@@ -30,7 +29,6 @@ export const QuizDashboardPage = () => {
     setTypeOptions,
     startingSetId,
     continueConfirm,
-    modeConfirm,
     sentinelRef,
     setKeyword,
     setSubjectFilter,
@@ -39,8 +37,6 @@ export const QuizDashboardPage = () => {
     startSet,
     confirmContinue,
     cancelContinue,
-    confirmMode,
-    cancelModeSelect,
   } = useQuizDashboard();
 
   const setTypeLabel = (setType: QuizSetType) =>
@@ -126,25 +122,6 @@ export const QuizDashboardPage = () => {
         confirming={Boolean(startingSetId)}
         onConfirm={confirmContinue}
         onCancel={cancelContinue}
-      />
-
-      <QuizModeSelectModal
-        open={Boolean(modeConfirm)}
-        title={t('mode_select.title')}
-        description={
-          modeConfirm?.title
-            ? t('mode_select.description_named', { title: modeConfirm.title })
-            : t('mode_select.description')
-        }
-        practiceTitle={t('mode_select.practice_title')}
-        practiceDescription={t('mode_select.practice_description')}
-        examTitle={t('mode_select.exam_title')}
-        examDescription={t('mode_select.exam_description')}
-        cancelText={t('mode_select.cancel')}
-        confirming={Boolean(startingSetId)}
-        onSelectPractice={() => void confirmMode('practice')}
-        onSelectExam={() => void confirmMode('exam')}
-        onCancel={cancelModeSelect}
       />
     </QuizDashboardLayout>
   );

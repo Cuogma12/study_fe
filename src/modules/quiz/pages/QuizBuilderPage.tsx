@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Button, Text } from '@/shared/components/atoms';
 import { useQuizBuilder } from '../hooks/useQuizBuilder';
 import { QuizBuilderField } from '../components/molecules/QuizBuilderField';
@@ -7,6 +8,7 @@ import { QuizBuilderLimitField } from '../components/molecules/QuizBuilderLimitF
 import { QuizBuilderTitleField } from '../components/molecules/QuizBuilderTitleField';
 import { QuizFormAlert } from '../components/molecules/QuizFormAlert';
 import { QuizModeSelectModal } from '../components/molecules/QuizModeSelectModal';
+import { QuizAiGeneratingOverlay } from '../components/molecules/QuizAiGeneratingOverlay';
 import { QuizDashboardHeader } from '../components/organisms/QuizDashboardHeader';
 import { QuizBuilderQuickPick } from '../components/organisms/QuizBuilderQuickPick';
 import { QuizDashboardLayout } from '../components/organisms/QuizDashboardLayout';
@@ -32,6 +34,7 @@ export const QuizBuilderPage = () => {
     submitError,
     submitting,
     modeConfirmOpen,
+    generateSource,
     subjectOptions,
     gradeOptions,
     topicOptions,
@@ -46,9 +49,21 @@ export const QuizBuilderPage = () => {
     onTitleChange,
     onLimitChange,
     openModeSelect,
+    openAiModeSelect,
     cancelModeSelect,
     generateQuiz,
   } = useQuizBuilder();
+
+  const aiWaitTips = useMemo(
+    () => [
+      t('ai.wait_tip_1'),
+      t('ai.wait_tip_2'),
+      t('ai.wait_tip_3'),
+      t('ai.wait_tip_4'),
+      t('ai.wait_tip_5'),
+    ],
+    [t]
+  );
 
   if (!ready || !isAuthenticated) {
     return (
@@ -142,8 +157,12 @@ export const QuizBuilderPage = () => {
         activeTemplateKey={activeTemplateKey}
         aiTitle={t('ai.title')}
         aiDescription={t('ai.description')}
-        aiBadgeText={t('ai.coming_soon')}
+        aiActionText={t('ai.action')}
+        aiGeneratingText={t('ai.generating')}
+        aiDisabled={!canGenerate}
+        aiLoading={submitting}
         onSelectTemplate={applyTemplate}
+        onSelectAi={openAiModeSelect}
       />
 
       <QuizModeSelectModal
@@ -159,6 +178,15 @@ export const QuizBuilderPage = () => {
         onSelectPractice={() => void generateQuiz('practice')}
         onSelectExam={() => void generateQuiz('exam')}
         onCancel={cancelModeSelect}
+      />
+
+      <QuizAiGeneratingOverlay
+        open={submitting && generateSource === 'ai'}
+        title={t('ai.wait_title')}
+        subtitle={t('ai.wait_subtitle')}
+        tips={aiWaitTips}
+        questionCount={limit}
+        questionCountLabel={t('ai.wait_question_count', { count: limit })}
       />
     </QuizDashboardLayout>
   );

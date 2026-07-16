@@ -4,14 +4,28 @@ import { quizDashboardPanel } from '../../constants/quizDashboardStyles';
 interface QuizBuilderAiCardProps {
   title: string;
   description: string;
-  badgeText: string;
+  actionText: string;
+  generatingText: string;
+  disabled?: boolean;
+  loading?: boolean;
+  onAction: () => void;
 }
 
-export const QuizBuilderAiCard = ({ title, description, badgeText }: QuizBuilderAiCardProps) => {
+export const QuizBuilderAiCard = ({
+  title,
+  description,
+  actionText,
+  generatingText,
+  disabled = false,
+  loading = false,
+  onAction,
+}: QuizBuilderAiCardProps) => {
   return (
-    <div
-      className={`${quizDashboardPanel.shell} relative flex flex-col border-dashed opacity-90 sm:flex-row sm:items-center sm:justify-between`}
-      aria-disabled
+    <button
+      type="button"
+      disabled={disabled || loading}
+      onClick={onAction}
+      className={`${quizDashboardPanel.shell} ${quizDashboardPanel.shellHover} relative flex w-full flex-col border-dashed text-left sm:flex-row sm:items-center sm:justify-between disabled:cursor-not-allowed disabled:opacity-60`}
     >
       <div className="flex min-w-0 flex-1 items-start gap-3">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-300">
@@ -29,10 +43,10 @@ export const QuizBuilderAiCard = ({ title, description, badgeText }: QuizBuilder
       <Text
         as="span"
         variant="small"
-        className="mt-3 shrink-0 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 !font-semibold !text-amber-700 sm:mt-0 dark:border-amber-900/40 dark:bg-amber-950/30 dark:!text-amber-300"
+        className="mt-3 shrink-0 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 !font-semibold !text-primary sm:mt-0"
       >
-        {badgeText}
+        {loading ? generatingText : actionText}
       </Text>
-    </div>
+    </button>
   );
 };

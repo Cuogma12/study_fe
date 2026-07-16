@@ -24,6 +24,7 @@ interface AiHubViewProps {
   personalDescription: string;
   stats: { value: string; label: string }[];
   onStartTutor: () => void;
+  onStartGenerateQuiz: () => void;
 }
 
 export const AiHubView = ({
@@ -45,6 +46,7 @@ export const AiHubView = ({
   personalDescription,
   stats,
   onStartTutor,
+  onStartGenerateQuiz,
 }: AiHubViewProps) => {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
@@ -79,9 +81,10 @@ export const AiHubView = ({
           icon="psychology_alt"
           title={generateTitle}
           description={generateDescription}
-          badgeText={comingSoon}
-          actionText={unavailable}
-          disabled
+          badgeText={activeBadge}
+          actionText={startAction}
+          active
+          onAction={onStartGenerateQuiz}
         />
       </div>
 
