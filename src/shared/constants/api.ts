@@ -11,11 +11,13 @@ export const API_ENDPOINTS = {
   USERS: {
     GET_BY_ID: (userId: string) => `${API_V1}/users/${userId}`,
     UPDATE: (userId: string) => `${API_V1}/users/${userId}`,
+    CHANGE_PASSWORD: (userId: string) => `${API_V1}/users/${userId}/password`,
   },
   ADMIN: {
     LOGIN_HISTORY: `${API_V1}/login-history`,
     USERS: `${API_V1}/users`,
     UPDATE_USER_STATUS: (userId: string) => `${API_V1}/users/${userId}/status`,
+    UPDATE_USER_ROLE: (userId: string) => `${API_V1}/users/${userId}/role`,
   },
   ME: {
     SAVED_QUESTIONS: `${API_V1}/me/saved-questions`,

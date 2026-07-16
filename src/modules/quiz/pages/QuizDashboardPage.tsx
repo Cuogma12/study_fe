@@ -88,6 +88,9 @@ export const QuizDashboardPage = () => {
             durationText={(minutes) => t('card.duration_minutes', { minutes })}
             startText={t('card.start_action')}
             continueText={t('card.continue_action')}
+            retryText={t('card.retry_action')}
+            completedText={t('card.completed')}
+            scoreText={(score) => t('card.latest_score', { score })}
             startingText={t('card.starting')}
             startingSetId={startingSetId}
             onStart={startSet}

@@ -3,10 +3,12 @@
 import React from 'react';
 import { Text } from '@/shared/components/atoms';
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import { useAdminSidebarMenu } from '../../hooks/useAdminSidebarMenu';
 
 export const AdminSidebarMenu = () => {
-  const { brandTitle, brandSubtitle, menus } = useAdminSidebarMenu();
+  const locale = useLocale();
+  const { brandTitle, brandSubtitle, homeLabel, menus } = useAdminSidebarMenu();
 
   return (
     <aside className="hidden w-72 border-r border-slate-200 bg-white lg:flex lg:flex-col">
@@ -24,7 +26,7 @@ export const AdminSidebarMenu = () => {
           {menus.map((menu) => (
             <Link
               key={menu.key}
-              href={menu.href}
+              href={`/${locale}${menu.href}`}
               className={`block rounded-lg px-3 py-2 font-medium transition-colors ${
                 menu.isActive
                   ? 'bg-indigo-50 text-indigo-700'
@@ -36,6 +38,15 @@ export const AdminSidebarMenu = () => {
           ))}
         </div>
       </nav>
+
+      <div className="border-t border-slate-200 p-4">
+        <Link
+          href={`/${locale}`}
+          className="block rounded-lg px-3 py-2 font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+        >
+          {homeLabel}
+        </Link>
+      </div>
     </aside>
   );
 };

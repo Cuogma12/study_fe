@@ -12,6 +12,7 @@ interface AdminUsersTableProps {
   currentUserId: string | null;
   updatingId: string | null;
   onUpdateStatus: (userId: string, status: AdminUserStatus) => void;
+  onEdit: (user: AdminUserItem) => void;
 }
 
 const badgeByStatus: Record<
@@ -42,6 +43,7 @@ export const AdminUsersTable = ({
   currentUserId,
   updatingId,
   onUpdateStatus,
+  onEdit,
 }: AdminUsersTableProps) => {
   const t = useTranslations('admin.users');
 
@@ -74,7 +76,7 @@ export const AdminUsersTable = ({
     { key: 'role', label: t('table.role'), className: 'w-[130px]' },
     { key: 'status', label: t('table.status'), className: 'w-[130px]' },
     { key: 'joined_at', label: t('table.joined_at'), className: 'w-[120px]' },
-    { key: 'actions', label: t('table.actions'), className: 'w-[140px] text-right' },
+    { key: 'actions', label: t('table.actions'), className: 'w-[220px] text-right' },
   ];
 
   const tableRows =
@@ -119,7 +121,15 @@ export const AdminUsersTable = ({
               </td>
               <td className="px-4 py-3 text-sm text-slate-600">{joinedAt}</td>
               <td className="px-4 py-3 text-right text-sm">
-                <div className="flex justify-end gap-2">
+                <div className="flex flex-wrap justify-end gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={isUpdating}
+                    onClick={() => onEdit(user)}
+                  >
+                    {t('actions.edit')}
+                  </Button>
                   {canBan ? (
                     <Button
                       size="sm"

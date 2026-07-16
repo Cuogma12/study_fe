@@ -20,6 +20,11 @@ export interface UpdateProfilePayload {
   avatar_url?: string | null;
 }
 
+export interface ChangePasswordPayload {
+  old_password: string;
+  new_password: string;
+}
+
 export const profileService = {
   getById: async (userId: string): Promise<UserProfile> => {
     const res = await axiosClient.get(API_ENDPOINTS.USERS.GET_BY_ID(userId));
@@ -29,6 +34,10 @@ export const profileService = {
   update: async (userId: string, payload: UpdateProfilePayload): Promise<UserProfile> => {
     const res = await axiosClient.put(API_ENDPOINTS.USERS.UPDATE(userId), payload);
     return res.data;
+  },
+
+  changePassword: async (userId: string, payload: ChangePasswordPayload): Promise<void> => {
+    await axiosClient.patch(API_ENDPOINTS.USERS.CHANGE_PASSWORD(userId), payload);
   },
 
   getMyQuestions: async (userId: string): Promise<QuestionListItem[]> => {

@@ -7,6 +7,7 @@ import { useAuth } from '@/shared/hooks/useAuth';
 import { AdminShell } from '../components/organisms/AdminShell';
 import { AdminUsersFilters } from '../components/molecules/AdminUsersFilters';
 import { AdminUsersTable } from '../components/organisms/AdminUsersTable';
+import { AdminEditUserModal } from '../components/organisms/AdminEditUserModal';
 import { useAdminUsers } from '../hooks/useAdminUsers';
 import { AdminUserStatus } from '../types/user-management';
 
@@ -25,11 +26,16 @@ export const AdminUsersPage = () => {
     status,
     setStatus,
     roleOptions,
+    editRoleOptions,
+    editStatusOptions,
     statusOptions,
     updatingId,
+    editingUser,
+    setEditingUser,
     onSearch,
     onChangePage,
     updateStatus,
+    saveEditedUser,
   } = useAdminUsers();
 
   if (!ready) {
@@ -97,6 +103,7 @@ export const AdminUsersPage = () => {
           currentUserId={user.userId}
           updatingId={updatingId}
           onUpdateStatus={handleUpdateStatus}
+          onEdit={setEditingUser}
         />
       </div>
 
@@ -125,6 +132,17 @@ export const AdminUsersPage = () => {
           </Button>
         </div>
       </div>
+
+      <AdminEditUserModal
+        user={editingUser}
+        saving={updatingId === editingUser?.id}
+        canChangeRole={Boolean(editingUser && editingUser.id !== user.userId)}
+        canChangeStatus={Boolean(editingUser && editingUser.id !== user.userId)}
+        roleOptions={editRoleOptions}
+        statusOptions={editStatusOptions}
+        onClose={() => setEditingUser(null)}
+        onSave={saveEditedUser}
+      />
     </AdminShell>
   );
 };

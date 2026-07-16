@@ -3,8 +3,10 @@ import axiosClient from '@/shared/utils/axiosClient';
 import { AdminLoginHistoryListResponse, AdminLoginHistoryQuery } from '../types/login-history';
 import {
   AdminUserItem,
+  AdminUpdateUserProfilePayload,
   AdminUsersListResponse,
   AdminUsersQuery,
+  AdminUserRole,
   AdminUserStatus,
 } from '../types/user-management';
 
@@ -33,5 +35,29 @@ export const adminService = {
       status,
     });
     return res.data;
+  },
+
+  updateUserRole: async (
+    userId: string,
+    role: AdminUserRole
+  ): Promise<AdminUserItem> => {
+    const res = await axiosClient.patch(API_ENDPOINTS.ADMIN.UPDATE_USER_ROLE(userId), {
+      role,
+    });
+    return res.data;
+  },
+
+  updateUserProfile: async (
+    userId: string,
+    payload: AdminUpdateUserProfilePayload
+  ): Promise<AdminUserItem> => {
+    const res = await axiosClient.put(API_ENDPOINTS.USERS.UPDATE(userId), payload);
+    return res.data;
+  },
+
+  resetUserPassword: async (userId: string, newPassword: string): Promise<void> => {
+    await axiosClient.patch(API_ENDPOINTS.USERS.CHANGE_PASSWORD(userId), {
+      new_password: newPassword,
+    });
   },
 };

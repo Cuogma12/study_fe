@@ -91,6 +91,7 @@
     "STD_ANS_004": "Không tìm thấy nội dung để phản hồi",
     "STD_USR_002": "Bạn không có quyền truy cập tài nguyên này",
     "STD_USR_004": "Bạn không thể thay đổi trạng thái tài khoản của chính mình",
+    "STD_USR_005": "Bạn không thể thay đổi vai trò tài khoản của chính mình",
     "STD_QIZ_001": "Không tìm thấy môn học",
     "STD_QIZ_002": "Không tìm thấy chủ đề",
     "STD_QIZ_003": "Chủ đề không thuộc môn học đã chọn",
@@ -116,7 +117,8 @@
     "STD_AI_003": "Chế độ AI này chưa được hỗ trợ",
     "STD_AI_004": "Trợ lý AI chưa được cấu hình. Thử lại sau.",
     "STD_AI_005": "Không gọi được AI. Thử lại sau.",
-    "STD_AI_006": "Không tìm thấy câu hỏi để gắn ngữ cảnh"
+    "STD_AI_006": "Không tìm thấy câu hỏi để gắn ngữ cảnh",
+    "STD_USR_003": "Mật khẩu hiện tại không đúng"
   },
   "profile": {
     "avatar_alt": "Ảnh đại diện",
@@ -161,7 +163,27 @@
     "login_required_title": "Bạn chưa đăng nhập",
     "login_required_desc": "Đăng nhập để xem hồ sơ, câu hỏi đã lưu và quản lý tài khoản của bạn.",
     "go_login": "Đăng nhập",
-    "go_register": "Tạo tài khoản"
+    "go_register": "Tạo tài khoản",
+    "password": {
+      "open": "Đổi mật khẩu",
+      "title": "Đổi mật khẩu",
+      "desc": "Nhập mật khẩu hiện tại và mật khẩu mới (tối thiểu 8 ký tự, có chữ và số).",
+      "old": "Mật khẩu hiện tại",
+      "new": "Mật khẩu mới",
+      "confirm": "Xác nhận mật khẩu mới",
+      "cancel": "Hủy",
+      "save": "Đổi mật khẩu",
+      "saving": "Đang đổi...",
+      "success": "Đổi mật khẩu thành công.",
+      "failed": "Không đổi được mật khẩu. Thử lại sau.",
+      "errors": {
+        "required": "Vui lòng nhập trường này",
+        "invalid": "Mật khẩu tối thiểu 8 ký tự, gồm chữ và số",
+        "mismatch": "Mật khẩu xác nhận không khớp",
+        "same_as_old": "Mật khẩu mới phải khác mật khẩu hiện tại",
+        "wrong_old": "Mật khẩu hiện tại không đúng"
+      }
+    }
   },
   "home": {
     "header": {
@@ -171,8 +193,10 @@
       "courses": "Khóa học",
       "community": "Cộng đồng",
       "quiz": "Ôn tập",
+      "ai_hub": "AI Hub",
       "ask_question": "Đặt câu hỏi",
       "profile": "Hồ sơ",
+      "change_password": "Đổi mật khẩu",
       "login": "Đăng nhập",
       "logout": "Đăng xuất"
     },
@@ -236,8 +260,8 @@
     },
     "bottom_nav": {
       "home": "Trang chủ",
-      "courses": "Khóa học",
-      "discussion": "Thảo luận",
+      "quiz": "Ôn tập",
+      "ai_hub": "AI Hub",
       "profile": "Cá nhân"
     }
   },
@@ -341,8 +365,6 @@
     "save": "Lưu",
     "saved": "Đã lưu",
     "save_failed": "Không lưu được bài. Thử lại sau.",
-    "share": "Chia sẻ",
-    "link_copied": "Đã copy",
     "close_discussion": "Đóng thảo luận",
     "close_confirm": "Bạn chắc chắn muốn đóng thảo luận? Không ai có thể trả lời thêm.",
     "edit": "Chỉnh sửa",
@@ -423,12 +445,13 @@
     "shell": {
       "brand_title": "Quản trị StudyApp",
       "brand_subtitle": "Cổng quản trị",
+      "back_home": "← Về trang chủ",
       "menu_login_history": "Lịch sử đăng nhập",
       "menu_users": "Quản lý người dùng"
     },
     "users": {
       "title": "Quản lý người dùng",
-      "description": "Danh sách tài khoản, lọc và thay đổi trạng thái",
+      "description": "Danh sách tài khoản, đổi vai trò, sửa hồ sơ và thay đổi trạng thái",
       "loading": "Đang tải dữ liệu người dùng...",
       "load_error": "Không tải được danh sách người dùng",
       "forbidden": "Bạn không có quyền xem trang này",
@@ -445,8 +468,7 @@
       },
       "roles": {
         "user": "User",
-        "admin": "Admin",
-        "moderator": "Moderator"
+        "admin": "Admin"
       },
       "status": {
         "active": "Active",
@@ -463,9 +485,38 @@
         "actions": "Thao tác"
       },
       "actions": {
+        "edit": "Sửa",
         "ban": "Ban",
         "activate": "Kích hoạt",
-        "self_protected": "Không thể thao tác"
+        "self_protected": "Không thể ban chính mình"
+      },
+      "edit": {
+        "title": "Sửa thông tin người dùng",
+        "subtitle": "Cập nhật toàn bộ thông tin tài khoản",
+        "username": "Username",
+        "email": "Email",
+        "full_name": "Họ tên",
+        "avatar_url": "URL ảnh đại diện",
+        "avatar_url_placeholder": "https://... hoặc để trống",
+        "bio": "Giới thiệu",
+        "grade_level": "Khối lớp",
+        "grade_none": "Không chọn",
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "role_self_locked": "Không thể đổi vai trò của chính mình",
+        "status_self_locked": "Không thể đổi trạng thái của chính mình",
+        "new_password": "Mật khẩu mới",
+        "new_password_placeholder": "Để trống nếu không đổi",
+        "new_password_hint": "Tối thiểu 8 ký tự, gồm chữ và số",
+        "password_self_locked": "Đổi mật khẩu của chính bạn qua menu avatar trên header",
+        "save": "Lưu",
+        "saving": "Đang lưu...",
+        "cancel": "Hủy",
+        "close": "Đóng",
+        "save_failed": "Không lưu được thông tin người dùng"
       },
       "confirm": {
         "ban": "Bạn chắc chắn muốn ban tài khoản này?",
@@ -566,6 +617,9 @@
         "duration_minutes": "{minutes} phút",
         "start_action": "Bắt đầu làm bài",
         "continue_action": "Tiếp tục làm",
+        "retry_action": "Làm lại",
+        "completed": "Đã làm",
+        "latest_score": "Điểm gần nhất: {score}",
         "starting": "Đang mở đề..."
       },
       "pagination": {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
 import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
 import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
@@ -35,23 +35,12 @@ export const QuestionDetailCard = ({
 }: QuestionDetailCardProps) => {
   const t = useTranslations('question_detail');
   const locale = useLocale();
-  const [shareDone, setShareDone] = useState(false);
 
   const handleSave = async () => {
     if (!requireAuth()) {
       return;
     }
     await onToggleSave();
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setShareDone(true);
-      setTimeout(() => setShareDone(false), 2000);
-    } catch {
-      // ignore
-    }
   };
 
   const handleClose = async () => {
@@ -120,15 +109,6 @@ export const QuestionDetailCard = ({
             >
               <MaterialIcon icon="bookmark" size="text-lg" />
               {question.is_saved ? t('saved') : t('save')}
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleShare}
-              className="flex items-center gap-1"
-            >
-              <MaterialIcon icon="share" size="text-lg" />
-              {shareDone ? t('link_copied') : t('share')}
             </Button>
           </div>
         </div>

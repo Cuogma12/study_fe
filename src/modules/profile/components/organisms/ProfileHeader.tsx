@@ -17,7 +17,6 @@ interface ProfileHeaderProps {
 
 const roleLabel = (role: string) => {
   if (role === 'admin') return 'Admin';
-  if (role === 'moderator') return 'Moderator';
   return 'Học sinh';
 };
 

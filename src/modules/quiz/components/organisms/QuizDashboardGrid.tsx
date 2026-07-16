@@ -13,6 +13,8 @@ interface QuizDashboardGridItem {
   durationMinutes: number | null;
   hasInProgress: boolean;
   inProgressAttemptId: string | null;
+  hasSubmitted: boolean;
+  latestScore: number | null;
 }
 
 interface QuizDashboardGridProps {
@@ -22,6 +24,9 @@ interface QuizDashboardGridProps {
   durationText: (minutes: number) => string;
   startText: string;
   continueText: string;
+  retryText: string;
+  completedText: string;
+  scoreText: (score: number) => string;
   startingText: string;
   startingSetId: string | null;
   onStart: (setId: string, inProgressAttemptId?: string | null, title?: string) => void;
@@ -34,6 +39,9 @@ export const QuizDashboardGrid = ({
   durationText,
   startText,
   continueText,
+  retryText,
+  completedText,
+  scoreText,
   startingText,
   startingSetId,
   onStart,
@@ -46,14 +54,20 @@ export const QuizDashboardGrid = ({
           title={card.title}
           subjectName={card.subjectName}
           topicName={card.topicName}
+          setType={card.setType}
           setTypeLabel={setTypeLabel(card.setType)}
           gradeText={card.gradeText}
           questionCountText={questionCountText(card.questionCount)}
           durationText={card.durationMinutes ? durationText(card.durationMinutes) : null}
           startText={startText}
           continueText={continueText}
+          retryText={retryText}
+          completedText={completedText}
+          scoreText={scoreText}
           startingText={startingText}
           hasInProgress={card.hasInProgress}
+          hasSubmitted={card.hasSubmitted}
+          latestScore={card.latestScore}
           starting={startingSetId === card.setId}
           onStart={() => onStart(card.setId, card.inProgressAttemptId, card.title)}
         />

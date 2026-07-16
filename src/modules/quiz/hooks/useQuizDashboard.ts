@@ -201,6 +201,8 @@ export const useQuizDashboard = () => {
         durationMinutes: item.duration_minutes,
         hasInProgress: item.has_in_progress_attempt,
         inProgressAttemptId: item.in_progress_attempt_id,
+        hasSubmitted: item.has_submitted_attempt,
+        latestScore: item.latest_score,
       })),
     [sets, t]
   );

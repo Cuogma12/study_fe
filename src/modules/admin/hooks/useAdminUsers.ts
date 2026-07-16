@@ -10,6 +10,7 @@ import {
   AdminUsersPagination,
   AdminUserStatus,
 } from '../types/user-management';
+import type { AdminEditUserFormValues } from '../components/organisms/AdminEditUserModal';
 
 const DEFAULT_PAGINATION: AdminUsersPagination = {
   page: 1,
@@ -32,6 +33,7 @@ export const useAdminUsers = () => {
   const [role, setRole] = useState<RoleFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [editingUser, setEditingUser] = useState<AdminUserItem | null>(null);
 
   const fetchData = useCallback(
     async (page = 1) => {
@@ -63,21 +65,57 @@ export const useAdminUsers = () => {
     fetchData(1);
   }, [fetchData]);
 
-  const updateStatus = async (
-    userId: string,
-    nextStatus: AdminUserStatus
-  ) => {
+  const updateStatus = async (userId: string, nextStatus: AdminUserStatus) => {
     setUpdatingId(userId);
     try {
       const updated = await adminService.updateUserStatus(userId, nextStatus);
       setItems((current) =>
-        current.map((item) =>
-          item.id === userId ? { ...item, status: updated.status } : item
-        )
+        current.map((item) => (item.id === userId ? { ...item, ...updated } : item))
       );
       return true;
     } catch (err: unknown) {
       setError(resolveApiErrorMessage(err, tApiErrors, t('update_status_failed')));
+      return false;
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const saveEditedUser = async (values: AdminEditUserFormValues) => {
+    if (!editingUser) return false;
+
+    setUpdatingId(editingUser.id);
+    try {
+      const grade =
+        values.grade_level === '' ? null : Number.parseInt(values.grade_level, 10);
+
+      let updated = await adminService.updateUserProfile(editingUser.id, {
+        username: values.username,
+        email: values.email,
+        full_name: values.full_name || null,
+        avatar_url: values.avatar_url || null,
+        bio: values.bio || null,
+        grade_level: Number.isFinite(grade) ? grade : null,
+      });
+
+      if (values.role !== editingUser.role) {
+        updated = await adminService.updateUserRole(editingUser.id, values.role);
+      }
+
+      if (values.status !== editingUser.status) {
+        updated = await adminService.updateUserStatus(editingUser.id, values.status);
+      }
+
+      if (values.new_password.trim()) {
+        await adminService.resetUserPassword(editingUser.id, values.new_password.trim());
+      }
+
+      setItems((current) =>
+        current.map((item) => (item.id === editingUser.id ? { ...item, ...updated } : item))
+      );
+      return true;
+    } catch (err: unknown) {
+      setError(resolveApiErrorMessage(err, tApiErrors, t('edit.save_failed')));
       return false;
     } finally {
       setUpdatingId(null);
@@ -89,7 +127,14 @@ export const useAdminUsers = () => {
       { value: 'all', label: t('filters.role_all') },
       { value: 'user', label: t('roles.user') },
       { value: 'admin', label: t('roles.admin') },
-      { value: 'moderator', label: t('roles.moderator') },
+    ],
+    [t]
+  );
+
+  const editRoleOptions = useMemo(
+    () => [
+      { value: 'user' as const, label: t('roles.user') },
+      { value: 'admin' as const, label: t('roles.admin') },
     ],
     [t]
   );
@@ -101,6 +146,16 @@ export const useAdminUsers = () => {
       { value: 'inactive', label: t('status.inactive') },
       { value: 'banned', label: t('status.banned') },
       { value: 'pending', label: t('status.pending') },
+    ],
+    [t]
+  );
+
+  const editStatusOptions = useMemo(
+    () => [
+      { value: 'active' as const, label: t('status.active') },
+      { value: 'inactive' as const, label: t('status.inactive') },
+      { value: 'banned' as const, label: t('status.banned') },
+      { value: 'pending' as const, label: t('status.pending') },
     ],
     [t]
   );
@@ -117,10 +172,15 @@ export const useAdminUsers = () => {
     status,
     setStatus,
     roleOptions,
+    editRoleOptions,
+    editStatusOptions,
     statusOptions,
     updatingId,
+    editingUser,
+    setEditingUser,
     onSearch: () => fetchData(1),
     onChangePage: (page: number) => fetchData(page),
     updateStatus,
+    saveEditedUser,
   };
 };

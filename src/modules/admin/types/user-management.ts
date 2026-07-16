@@ -1,4 +1,4 @@
-export type AdminUserRole = 'user' | 'admin' | 'moderator';
+export type AdminUserRole = 'user' | 'admin';
 export type AdminUserStatus = 'active' | 'inactive' | 'banned' | 'pending';
 
 export interface AdminUserItem {
@@ -7,9 +7,20 @@ export interface AdminUserItem {
   email: string;
   full_name: string | null;
   avatar_url: string | null;
+  bio: string | null;
   role: AdminUserRole;
+  grade_level: number | null;
   status: AdminUserStatus;
   created_at: string;
+}
+
+export interface AdminUpdateUserProfilePayload {
+  username?: string;
+  email?: string;
+  full_name?: string | null;
+  avatar_url?: string | null;
+  bio?: string | null;
+  grade_level?: number | null;
 }
 
 export interface AdminUsersPagination {

@@ -18,6 +18,10 @@ export interface QuizSetItem {
   question_count: number;
   has_in_progress_attempt: boolean;
   in_progress_attempt_id: string | null;
+  has_submitted_attempt: boolean;
+  latest_submitted_attempt_id: string | null;
+  latest_score: number | null;
+  latest_submitted_at: string | null;
 }
 
 export interface QuizSetListResponse {
