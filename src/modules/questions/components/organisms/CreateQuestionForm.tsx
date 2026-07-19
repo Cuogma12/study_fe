@@ -10,6 +10,7 @@ import {
   Textarea,
   Button,
   IconButton,
+  Image,
 } from '@/shared/components/atoms';
 import { HiddenFileInput } from '@/shared/components/molecules/HiddenFileInput';
 import { FIELD_ERROR_STYLES } from '@/shared/utils/fieldErrorStyles';
@@ -240,7 +241,7 @@ export const CreateQuestionForm = ({ isAuthenticated, formState }: CreateQuestio
               {form.images.map((url, index) => (
                 <div key={`${url}-${index}`} className="group relative h-20 w-20">
                   <div className="h-full w-full overflow-hidden rounded-xl border border-gray-300">
-                    <img src={url} alt="" className="h-full w-full object-cover" />
+                    <Image src={url} alt="" className="h-full w-full object-cover" />
                   </div>
                   <IconButton
                     label={t('remove_image')}

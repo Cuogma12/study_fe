@@ -10,4 +10,5 @@ export * from './Textarea';
 export * from './Tag';
 export * from './IconButton';
 export * from './Badge';
+export * from './Image';
 export * from './icon';

@@ -920,7 +920,22 @@
       "send_error": "Không gửi được tin nhắn. Thử lại sau.",
       "empty_hint": "Bắt đầu bằng một câu hỏi ngắn về bài tập.",
       "suggestion_1": "Giải thích thêm về lý thuyết",
-      "suggestion_2": "Cho ví dụ thực tế"
+      "suggestion_2": "Cho ví dụ thực tế",
+      "attach_image": "Đính kèm ảnh đề bài",
+      "remove_image": "Xóa ảnh",
+      "image_default_prompt": "Hãy đọc ảnh và hướng dẫn mình giải bài này.",
+      "images_max": "Mỗi tin nhắn được đính kèm tối đa {max} ảnh.",
+      "image_too_large": "Ảnh phải nhỏ hơn hoặc bằng 5 MB.",
+      "image_type_invalid": "Chỉ hỗ trợ ảnh JPEG, PNG, WebP hoặc GIF.",
+      "image_upload_failed": "Không tải được ảnh lên. Vui lòng thử lại.",
+      "cloudinary_not_configured": "Chức năng tải ảnh chưa được cấu hình.",
+      "history_title": "Lịch sử trò chuyện",
+      "new_chat": "Chat mới",
+      "history_loading": "Đang tải lịch sử...",
+      "history_empty": "Chưa có cuộc trò chuyện nào.",
+      "history_load_error": "Không tải được lịch sử trò chuyện.",
+      "untitled": "Cuộc trò chuyện mới",
+      "message_count": "{count} tin nhắn"
     }
   }
 }

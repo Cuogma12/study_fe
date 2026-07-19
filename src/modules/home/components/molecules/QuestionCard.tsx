@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { MaterialIcon, Text, Button, Tag } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Button, Tag, Image } from '@/shared/components/atoms';
 import { SubjectTag, NeutralTag } from '@/shared/components/molecules/SubjectTag';
 import { PreviewableImage } from '@/shared/components/molecules/PreviewableImage';
 import { normalizeQuestionImages } from '@/shared/utils/normalizeQuestionImages';
@@ -175,7 +175,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
         <div className="flex items-center gap-3">
           {question.author?.avatar_url ? (
             <div className="h-8 w-8 overflow-hidden rounded-full">
-              <img
+              <Image
                 className="h-full w-full object-cover"
                 src={question.author.avatar_url}
                 alt={question.author.username}

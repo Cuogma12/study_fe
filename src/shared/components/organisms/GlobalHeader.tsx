@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { MaterialIcon, Text, TextLink, Button } from '../atoms';
+import { MaterialIcon, Text, Button } from '../atoms';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
@@ -22,7 +22,9 @@ const HeaderSearchFallback = () => {
 
 const isHomePath = (pathname: string | null) => {
   if (!pathname) return false;
-  return /\/(vi|en)\/?$/.test(pathname) || pathname === '/' || pathname === '/vi' || pathname === '/en';
+  return (
+    /\/(vi|en)\/?$/.test(pathname) || pathname === '/' || pathname === '/vi' || pathname === '/en'
+  );
 };
 
 export const GlobalHeader = () => {
@@ -30,6 +32,7 @@ export const GlobalHeader = () => {
   const { navigateTo } = useAppNavigation();
   const pathname = usePathname();
   const onHome = isHomePath(pathname);
+  const onAskQuestion = pathname?.includes('/questions/new') ?? false;
   const onQuiz = pathname?.includes('/quiz') ?? false;
   const onAi = pathname?.includes('/ai') ?? false;
 
@@ -58,14 +61,22 @@ export const GlobalHeader = () => {
       </div>
 
       <div className="flex items-center gap-3 lg:gap-5">
-        <nav className="hidden items-center gap-6 lg:flex">
-          <TextLink
-            onClick={() => navigateTo('/')}
-            className={onHome ? '!font-semibold' : '!font-medium !text-slate-600 dark:!text-slate-400'}
-          >
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigateTo('/')}
+          aria-label={t('home')}
+          className={`hidden !h-10 !gap-1.5 !rounded-full !border-sky-200 !bg-sky-50 !px-3 !text-sky-700 transition-all hover:!border-sky-300 hover:!bg-sky-100 hover:!shadow-sm dark:!border-sky-500/40 dark:!bg-sky-500/15 dark:!text-sky-200 dark:hover:!bg-sky-500/25 lg:inline-flex ${
+            onHome
+              ? '!border-sky-400 !shadow-md ring-2 ring-sky-200 dark:!border-sky-400 dark:ring-sky-500/30'
+              : ''
+          }`}
+        >
+          <MaterialIcon icon="home" size="text-lg" className="!text-sky-600 dark:!text-sky-300" />
+          <Text as="span" variant="small" className="!font-semibold !text-inherit">
             {t('home')}
-          </TextLink>
-        </nav>
+          </Text>
+        </Button>
 
         <Button
           variant="outline"
@@ -73,10 +84,16 @@ export const GlobalHeader = () => {
           onClick={() => navigateTo('/ai')}
           aria-label={t('ai_hub')}
           className={`!h-10 !gap-1.5 !rounded-full !border-violet-200 !bg-violet-50 !px-3 !text-violet-700 transition-all hover:!border-violet-300 hover:!bg-violet-100 hover:!shadow-sm dark:!border-violet-500/40 dark:!bg-violet-500/15 dark:!text-violet-200 dark:hover:!bg-violet-500/25 ${
-            onAi ? '!border-violet-400 !shadow-md ring-2 ring-violet-200 dark:!border-violet-400 dark:ring-violet-500/30' : ''
+            onAi
+              ? '!border-violet-400 !shadow-md ring-2 ring-violet-200 dark:!border-violet-400 dark:ring-violet-500/30'
+              : ''
           }`}
         >
-          <MaterialIcon icon="smart_toy" size="text-lg" className="!text-violet-600 dark:!text-violet-300" />
+          <MaterialIcon
+            icon="smart_toy"
+            size="text-lg"
+            className="!text-violet-600 dark:!text-violet-300"
+          />
           <Text as="span" variant="small" className="hidden !font-semibold !text-inherit sm:inline">
             {t('ai_hub')}
           </Text>
@@ -88,22 +105,38 @@ export const GlobalHeader = () => {
           onClick={() => navigateTo('/quiz')}
           aria-label={t('quiz')}
           className={`!h-10 !gap-1.5 !rounded-full !border-amber-200 !bg-amber-50 !px-3 !text-amber-800 transition-all hover:!border-amber-300 hover:!bg-amber-100 hover:!shadow-sm dark:!border-amber-500/40 dark:!bg-amber-500/15 dark:!text-amber-200 dark:hover:!bg-amber-500/25 ${
-            onQuiz ? '!border-amber-400 !shadow-md ring-2 ring-amber-200 dark:!border-amber-400 dark:ring-amber-500/30' : ''
+            onQuiz
+              ? '!border-amber-400 !shadow-md ring-2 ring-amber-200 dark:!border-amber-400 dark:ring-amber-500/30'
+              : ''
           }`}
         >
-          <MaterialIcon icon="quiz" size="text-lg" className="!text-amber-600 dark:!text-amber-300" />
+          <MaterialIcon
+            icon="quiz"
+            size="text-lg"
+            className="!text-amber-600 dark:!text-amber-300"
+          />
           <Text as="span" variant="small" className="hidden !font-semibold !text-inherit sm:inline">
             {t('quiz')}
           </Text>
         </Button>
 
         <Button
+          variant="outline"
           size="sm"
           onClick={() => navigateTo('/questions/new')}
-          className="hidden !gap-1.5 sm:inline-flex"
+          aria-label={t('ask_question')}
+          className={`hidden !h-10 !gap-1.5 !rounded-full !border-emerald-200 !bg-emerald-50 !px-3 !text-emerald-700 transition-all hover:!border-emerald-300 hover:!bg-emerald-100 hover:!shadow-sm dark:!border-emerald-500/40 dark:!bg-emerald-500/15 dark:!text-emerald-200 dark:hover:!bg-emerald-500/25 sm:inline-flex ${
+            onAskQuestion
+              ? '!border-emerald-400 !shadow-md ring-2 ring-emerald-200 dark:!border-emerald-400 dark:ring-emerald-500/30'
+              : ''
+          }`}
         >
-          <MaterialIcon icon="edit_note" size="text-lg" className="text-white" />
-          <Text as="span" variant="small" className="hidden !font-semibold !text-white md:inline">
+          <MaterialIcon
+            icon="edit_note"
+            size="text-lg"
+            className="!text-emerald-600 dark:!text-emerald-300"
+          />
+          <Text as="span" variant="small" className="hidden !font-semibold !text-inherit md:inline">
             {t('ask_question')}
           </Text>
         </Button>

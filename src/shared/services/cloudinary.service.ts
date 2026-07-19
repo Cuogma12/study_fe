@@ -1,4 +1,4 @@
-export type CloudinaryFolder = 'avatars' | 'posts';
+export type CloudinaryFolder = 'avatars' | 'posts' | 'ai-chat';
 
 interface CloudinaryUploadResponse {
   secure_url: string;
@@ -30,13 +30,10 @@ export const uploadToCloudinary = async (
   formData.append('upload_preset', uploadPreset);
   formData.append('folder', `study_ai/${folder}`);
 
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-    {
-      method: 'POST',
-      body: formData,
-    }
-  );
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: 'POST',
+    body: formData,
+  });
 
   if (!response.ok) {
     throw new Error('cloudinary_upload_failed');
@@ -53,6 +50,6 @@ export const uploadToCloudinary = async (
 export const isCloudinaryConfigured = (): boolean => {
   return Boolean(
     process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
   );
 };

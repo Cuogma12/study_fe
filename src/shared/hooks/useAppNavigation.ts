@@ -7,5 +7,9 @@ export const useAppNavigation = () => {
     router.push(path);
   };
 
-  return { navigateTo };
+  const replaceTo = (path: string) => {
+    router.replace(path);
+  };
+
+  return { navigateTo, replaceTo };
 };

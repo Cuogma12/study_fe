@@ -1,6 +1,6 @@
 'use client';
 
-import { MaterialIcon, Text } from '@/shared/components/atoms';
+import { MaterialIcon, Text, Image } from '@/shared/components/atoms';
 import { AiMessage } from '../../types/ai';
 import { AiMarkdownContent } from '../molecules/AiMarkdownContent';
 
@@ -91,6 +91,23 @@ export const AiChatMessageList = ({
                   : 'rounded-tl-sm border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800'
               }`}
             >
+              {(message.images ?? []).length > 0 ? (
+                <div
+                  className={`mb-2 grid gap-2 ${
+                    (message.images ?? []).length > 1 ? 'grid-cols-2' : 'grid-cols-1'
+                  }`}
+                >
+                  {(message.images ?? []).map((url, index) => (
+                    <div key={`${url}-${index}`} className="overflow-hidden rounded-lg">
+                      <Image
+                        src={url}
+                        alt=""
+                        className={`w-full object-cover ${isCompact ? 'max-h-32' : 'max-h-64'}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
               {isUser ? (
                 <Text
                   variant={isCompact ? 'small' : 'body1'}
@@ -127,7 +144,10 @@ export const AiChatMessageList = ({
         </div>
       ) : null}
 
-      <div ref={bottomRef as React.RefObject<HTMLDivElement>} className={isCompact ? 'h-1' : 'h-4'} />
+      <div
+        ref={bottomRef as React.RefObject<HTMLDivElement>}
+        className={isCompact ? 'h-1' : 'h-4'}
+      />
     </div>
   );
 };

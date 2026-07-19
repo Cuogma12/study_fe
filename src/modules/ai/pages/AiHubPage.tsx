@@ -13,6 +13,8 @@ const AiHubPageInner = () => {
     isAuthenticated,
     isTutorMode,
     questionId,
+    conversationId,
+    newChatKey,
     hubStats,
     startTutor,
     startGenerateQuiz,
@@ -43,7 +45,11 @@ const AiHubPageInner = () => {
   if (isTutorMode) {
     return (
       <main className="w-full">
-        <AiTutorChat questionId={questionId} />
+        <AiTutorChat
+          questionId={questionId}
+          initialConversationId={conversationId}
+          newChatKey={newChatKey}
+        />
       </main>
     );
   }

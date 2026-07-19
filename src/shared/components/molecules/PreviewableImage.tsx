@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button, IconButton, MaterialIcon } from '../atoms';
+import { Button, IconButton, Image, MaterialIcon } from '../atoms';
 import { ModalBackdrop } from './ModalBackdrop';
 import { useTranslations } from 'next-intl';
 
@@ -89,7 +89,7 @@ export const PreviewableImage = ({
               <MaterialIcon icon="close" className="text-2xl" />
             </IconButton>
 
-            <img
+            <Image
               src={src}
               alt={alt}
               className="relative z-10 max-h-[100dvh] max-w-[100vw] object-contain p-4 sm:p-8"
@@ -109,11 +109,10 @@ export const PreviewableImage = ({
         aria-label={t('image_view')}
         className={`!h-auto !w-full !cursor-pointer !rounded-xl !border-2 !border-gray-300 !bg-slate-50 !p-2 transition-colors hover:!border-primary dark:!border-slate-600 dark:!bg-slate-800/50 dark:hover:!border-primary ${frameClassName}`.trim()}
       >
-        <img
+        <Image
           src={src}
           alt={alt}
           className={`block w-full rounded-lg object-contain ${imageClassName}`.trim()}
-          loading="lazy"
         />
       </Button>
 

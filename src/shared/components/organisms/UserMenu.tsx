@@ -1,16 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, IconButton, MaterialIcon } from '../atoms';
+import { Button, IconButton, Image, MaterialIcon } from '../atoms';
 import { MenuItem } from '../molecules/MenuItem';
 import { useTranslations } from 'next-intl';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { authService } from '@/modules/auth/services/auth.service';
-import {
-  profileService,
-  ChangePasswordPayload,
-} from '@/modules/profile/services/profile.service';
+import { profileService, ChangePasswordPayload } from '@/modules/profile/services/profile.service';
 import { ProfileChangePasswordModal } from '@/modules/profile/components/organisms/ProfileChangePasswordModal';
 import { getUserAvatarUrl } from '@/shared/utils/getUserAvatarUrl';
 import { extractApiErrorCode } from '@/shared/utils/resolveApiErrorMessage';
@@ -129,7 +126,7 @@ export const UserMenu = () => {
           className="!h-8 !w-8 !overflow-hidden !rounded-full !border !border-primary/30 !bg-slate-100 !p-0 hover:!scale-105 hover:!shadow-md dark:!bg-slate-800"
         >
           {avatarUrl ? (
-            <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+            <Image src={avatarUrl} alt="" className="h-full w-full object-cover" />
           ) : (
             <MaterialIcon icon="person" className="text-primary" size="text-lg" />
           )}

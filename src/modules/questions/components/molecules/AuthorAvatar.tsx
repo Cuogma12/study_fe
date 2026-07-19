@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Image } from '@/shared/components/atoms';
 
 interface AuthorAvatarProps {
   username?: string | null;
@@ -13,15 +14,11 @@ const sizeClass = {
   md: 'h-10 w-10 text-sm',
 };
 
-export const AuthorAvatar = ({
-  username,
-  avatarUrl,
-  size = 'md',
-}: AuthorAvatarProps) => {
+export const AuthorAvatar = ({ username, avatarUrl, size = 'md' }: AuthorAvatarProps) => {
   if (avatarUrl) {
     return (
-      <div className={`${sizeClass[size]} overflow-hidden rounded-full shrink-0`}>
-        <img className="h-full w-full object-cover" src={avatarUrl} alt={username ?? ''} />
+      <div className={`${sizeClass[size]} shrink-0 overflow-hidden rounded-full`}>
+        <Image className="h-full w-full object-cover" src={avatarUrl} alt={username ?? ''} />
       </div>
     );
   }

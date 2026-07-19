@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/shared/components/atoms';
+import { Button, Image } from '@/shared/components/atoms';
 import { CommonDataTable } from '@/shared/components/organisms/CommonDataTable';
 import { AdminUserItem, AdminUserStatus } from '../../types/user-management';
 
@@ -15,10 +15,7 @@ interface AdminUsersTableProps {
   onEdit: (user: AdminUserItem) => void;
 }
 
-const badgeByStatus: Record<
-  AdminUserStatus,
-  { text: string; className: string }
-> = {
+const badgeByStatus: Record<AdminUserStatus, { text: string; className: string }> = {
   active: {
     text: 'active',
     className: 'bg-emerald-100 text-emerald-700',
@@ -55,7 +52,7 @@ export const AdminUsersTable = ({
 
     if (user.avatar_url) {
       return (
-        <img
+        <Image
           src={user.avatar_url}
           alt=""
           className="h-9 w-9 rounded-full border border-slate-200 object-cover"
@@ -108,7 +105,7 @@ export const AdminUsersTable = ({
               </td>
               <td className="px-4 py-3 text-sm">{user.full_name ?? '—'}</td>
               <td className="px-4 py-3 text-sm">
-                <span className="inline-flex rounded px-2 py-1 text-xs font-semibold bg-slate-100 text-slate-700">
+                <span className="inline-flex rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
                   {t(`roles.${user.role}`)}
                 </span>
               </td>

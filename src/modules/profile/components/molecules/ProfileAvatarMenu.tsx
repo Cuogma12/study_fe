@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button, IconButton, MaterialIcon, Text } from '@/shared/components/atoms';
+import { Button, IconButton, Image, MaterialIcon, Text } from '@/shared/components/atoms';
 import { HiddenFileInput } from '@/shared/components/molecules/HiddenFileInput';
 import { MenuItem } from '@/shared/components/molecules/MenuItem';
 import { ModalBackdrop } from '@/shared/components/molecules/ModalBackdrop';
@@ -121,7 +121,7 @@ export const ProfileAvatarMenu = ({
               <MaterialIcon icon="close" className="text-2xl" />
             </IconButton>
 
-            <img
+            <Image
               alt={displayName}
               src={avatarUrl}
               className="relative z-10 max-h-[100dvh] max-w-[100vw] object-contain p-4 sm:p-8"
@@ -144,7 +144,7 @@ export const ProfileAvatarMenu = ({
           aria-label={t('avatar_alt')}
           className="group relative !h-auto !rounded-full !p-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
-          <img
+          <Image
             alt={t('avatar_alt')}
             className="h-20 w-20 rounded-full border-[4px] border-white object-cover shadow-md dark:border-slate-900 md:h-24 md:w-24"
             src={avatarUrl}

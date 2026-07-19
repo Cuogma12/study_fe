@@ -10,10 +10,7 @@ interface QuestionAiSidebarProps {
   questionTitle?: string | null;
 }
 
-export const QuestionAiSidebar = ({
-  questionId,
-  questionTitle = null,
-}: QuestionAiSidebarProps) => {
+export const QuestionAiSidebar = ({ questionId, questionTitle = null }: QuestionAiSidebarProps) => {
   const {
     t,
     tChat,
@@ -25,12 +22,18 @@ export const QuestionAiSidebar = ({
     messages,
     draft,
     setDraft,
+    pendingImages,
+    imageUploading,
+    imageError,
+    maxImages,
     loading,
     sending,
     error,
     bottomRef,
     welcomeText,
     sendMessage,
+    uploadImage,
+    removePendingImage,
   } = useQuestionAiSidebar({ questionId, questionTitle });
 
   return (
@@ -122,12 +125,20 @@ export const QuestionAiSidebar = ({
               disabled={loading || !conversationId}
               sending={sending}
               variant="compact"
-      onChange={setDraft}
-      onSend={() => void sendMessage(draft)}
-      onSuggestion={(text) => void sendMessage(text)}
-    />
-  </>
-)}
+              images={pendingImages}
+              imageUploading={imageUploading}
+              imageError={imageError}
+              attachImageLabel={tChat('attach_image')}
+              removeImageLabel={tChat('remove_image')}
+              maxImages={maxImages}
+              onChange={setDraft}
+              onSend={() => void sendMessage(draft)}
+              onSuggestion={(text) => void sendMessage(text)}
+              onImagePick={(file) => void uploadImage(file)}
+              onRemoveImage={removePendingImage}
+            />
+          </>
+        )}
       </div>
     </aside>
   );

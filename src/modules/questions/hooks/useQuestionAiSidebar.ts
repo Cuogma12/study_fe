@@ -46,11 +46,17 @@ export const useQuestionAiSidebar = ({
     messages: chat.messages,
     draft: chat.draft,
     setDraft: chat.setDraft,
+    pendingImages: chat.pendingImages,
+    imageUploading: chat.imageUploading,
+    imageError: chat.imageError,
+    maxImages: chat.maxImages,
     loading: chat.loading,
     sending: chat.sending,
     error: chat.error,
     bottomRef: chat.bottomRef,
     welcomeText: chat.welcomeText,
     sendMessage: chat.sendMessage,
+    uploadImage: chat.uploadImage,
+    removePendingImage: chat.removePendingImage,
   };
 };

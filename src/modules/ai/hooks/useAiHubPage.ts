@@ -13,6 +13,8 @@ export const useAiHubPage = () => {
 
   const mode = searchParams.get('mode');
   const questionId = searchParams.get('question_id');
+  const conversationId = searchParams.get('conversation_id');
+  const newChatKey = searchParams.get('new');
   const isTutorMode = mode === 'tutor';
 
   const startTutor = () => navigateTo('/ai?mode=tutor');
@@ -44,6 +46,8 @@ export const useAiHubPage = () => {
     isAuthenticated,
     isTutorMode,
     questionId,
+    conversationId,
+    newChatKey,
     hubStats,
     startTutor,
     startGenerateQuiz,
