@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Image } from '@/shared/components/atoms';
+import { Button, Image, Tag } from '@/shared/components/atoms';
 import { CommonDataTable } from '@/shared/components/organisms/CommonDataTable';
 import { AdminUserItem, AdminUserStatus } from '../../types/user-management';
 
@@ -105,16 +105,16 @@ export const AdminUsersTable = ({
               </td>
               <td className="px-4 py-3 text-sm">{user.full_name ?? '—'}</td>
               <td className="px-4 py-3 text-sm">
-                <span className="inline-flex rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+                <Tag className="!rounded !bg-slate-100 !px-2 !py-1 !text-xs !font-semibold !normal-case !text-slate-700">
                   {t(`roles.${user.role}`)}
-                </span>
+                </Tag>
               </td>
               <td className="px-4 py-3 text-sm">
-                <span
-                  className={`inline-flex rounded px-2 py-1 text-xs font-semibold ${statusBadge.className}`}
+                <Tag
+                  className={`!rounded !px-2 !py-1 !text-xs !font-semibold !normal-case ${statusBadge.className}`}
                 >
                   {t(`status.${statusBadge.text}`)}
-                </span>
+                </Tag>
               </td>
               <td className="px-4 py-3 text-sm text-slate-600">{joinedAt}</td>
               <td className="px-4 py-3 text-right text-sm">

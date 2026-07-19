@@ -35,8 +35,8 @@ export const QuizPlayOptionList = ({
         const isCorrectOption = showResult && correctAnswer === optionKey;
         const isWrongSelected = showResult && isSelected && correctAnswer !== optionKey;
 
-        let buttonClass = quizPlayLayout.optionButtonDefault;
-        let letterClass = quizPlayLayout.optionLetter;
+        let buttonClass: string = quizPlayLayout.optionButtonDefault;
+        let letterClass: string = quizPlayLayout.optionLetter;
 
         if (isCorrectOption) {
           buttonClass = quizPlayLayout.optionButtonCorrect;
