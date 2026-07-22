@@ -18,14 +18,24 @@ export const useAdminSidebarMenu = () => {
   const menus: AdminSidebarMenuItem[] = useMemo(() => {
     const items = [
       {
-        key: 'login-history',
-        label: t('menu_login_history'),
-        href: '/admin/login-history',
+        key: 'dashboard',
+        label: t('menu_dashboard'),
+        href: '/admin/dashboard',
+      },
+      {
+        key: 'quiz-sets',
+        label: t('menu_quiz_sets'),
+        href: '/admin/quiz-sets',
       },
       {
         key: 'users',
         label: t('menu_users'),
         href: '/admin/users',
+      },
+      {
+        key: 'login-history',
+        label: t('menu_login_history'),
+        href: '/admin/login-history',
       },
     ];
 

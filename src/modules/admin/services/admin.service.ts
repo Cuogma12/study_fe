@@ -1,6 +1,13 @@
 import { API_ENDPOINTS } from '@/shared/constants/api';
 import axiosClient from '@/shared/utils/axiosClient';
 import { AdminLoginHistoryListResponse, AdminLoginHistoryQuery } from '../types/login-history';
+import { AdminDashboardData } from '../types/dashboard';
+import {
+  AdminQuizSetItem,
+  AdminQuizSetsListResponse,
+  AdminQuizSetsQuery,
+  AdminUpdateQuizSetPayload,
+} from '../types/quiz-sets';
 import {
   AdminUserItem,
   AdminUpdateUserProfilePayload,
@@ -59,5 +66,25 @@ export const adminService = {
     await axiosClient.patch(API_ENDPOINTS.USERS.CHANGE_PASSWORD(userId), {
       new_password: newPassword,
     });
+  },
+
+  getDashboard: async (): Promise<AdminDashboardData> => {
+    const res = await axiosClient.get(API_ENDPOINTS.ADMIN.DASHBOARD);
+    return res.data;
+  },
+
+  getQuizSets: async (query: AdminQuizSetsQuery): Promise<AdminQuizSetsListResponse> => {
+    const res = await axiosClient.get(API_ENDPOINTS.ADMIN.QUIZ_SETS, {
+      params: query,
+    });
+    return res.data;
+  },
+
+  updateQuizSet: async (
+    setId: string,
+    payload: AdminUpdateQuizSetPayload
+  ): Promise<AdminQuizSetItem> => {
+    const res = await axiosClient.patch(API_ENDPOINTS.ADMIN.UPDATE_QUIZ_SET(setId), payload);
+    return res.data;
   },
 };

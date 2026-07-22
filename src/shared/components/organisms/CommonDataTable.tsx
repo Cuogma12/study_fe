@@ -14,6 +14,8 @@ interface CommonDataTableProps {
   loadingLabel: string;
   emptyLabel: string;
   rows: React.ReactNode;
+  /** Minimum table width so wide columns scroll instead of clipping */
+  minWidthClassName?: string;
 }
 
 export const CommonDataTable = ({
@@ -22,19 +24,20 @@ export const CommonDataTable = ({
   loadingLabel,
   emptyLabel,
   rows,
+  minWidthClassName = 'min-w-[960px]',
 }: CommonDataTableProps) => {
   const colSpan = columns.length;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] table-fixed border-collapse">
+        <table className={`w-full border-collapse ${minWidthClassName}`}>
           <thead>
             <tr className="bg-slate-50 text-left">
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 ${column.className ?? ''}`}
+                  className={`whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 ${column.className ?? ''}`}
                 >
                   {column.label}
                 </th>

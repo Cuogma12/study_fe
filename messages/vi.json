@@ -441,13 +441,116 @@
   },
   "admin": {
     "title": "Bảng điều khiển quản trị",
-    "description": "Quản trị hệ thống - hiện đang mở mục lịch sử đăng nhập",
+    "description": "Quản trị hệ thống Study AI",
     "shell": {
-      "brand_title": "Quản trị StudyApp",
+      "brand_title": "Study AI Admin",
       "brand_subtitle": "Cổng quản trị",
       "back_home": "← Về trang chủ",
+      "menu_dashboard": "Tổng quan",
+      "menu_quiz_sets": "Quản lý đề",
       "menu_login_history": "Lịch sử đăng nhập",
       "menu_users": "Quản lý người dùng"
+    },
+    "dashboard": {
+      "title": "Tổng quan hệ thống",
+      "description": "Thống kê nhanh hoạt động học tập và người dùng trên Study AI",
+      "loading": "Đang tải thống kê...",
+      "load_error": "Không tải được dữ liệu tổng quan",
+      "forbidden": "Bạn không có quyền xem trang này",
+      "stats": {
+        "total_users": "Tổng người dùng",
+        "total_quiz_sets": "Bộ quiz",
+        "total_attempts": "Lượt làm bài",
+        "attempts_hint": "Các bài đã nộp",
+        "average_score": "Điểm trung bình",
+        "average_score_hint": "Trên các bài đã nộp",
+        "total_questions": "Câu hỏi diễn đàn",
+        "total_ai_conversations": "Hội thoại AI",
+        "ai_hint": "Số cuộc trò chuyện"
+      },
+      "table": {
+        "title": "Top 5 người học tích cực",
+        "subtitle": "Học sinh có nhiều lượt làm bài đã nộp nhất",
+        "empty": "Chưa có dữ liệu làm bài",
+        "rank": "#",
+        "name": "Họ tên",
+        "email": "Email",
+        "attempt_count": "Số lần làm",
+        "average_score": "Điểm TB"
+      }
+    },
+    "quiz_sets": {
+      "title": "Quản lý đề quiz",
+      "description": "Xem, chỉnh sửa và ẩn/hiện đề ôn tập trên hệ thống",
+      "loading": "Đang tải danh sách đề...",
+      "load_error": "Không tải được danh sách đề quiz",
+      "forbidden": "Bạn không có quyền xem trang này",
+      "empty": "Chưa có đề phù hợp với bộ lọc",
+      "toggle_publish_failed": "Không cập nhật được trạng thái hiển thị",
+      "filters": {
+        "search_label": "Tìm kiếm",
+        "search_placeholder": "Tìm theo tên đề...",
+        "subject_label": "Môn học",
+        "subject_all": "Tất cả môn",
+        "grade_label": "Khối lớp",
+        "grade_all": "Tất cả khối",
+        "status_label": "Trạng thái",
+        "status_all": "Tất cả",
+        "apply": "Tìm kiếm"
+      },
+      "grades": {
+        "grade_10": "Lớp 10",
+        "grade_11": "Lớp 11",
+        "grade_12": "Lớp 12",
+        "grade_value": "Lớp {grade}"
+      },
+      "status": {
+        "published": "Đang hiện",
+        "hidden": "Đã ẩn"
+      },
+      "table": {
+        "title": "Tên đề",
+        "subject_grade": "Môn & khối",
+        "question_count": "Số câu",
+        "duration": "Thời gian",
+        "duration_value": "{minutes} phút",
+        "attempt_count": "Lượt làm",
+        "status": "Trạng thái",
+        "updated_at": "Cập nhật",
+        "actions": "Thao tác"
+      },
+      "actions": {
+        "edit": "Sửa",
+        "hide": "Ẩn",
+        "show": "Hiện"
+      },
+      "confirm": {
+        "hide": "Ẩn đề này? Học sinh sẽ không thấy trong danh sách.",
+        "show": "Hiện lại đề này cho học sinh?"
+      },
+      "edit": {
+        "title": "Sửa thông tin đề",
+        "subtitle": "Cập nhật metadata và trạng thái hiển thị",
+        "fields": {
+          "title": "Tên đề",
+          "description": "Mô tả",
+          "duration_minutes": "Thời gian làm bài (phút)",
+          "duration_placeholder": "Để trống nếu không giới hạn",
+          "display_order": "Thứ tự hiển thị",
+          "status": "Trạng thái"
+        },
+        "status_published": "Đang hiện",
+        "status_hidden": "Đã ẩn",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu...",
+        "cancel": "Hủy",
+        "save_failed": "Không lưu được thông tin đề"
+      },
+      "pagination": {
+        "summary": "Trang {page}/{total_pages} - Tổng {total} đề",
+        "prev": "Trước",
+        "next": "Sau"
+      }
     },
     "users": {
       "title": "Quản lý người dùng",
@@ -488,7 +591,8 @@
         "edit": "Sửa",
         "ban": "Ban",
         "activate": "Kích hoạt",
-        "self_protected": "Không thể ban chính mình"
+        "self_protected": "Không thể ban chính mình",
+        "self_activate_protected": "Không thể đổi trạng thái của chính mình"
       },
       "edit": {
         "title": "Sửa thông tin người dùng",

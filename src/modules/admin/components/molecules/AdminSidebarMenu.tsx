@@ -11,7 +11,7 @@ export const AdminSidebarMenu = () => {
   const { brandTitle, brandSubtitle, homeLabel, menus } = useAdminSidebarMenu();
 
   return (
-    <aside className="hidden w-72 border-r border-slate-200 bg-white lg:flex lg:flex-col">
+    <aside className="hidden w-72 min-w-72 shrink-0 border-r border-slate-200 bg-white lg:flex lg:flex-col">
       <div className="border-b border-slate-200 p-6">
         <Text variant="h4" className="!font-bold">
           {brandTitle}

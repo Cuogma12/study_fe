@@ -9,7 +9,6 @@ import { AdminUserItem, AdminUserStatus } from '../../types/user-management';
 interface AdminUsersTableProps {
   items: AdminUserItem[];
   loading: boolean;
-  currentUserId: string | null;
   updatingId: string | null;
   onUpdateStatus: (userId: string, status: AdminUserStatus) => void;
   onEdit: (user: AdminUserItem) => void;
@@ -37,7 +36,6 @@ const badgeByStatus: Record<AdminUserStatus, { text: string; className: string }
 export const AdminUsersTable = ({
   items,
   loading,
-  currentUserId,
   updatingId,
   onUpdateStatus,
   onEdit,
@@ -68,12 +66,12 @@ export const AdminUsersTable = ({
   };
 
   const columns = [
-    { key: 'user', label: t('table.user'), className: 'w-[240px]' },
-    { key: 'full_name', label: t('table.full_name'), className: 'w-[160px]' },
-    { key: 'role', label: t('table.role'), className: 'w-[130px]' },
-    { key: 'status', label: t('table.status'), className: 'w-[130px]' },
-    { key: 'joined_at', label: t('table.joined_at'), className: 'w-[120px]' },
-    { key: 'actions', label: t('table.actions'), className: 'w-[220px] text-right' },
+    { key: 'user', label: t('table.user'), className: 'min-w-[220px]' },
+    { key: 'full_name', label: t('table.full_name'), className: 'min-w-[140px]' },
+    { key: 'role', label: t('table.role'), className: 'min-w-[100px]' },
+    { key: 'status', label: t('table.status'), className: 'min-w-[100px]' },
+    { key: 'joined_at', label: t('table.joined_at'), className: 'min-w-[110px]' },
+    { key: 'actions', label: t('table.actions'), className: 'min-w-[160px] text-right' },
   ];
 
   const tableRows =
@@ -83,9 +81,8 @@ export const AdminUsersTable = ({
             dateStyle: 'short',
           }).format(new Date(user.created_at));
           const statusBadge = badgeByStatus[user.status];
-          const isSelf = currentUserId === user.id;
-          const canBan = user.status !== 'banned' && !isSelf;
-          const canActivate = user.status !== 'active' && !isSelf;
+          const showBan = user.status !== 'banned';
+          const showActivate = user.status !== 'active';
           const isUpdating = updatingId === user.id;
 
           return (
@@ -118,37 +115,40 @@ export const AdminUsersTable = ({
               </td>
               <td className="px-4 py-3 text-sm text-slate-600">{joinedAt}</td>
               <td className="px-4 py-3 text-right text-sm">
-                <div className="flex flex-wrap justify-end gap-2">
+                <div className="flex flex-nowrap items-center justify-end gap-2">
                   <Button
+                    type="button"
                     size="sm"
                     variant="outline"
+                    className="!shrink-0"
                     disabled={isUpdating}
                     onClick={() => onEdit(user)}
                   >
                     {t('actions.edit')}
                   </Button>
-                  {canBan ? (
+                  {showBan ? (
                     <Button
+                      type="button"
                       size="sm"
                       variant="outline"
+                      className="!shrink-0"
                       disabled={isUpdating}
                       onClick={() => onUpdateStatus(user.id, 'banned')}
                     >
                       {t('actions.ban')}
                     </Button>
                   ) : null}
-                  {canActivate ? (
+                  {showActivate ? (
                     <Button
+                      type="button"
                       size="sm"
                       variant="outline"
+                      className="!shrink-0"
                       disabled={isUpdating}
                       onClick={() => onUpdateStatus(user.id, 'active')}
                     >
                       {t('actions.activate')}
                     </Button>
-                  ) : null}
-                  {isSelf ? (
-                    <span className="text-xs text-slate-500">{t('actions.self_protected')}</span>
                   ) : null}
                 </div>
               </td>
@@ -164,6 +164,7 @@ export const AdminUsersTable = ({
       loadingLabel={t('loading')}
       emptyLabel={t('empty')}
       rows={tableRows}
+      minWidthClassName="min-w-[960px]"
     />
   );
 };

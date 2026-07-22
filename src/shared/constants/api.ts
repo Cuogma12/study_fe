@@ -14,6 +14,9 @@ export const API_ENDPOINTS = {
     CHANGE_PASSWORD: (userId: string) => `${API_V1}/users/${userId}/password`,
   },
   ADMIN: {
+    DASHBOARD: `${API_V1}/admin/dashboard`,
+    QUIZ_SETS: `${API_V1}/admin/quiz-sets`,
+    UPDATE_QUIZ_SET: (setId: string) => `${API_V1}/admin/quiz-sets/${setId}`,
     LOGIN_HISTORY: `${API_V1}/login-history`,
     USERS: `${API_V1}/users`,
     UPDATE_USER_STATUS: (userId: string) => `${API_V1}/users/${userId}/status`,
