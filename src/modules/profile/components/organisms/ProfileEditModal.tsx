@@ -72,6 +72,27 @@ export const ProfileEditModal = ({
         </Text>
 
         <Form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 dark:border-slate-700 dark:bg-slate-800/60">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <Text variant="small" className="!text-slate-500">
+                  {t('edit_username')}
+                </Text>
+                <Text variant="body2" weight="medium" className="truncate !text-slate-800 dark:!text-slate-100">
+                  @{profile.username}
+                </Text>
+              </div>
+            </div>
+            <div className="min-w-0 border-t border-slate-200 pt-2 dark:border-slate-700">
+              <Text variant="small" className="!text-slate-500">
+                {t('edit_email')}
+              </Text>
+              <Text variant="body2" weight="medium" className="truncate !text-slate-800 dark:!text-slate-100">
+                {profile.email}
+              </Text>
+            </div>
+          </div>
+
           <div className="space-y-1.5">
             <Label>{t('edit_full_name')}</Label>
             <Input

@@ -146,7 +146,7 @@ export const ProfileAvatarMenu = ({
         >
           <Image
             alt={t('avatar_alt')}
-            className="h-20 w-20 rounded-full border-[4px] border-white object-cover shadow-md dark:border-slate-900 md:h-24 md:w-24"
+            className="h-20 w-20 rounded-full border-2 border-slate-200 object-cover shadow-sm dark:border-slate-600 md:h-24 md:w-24"
             src={avatarUrl}
             referrerPolicy="no-referrer"
           />

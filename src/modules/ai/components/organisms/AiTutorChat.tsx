@@ -57,7 +57,7 @@ export const AiTutorChat = ({
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100dvh-4rem)] w-full max-w-[1200px] flex-col overflow-hidden bg-[#f6f6f8] md:flex-row">
+    <div className="flex h-[calc(100dvh-4rem)] w-full flex-col overflow-hidden bg-[#f6f6f8] md:flex-row">
       <AiConversationSidebar
         items={historyItems}
         activeConversationId={conversationId}
@@ -73,8 +73,8 @@ export const AiTutorChat = ({
         onSelect={selectConversation}
       />
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <header className="flex shrink-0 items-center border-b border-slate-200 bg-white px-6 py-4">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white dark:bg-slate-950">
+        <header className="flex shrink-0 items-center border-b border-slate-200 bg-white px-4 py-3 md:px-6 md:py-4 dark:border-slate-700 dark:bg-slate-950">
           <IconButton
             label={t('back')}
             onClick={() => navigateTo('/ai')}

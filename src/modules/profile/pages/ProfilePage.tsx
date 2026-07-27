@@ -19,6 +19,7 @@ export const ProfilePage = () => {
     profile,
     myQuestions,
     savedQuestions,
+    quizStats,
     loading,
     listLoading,
     tab,
@@ -94,8 +95,12 @@ export const ProfilePage = () => {
     <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
       <ProfileHeader
         profile={profile}
-        questionsCount={myQuestions.length}
-        savedCount={savedQuestions.length}
+        stats={{
+          questionsCount: myQuestions.length,
+          savedCount: savedQuestions.length,
+          quizDoneCount: quizStats.doneCount,
+          quizAvgScore: quizStats.avgScore,
+        }}
         avatarUploading={avatarUploading}
         onChangeAvatar={changeAvatar}
       />

@@ -3,7 +3,7 @@ import { Text } from '../atoms';
 
 interface ProfileStatCardProps {
   label: string;
-  value: number;
+  value: number | string;
 }
 
 export const ProfileStatCard = ({ label, value }: ProfileStatCardProps) => (

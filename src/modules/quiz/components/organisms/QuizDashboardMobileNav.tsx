@@ -8,7 +8,7 @@ export const QuizDashboardMobileNav = () => {
   const menus = useQuizSidebarMenu();
 
   return (
-    <nav className="mb-4 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+    <nav className="mb-4 flex gap-2 overflow-x-auto pb-1 xl:hidden">
       {menus.map((menu) => (
         <Link
           key={menu.key}

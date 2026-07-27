@@ -11,6 +11,7 @@ import {
 } from '../services/profile.service';
 import { UserProfile } from '../types/profile';
 import { QuestionListItem } from '@/modules/home/types/question';
+import { quizService } from '@/modules/quiz/services/quiz.service';
 
 export type ProfileTab = 'mine' | 'saved';
 
@@ -21,6 +22,10 @@ export const useProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [myQuestions, setMyQuestions] = useState<QuestionListItem[]>([]);
   const [savedQuestions, setSavedQuestions] = useState<SavedQuestionItem[]>([]);
+  const [quizStats, setQuizStats] = useState<{ doneCount: number; avgScore: number | null }>({
+    doneCount: 0,
+    avgScore: null,
+  });
   const [loading, setLoading] = useState(true);
   const [listLoading, setListLoading] = useState(false);
   const [tab, setTab] = useState<ProfileTab>('mine');
@@ -57,15 +62,30 @@ export const useProfilePage = () => {
 
     setListLoading(true);
     try {
-      const [mine, saved] = await Promise.all([
+      const [mine, saved, quizRes] = await Promise.all([
         profileService.getMyQuestions(userId),
         profileService.getSavedQuestions(),
+        quizService.getMyAttempts({ page: 1, limit: 50, status: 'submitted' }),
       ]);
       setMyQuestions(mine);
       setSavedQuestions(saved);
+
+      const scores = quizRes.items
+        .map((item) => item.score)
+        .filter((score): score is number => typeof score === 'number' && !Number.isNaN(score));
+      const avg =
+        scores.length > 0
+          ? Math.round((scores.reduce((sum, s) => sum + s, 0) / scores.length) * 10) / 10
+          : null;
+
+      setQuizStats({
+        doneCount: quizRes.pagination?.total ?? quizRes.items.length,
+        avgScore: avg,
+      });
     } catch {
       setMyQuestions([]);
       setSavedQuestions([]);
+      setQuizStats({ doneCount: 0, avgScore: null });
     } finally {
       setListLoading(false);
     }
@@ -127,6 +147,7 @@ export const useProfilePage = () => {
     profile,
     myQuestions,
     savedQuestions,
+    quizStats,
     loading,
     listLoading,
     tab,

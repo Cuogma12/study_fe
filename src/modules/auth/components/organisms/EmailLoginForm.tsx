@@ -1,24 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Button, Label, Checkbox, Form, TextLink, Text } from '@/shared/components/atoms';
-import { LoginIcon, CheckIcon } from '@/shared/components/atoms/icon';
+import { Button, Label, Form, Text } from '@/shared/components/atoms';
+import { LoginIcon } from '@/shared/components/atoms/icon';
 import { FormField } from '@/shared/components/molecules/FormField';
 import { PasswordInput } from '@/shared/components/molecules/PasswordInput';
 import { useLogin } from '@/modules/auth/hooks/useLogin';
 
 export const EmailLoginForm = () => {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    error,
-    loading,
-    handleSubmit,
-    handleForgotPassword,
-    t,
-  } = useLogin();
+  const { email, setEmail, password, setPassword, error, loading, handleSubmit, t } = useLogin();
 
   return (
     <div className="space-y-6">
@@ -45,12 +35,9 @@ export const EmailLoginForm = () => {
         />
 
         <div>
-          <div className="mb-1.5 flex items-center justify-between">
-            <Label htmlFor="password">{t('auth.login.password_label')}</Label>
-            <TextLink onClick={handleForgotPassword} className="text-sm font-medium">
-              {t('auth.login.forgot_password')}
-            </TextLink>
-          </div>
+          <Label htmlFor="password" className="mb-1.5">
+            {t('auth.login.password_label')}
+          </Label>
           <PasswordInput
             id="password"
             value={password}
@@ -60,8 +47,6 @@ export const EmailLoginForm = () => {
             className="py-3"
           />
         </div>
-
-        <Checkbox id="remember-me" label={t('auth.login.remember_me')} />
 
         <Button
           type="submit"

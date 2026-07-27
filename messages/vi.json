@@ -11,8 +11,6 @@
       "email_placeholder": "vd: alex@study.com",
       "password_label": "Mật khẩu",
       "password_placeholder": "••••••••",
-      "forgot_password": "Quên mật khẩu?",
-      "remember_me": "Ghi nhớ đăng nhập trong 30 ngày",
       "sign_in": "Đăng nhập",
       "signing_in": "Đang đăng nhập...",
       "no_account": "Chưa có tài khoản?",
@@ -135,6 +133,8 @@
     "edit_profile": "Chỉnh sửa hồ sơ",
     "edit_title": "Chỉnh sửa hồ sơ",
     "edit_desc": "Cập nhật thông tin hiển thị của bạn.",
+    "edit_username": "Tên đăng nhập",
+    "edit_email": "Email",
     "edit_full_name": "Họ và tên",
     "edit_full_name_placeholder": "vd: Nguyễn Văn An",
     "edit_bio": "Giới thiệu",
@@ -147,6 +147,8 @@
     "update_failed": "Không cập nhật được hồ sơ. Thử lại sau.",
     "stat_questions": "Bài đã đăng",
     "stat_saved": "Đã lưu",
+    "stat_quiz_done": "Quiz đã làm",
+    "stat_quiz_avg": "Điểm TB",
     "closed": "Đã đóng",
     "tabs": {
       "my_questions": "Bài của tôi",
@@ -254,9 +256,7 @@
       "online": "Đang trực tuyến",
       "ai_welcome": "Sẵn sàng gợi ý từng bước khi làm bài. Chọn chế độ bên dưới để bắt đầu.",
       "open_tutor": "Mở gia sư AI",
-      "open_hub": "Xem AI Hub",
-      "trending": "Xu hướng thảo luận",
-      "leaderboard": "Bảng xếp hạng tuần"
+      "open_hub": "Xem AI Hub"
     },
     "bottom_nav": {
       "home": "Trang chủ",
@@ -899,6 +899,7 @@
       "loading": "Đang tải bài quiz...",
       "exam_title_default": "Bài ôn tập",
       "exam_title_grade": "Bài ôn tập lớp {grade}",
+      "meta_grade": "Lớp {grade}",
       "time_remaining": "Thời gian còn lại: {time}",
       "practice_mode_label": "Chế độ ôn tập",
       "check_answer": "Hiện kết quả",

@@ -31,6 +31,7 @@ export const RegisterForm = () => {
     errors,
     submitError,
     loading,
+    isFormComplete,
     gradeOptions,
     setField,
     handleBlur,
@@ -185,7 +186,7 @@ export const RegisterForm = () => {
           type="submit"
           variant="primary"
           size="lg"
-          disabled={loading}
+          disabled={loading || !isFormComplete}
           className="w-full !rounded-xl !py-4 shadow-lg shadow-primary/30"
         >
           {loading ? t('auth.register.signing_up') : t('auth.register.sign_up')}

@@ -29,7 +29,7 @@ export const AiChatMessageList = ({
   return (
     <div
       className={`scrollbar-nice flex-1 space-y-4 overflow-y-auto ${
-        isCompact ? 'bg-white p-3' : 'space-y-8 bg-[#f6f6f8] p-6'
+        isCompact ? 'bg-white p-3' : 'space-y-8 bg-[#f6f6f8] p-4 md:p-6'
       }`}
     >
       {isCompact ? (

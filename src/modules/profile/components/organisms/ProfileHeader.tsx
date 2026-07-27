@@ -7,10 +7,16 @@ import { useTranslations } from 'next-intl';
 import { UserProfile } from '../../types/profile';
 import { ProfileAvatarMenu } from '../molecules/ProfileAvatarMenu';
 
-interface ProfileHeaderProps {
-  profile: UserProfile;
+export type ProfileStats = {
   questionsCount: number;
   savedCount: number;
+  quizDoneCount: number;
+  quizAvgScore: number | null;
+};
+
+interface ProfileHeaderProps {
+  profile: UserProfile;
+  stats: ProfileStats;
   avatarUploading?: boolean;
   onChangeAvatar: (dataUrl: string) => Promise<void>;
 }
@@ -22,8 +28,7 @@ const roleLabel = (role: string) => {
 
 export const ProfileHeader = ({
   profile,
-  questionsCount,
-  savedCount,
+  stats,
   avatarUploading = false,
   onChangeAvatar,
 }: ProfileHeaderProps) => {
@@ -33,14 +38,15 @@ export const ProfileHeader = ({
     profile.avatar_url ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4848e5&color=fff&size=128`;
 
-  return (
-    <section className="rounded-2xl border border-gray-300 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-900">
-      <div className="h-28 overflow-hidden rounded-t-2xl md:h-32">
-        <div className="h-full w-full bg-gradient-to-br from-primary via-indigo-500 to-violet-500" />
-      </div>
+  const avgDisplay =
+    stats.quizAvgScore == null ? '—' : Number.isInteger(stats.quizAvgScore)
+      ? String(stats.quizAvgScore)
+      : stats.quizAvgScore.toFixed(1);
 
-      <div className="relative px-5 pb-6 sm:px-8">
-        <div className="absolute -top-10 left-1/2 z-10 -translate-x-1/2 sm:left-8 sm:translate-x-0 md:-top-12">
+  return (
+    <section className="rounded-2xl border border-gray-300 bg-white p-5 shadow-sm dark:border-slate-600 dark:bg-slate-900 sm:p-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
+        <div className="mx-auto shrink-0 sm:mx-0">
           <ProfileAvatarMenu
             avatarUrl={avatarUrl}
             displayName={displayName}
@@ -49,12 +55,15 @@ export const ProfileHeader = ({
           />
         </div>
 
-        <div className="pt-12 text-center sm:pl-28 sm:pt-3 sm:text-left md:pt-4">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <Text variant="h3" weight="bold" className="!text-slate-900 dark:!text-white">
             {displayName}
           </Text>
+          <Text variant="body2" className="mt-1 !text-slate-500 dark:!text-slate-400">
+            @{profile.username}
+          </Text>
 
-          <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
             <Tag
               className="!rounded-full !bg-primary/10 !px-3 !py-1 !text-xs !font-semibold !text-primary"
               icon={<MaterialIcon icon="verified" size="text-sm" />}
@@ -71,11 +80,13 @@ export const ProfileHeader = ({
             )}
           </div>
         </div>
+      </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
-          <ProfileStatCard label={t('stat_questions')} value={questionsCount} />
-          <ProfileStatCard label={t('stat_saved')} value={savedCount} />
-        </div>
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <ProfileStatCard label={t('stat_questions')} value={stats.questionsCount} />
+        <ProfileStatCard label={t('stat_saved')} value={stats.savedCount} />
+        <ProfileStatCard label={t('stat_quiz_done')} value={stats.quizDoneCount} />
+        <ProfileStatCard label={t('stat_quiz_avg')} value={avgDisplay} />
       </div>
     </section>
   );

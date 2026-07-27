@@ -86,7 +86,7 @@ export const QuizDashboardCard = ({
 
   return (
     <article
-      className={`${quizDashboardPanel.shell} ${quizDashboardPanel.shellHover} flex flex-col`}
+      className={`${quizDashboardPanel.shell} ${quizDashboardPanel.shellHover} flex min-w-0 flex-col`}
     >
       <div
         className={`relative mb-3 flex h-24 items-center justify-center overflow-hidden rounded-xl border ${visual.banner}`}
@@ -158,15 +158,21 @@ export const QuizDashboardCard = ({
         </Text>
       ) : null}
 
-      <Button className="mt-auto w-full pt-4 shadow-sm" disabled={starting} onClick={onStart}>
-        {starting
-          ? startingText
-          : hasInProgress
-            ? continueText
-            : hasSubmitted
-              ? retryText
-              : startText}
-      </Button>
+      <div className="mt-auto w-full min-w-0 pt-4">
+        <Button
+          className="w-full min-w-0 max-w-full !px-4 shadow-sm"
+          disabled={starting}
+          onClick={onStart}
+        >
+          {starting
+            ? startingText
+            : hasInProgress
+              ? continueText
+              : hasSubmitted
+                ? retryText
+                : startText}
+        </Button>
+      </div>
     </article>
   );
 };

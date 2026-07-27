@@ -26,10 +26,36 @@ export const UserMenu = () => {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const openMenu = () => {
+    clearCloseTimer();
+    setOpen(true);
+  };
+
+  const scheduleCloseMenu = () => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => {
+      setOpen(false);
+      closeTimerRef.current = null;
+    }, 220);
+  };
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, []);
 
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
+        clearCloseTimer();
         setOpen(false);
       }
     };
@@ -114,16 +140,19 @@ export const UserMenu = () => {
       <div
         ref={rootRef}
         className="relative"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        onMouseEnter={openMenu}
+        onMouseLeave={scheduleCloseMenu}
       >
         <Button
           type="button"
           variant="ghost"
-          onClick={() => setOpen((current) => !current)}
+          onClick={() => {
+            clearCloseTimer();
+            setOpen((current) => !current);
+          }}
           aria-label={t('profile')}
           aria-expanded={open}
-          className="!h-8 !w-8 !overflow-hidden !rounded-full !border !border-primary/30 !bg-slate-100 !p-0 hover:!scale-105 hover:!shadow-md dark:!bg-slate-800"
+          className="!h-8 !w-8 !overflow-hidden !rounded-full !border !border-primary/30 !bg-slate-100 !p-0 hover:!shadow-md dark:!bg-slate-800"
         >
           {avatarUrl ? (
             <Image src={avatarUrl} alt="" className="h-full w-full object-cover" />
@@ -133,8 +162,9 @@ export const UserMenu = () => {
         </Button>
 
         {open && (
-          <div className="absolute right-0 top-full z-[60] pt-2">
-            <div className="min-w-[200px] overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
+          // top âm + pt lớn: cầu hover chồng lên avatar, kéo chéo không bị mất vùng
+          <div className="absolute -right-1 top-[calc(100%-6px)] z-[60] min-w-[220px] pt-3">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
               <MenuItem
                 icon={<MaterialIcon icon="person" size="text-lg" />}
                 onClick={() => {

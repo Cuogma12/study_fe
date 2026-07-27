@@ -31,10 +31,6 @@ export const useLogin = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    router.push('/forgot-password');
-  };
-
   const handleRegisterRedirect = () => {
     router.push('/register');
   };
@@ -47,7 +43,6 @@ export const useLogin = () => {
     error,
     loading,
     handleSubmit,
-    handleForgotPassword,
     handleRegisterRedirect,
     t,
   };

@@ -33,9 +33,9 @@ export const AiConversationSidebar = ({
   onSelect,
 }: AiConversationSidebarProps) => {
   return (
-    <aside className="flex h-44 w-full shrink-0 flex-col border-b border-slate-200 bg-white md:h-full md:w-72 md:border-b-0 md:border-r">
-      <div className="flex items-center justify-between gap-2 border-b border-slate-200 p-3">
-        <Text variant="body2" weight="bold">
+    <aside className="flex h-auto max-h-48 w-full shrink-0 flex-col border-b border-slate-200 bg-white md:h-full md:max-h-none md:w-72 md:border-b-0 md:border-r dark:border-slate-700 dark:bg-slate-900">
+      <div className="flex items-center justify-between gap-2 border-b border-slate-200 px-3 py-3 dark:border-slate-700">
+        <Text variant="body2" weight="bold" className="min-w-0 flex-1 !leading-snug">
           {title}
         </Text>
         <Button
@@ -43,16 +43,16 @@ export const AiConversationSidebar = ({
           size="sm"
           variant="secondary"
           onClick={onNewChat}
-          className="!h-8 !gap-1 !px-2"
+          className="!inline-flex !h-8 !shrink-0 !items-center !justify-center !gap-1 !px-2.5"
         >
-          <MaterialIcon icon="add" size={16} className="!text-[16px]" />
-          <Text as="span" variant="small" className="!font-semibold !text-inherit">
+          <MaterialIcon icon="add" size={16} className="!leading-none !text-[16px]" />
+          <Text as="span" variant="small" className="!font-semibold !leading-none !text-inherit">
             {newChatLabel}
           </Text>
         </Button>
       </div>
 
-      <div className="scrollbar-nice flex-1 space-y-1 overflow-y-auto p-2">
+      <div className="scrollbar-nice min-h-0 flex-1 space-y-1 overflow-y-auto p-2">
         {loading && items.length === 0 ? (
           <Text variant="small" className="px-2 py-3 !text-slate-500">
             {loadingLabel}
@@ -60,9 +60,14 @@ export const AiConversationSidebar = ({
         ) : null}
 
         {!loading && items.length === 0 && !error ? (
-          <Text variant="small" className="px-2 py-3 !text-slate-500">
-            {emptyLabel}
-          </Text>
+          <div className="flex flex-col items-center gap-2 px-3 py-6 text-center md:py-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+              <MaterialIcon icon="chat_bubble_outline" size={20} className="!text-[20px]" />
+            </div>
+            <Text variant="small" className="!text-slate-500">
+              {emptyLabel}
+            </Text>
+          </div>
         ) : null}
 
         {error ? (

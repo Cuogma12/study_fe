@@ -32,6 +32,8 @@ export const useQuizPlay = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [mode, setMode] = useState<QuizAttemptMode>('exam');
   const [setTitle, setSetTitle] = useState('');
+  const [subjectName, setSubjectName] = useState('');
+  const [topicName, setTopicName] = useState('');
   const [gradeLevel, setGradeLevel] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -103,6 +105,8 @@ export const useQuizPlay = () => {
         setMode(nextMode);
         setQuestions(data.questions ?? []);
         setSetTitle(data.title || data.set_title || '');
+        setSubjectName(data.subject_name?.trim() || '');
+        setTopicName(data.topic_name?.trim() || '');
         setGradeLevel(data.grade_level ? String(data.grade_level) : '');
         applySavedAnswers(data.saved_answers);
         if (nextMode === 'exam') {
@@ -230,6 +234,20 @@ export const useQuizPlay = () => {
     }
     return gradeLevel ? t('exam_title_grade', { grade: gradeLevel }) : t('exam_title_default');
   }, [gradeLevel, setTitle, t]);
+
+  const examMeta = useMemo(() => {
+    const parts: string[] = [];
+    if (subjectName) {
+      parts.push(subjectName);
+    }
+    if (gradeLevel) {
+      parts.push(t('meta_grade', { grade: gradeLevel }));
+    }
+    if (topicName) {
+      parts.push(topicName);
+    }
+    return parts.length ? parts.join(' · ') : null;
+  }, [gradeLevel, subjectName, t, topicName]);
 
   const timeLabel = isPractice
     ? t('practice_mode_label')
@@ -359,6 +377,7 @@ export const useQuizPlay = () => {
     answeredCount,
     totalQuestions,
     examTitle,
+    examMeta,
     timeLabel,
     questionProgressLabel,
     percentLabel,

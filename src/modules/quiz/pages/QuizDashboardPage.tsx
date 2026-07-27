@@ -44,7 +44,7 @@ export const QuizDashboardPage = () => {
 
   if (!ready || !isAuthenticated) {
     return (
-      <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 items-center justify-center bg-slate-50/60 px-4 py-12 dark:bg-slate-950/40">
+      <main className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-1 items-center justify-center px-4 py-12 lg:px-10">
         <Text variant="body2" className="!text-slate-500">
           {t('loading')}
         </Text>

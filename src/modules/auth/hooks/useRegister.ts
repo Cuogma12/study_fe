@@ -232,12 +232,15 @@ export const useRegister = () => {
     }
   });
 
+  const isFormComplete = Object.keys(validateAll(form)).length === 0;
+
   return {
     t,
     form,
     errors: visibleErrors,
     submitError,
     loading,
+    isFormComplete,
     gradeOptions,
     setField,
     handleBlur,

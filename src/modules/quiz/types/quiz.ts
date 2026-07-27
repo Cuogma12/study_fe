@@ -102,6 +102,8 @@ export interface QuizAttemptPlayResponse {
   title?: string | null;
   subject_id?: string;
   topic_id?: string | null;
+  subject_name?: string | null;
+  topic_name?: string | null;
   grade_level?: number | null;
   status: QuizAttemptStatus;
   total_questions?: number;

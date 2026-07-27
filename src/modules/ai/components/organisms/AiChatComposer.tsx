@@ -76,7 +76,7 @@ export const AiChatComposer = ({
   return (
     <div
       className={`shrink-0 ${
-        isCompact ? 'border-t border-primary/10 bg-white p-3 pt-2' : 'bg-[#f6f6f8] px-6 pb-4 pt-2'
+        isCompact ? 'border-t border-primary/10 bg-white p-3 pt-2' : 'bg-[#f6f6f8] px-4 pb-4 pt-2 md:px-6'
       }`}
     >
       {showSuggestions ? (
@@ -135,8 +135,8 @@ export const AiChatComposer = ({
       ) : null}
 
       <div
-        className={`flex items-end gap-2 rounded-2xl border border-slate-200 bg-slate-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary dark:border-slate-700 dark:bg-slate-800 ${
-          isCompact ? 'p-1.5' : 'p-2 shadow-sm'
+        className={`flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary dark:border-slate-700 dark:bg-slate-800 ${
+          isCompact ? 'p-1.5' : 'px-2 py-1.5 shadow-sm'
         }`}
       >
         {canAttachImages ? (
@@ -146,13 +146,17 @@ export const AiChatComposer = ({
               title={attachImageLabel}
               disabled={disabled || sending || imageUploading || images.length >= maxImages}
               onClick={() => fileRef.current?.click()}
-              size={isCompact ? 'sm' : 'md'}
-              className="mb-0.5 !text-slate-500 hover:!bg-slate-200 hover:!text-primary"
+              size="sm"
+              className="!shrink-0 !self-center !text-slate-500 hover:!bg-slate-200 hover:!text-primary"
             >
               <MaterialIcon
                 icon={imageUploading ? 'progress_activity' : 'add_photo_alternate'}
                 size={20}
-                className={imageUploading ? 'animate-spin !text-[20px]' : '!text-[20px]'}
+                className={
+                  imageUploading
+                    ? 'animate-spin !leading-none !text-[20px]'
+                    : '!leading-none !text-[20px]'
+                }
               />
             </IconButton>
             <HiddenFileInput
@@ -162,7 +166,7 @@ export const AiChatComposer = ({
             />
           </>
         ) : null}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 self-center">
           <Textarea
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -173,8 +177,8 @@ export const AiChatComposer = ({
             hideErrorMessage
             className={`!resize-none !border-none !bg-transparent !p-0 !shadow-none outline-none placeholder:text-slate-400 focus:!border-transparent focus:!ring-0 disabled:opacity-60 ${
               isCompact
-                ? '!max-h-[80px] !min-h-[36px] !px-2 !py-2 !text-sm'
-                : '!max-h-[120px] !min-h-[44px] !px-2 !py-3 !text-base'
+                ? '!max-h-[80px] !min-h-[32px] !px-1.5 !py-1.5 !text-sm !leading-5'
+                : '!max-h-[120px] !min-h-[36px] !px-1.5 !py-2 !text-base !leading-6'
             }`}
           />
         </div>
@@ -182,14 +186,10 @@ export const AiChatComposer = ({
           label={sendLabel}
           disabled={disabled || sending || !canSend}
           onClick={onSend}
-          size={isCompact ? 'sm' : 'md'}
-          className="mb-0.5 !bg-primary !text-white hover:!bg-primary hover:!opacity-90 disabled:!opacity-40"
+          size="sm"
+          className="!shrink-0 !self-center !bg-primary !text-white hover:!bg-primary hover:!opacity-90 disabled:!opacity-40"
         >
-          <MaterialIcon
-            icon="send"
-            size={isCompact ? 16 : 20}
-            className={isCompact ? '!text-[16px]' : '!text-[20px]'}
-          />
+          <MaterialIcon icon="send" size={18} className="!leading-none !text-[18px]" />
         </IconButton>
       </div>
 

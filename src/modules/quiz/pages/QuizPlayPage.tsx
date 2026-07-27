@@ -24,6 +24,7 @@ export const QuizPlayPage = () => {
     currentReveal,
     answeredCount,
     examTitle,
+    examMeta,
     timeLabel,
     questionProgressLabel,
     percentLabel,
@@ -91,15 +92,25 @@ export const QuizPlayPage = () => {
 
   return (
     <div className={quizPlayLayout.page}>
-      <QuizPlayHeader examTitle={examTitle} timeLabel={timeLabel} onExit={exitQuiz} />
+      <QuizPlayHeader
+        examTitle={examTitle}
+        examMeta={examMeta}
+        timeLabel={timeLabel}
+        onExit={exitQuiz}
+      />
 
       <main className={quizPlayLayout.main}>
         <div className={quizPlayLayout.body}>
           <div className={quizPlayLayout.content}>
-            <div className="flex justify-end text-right sm:hidden">
-              <Text variant="caption" className="!text-xs !text-slate-500">
+            <div className="flex flex-col items-end text-right sm:hidden">
+              <Text variant="caption" className="!text-xs !font-semibold !text-slate-700">
                 {examTitle}
               </Text>
+              {examMeta ? (
+                <Text variant="caption" className="mt-0.5 !text-[11px] !text-slate-400">
+                  {examMeta}
+                </Text>
+              ) : null}
               <Text variant="body2" className="!font-bold !text-primary">
                 {timeLabel}
               </Text>
