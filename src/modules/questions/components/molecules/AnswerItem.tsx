@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { formatRelativeTime } from '@/shared/utils/formatRelativeTime';
 import { detailPanel } from '../../constants/detailPanelStyles';
 import { AnswerItem as AnswerItemType } from '../../types/answer';
+import { AnswerContentImages } from './AnswerContentImages';
 import { AuthorAvatar } from './AuthorAvatar';
 import { AnswerForm } from '../organisms/AnswerForm';
 
@@ -14,7 +15,11 @@ interface AnswerItemProps {
   isClosed: boolean;
   actionLoading: boolean;
   requireAuth: () => boolean;
-  onReply: (parentId: string, content: string) => Promise<AnswerItemType | undefined>;
+  onReply: (
+    parentId: string,
+    content: string,
+    images?: string[]
+  ) => Promise<AnswerItemType | undefined>;
   loadReplies: (answerId: string) => Promise<AnswerItemType[]>;
 }
 
@@ -56,8 +61,8 @@ export const AnswerItemCard = ({
     setShowReplyForm(true);
   };
 
-  const handleSubmitReply = async (content: string) => {
-    const reply = await onReply(answer.id, content);
+  const handleSubmitReply = async (content: string, images?: string[]) => {
+    const reply = await onReply(answer.id, content, images);
     if (reply) {
       setReplies((current) => [...current, reply]);
       setRepliesLoaded(true);
@@ -89,6 +94,7 @@ export const AnswerItemCard = ({
       >
         {answer.content}
       </Text>
+      <AnswerContentImages images={answer.images} />
 
       <div className="mt-4 flex items-center gap-3">
         {!isClosed && (
@@ -159,6 +165,7 @@ export const AnswerItemCard = ({
               >
                 {reply.content}
               </Text>
+              <AnswerContentImages images={reply.images} compact />
             </div>
           ))}
         </div>

@@ -15,8 +15,12 @@ interface AnswersSectionProps {
   isAuthenticated: boolean;
   actionLoading: boolean;
   requireAuth: () => boolean;
-  onSubmitAnswer: (content: string) => Promise<void>;
-  onReply: (parentId: string, content: string) => Promise<AnswerItem | undefined>;
+  onSubmitAnswer: (content: string, images?: string[]) => Promise<void>;
+  onReply: (
+    parentId: string,
+    content: string,
+    images?: string[]
+  ) => Promise<AnswerItem | undefined>;
   loadReplies: (answerId: string) => Promise<AnswerItem[]>;
 }
 

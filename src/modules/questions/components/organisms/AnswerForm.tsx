@@ -6,12 +6,13 @@ import { useTranslations } from 'next-intl';
 import { API_ERROR_CODES } from '@/shared/constants/apiErrorCodes';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { composeTextareaClass } from '../../constants/detailPanelStyles';
+import { AnswerImagePicker } from '../molecules/AnswerImagePicker';
 
 interface AnswerFormProps {
   placeholder?: string;
   submitLabel?: string;
   disabled?: boolean;
-  onSubmit: (content: string) => Promise<void>;
+  onSubmit: (content: string, images?: string[]) => Promise<void>;
   onCancel?: () => void;
   compact?: boolean;
 }
@@ -25,8 +26,10 @@ export const AnswerForm = ({
   compact = false,
 }: AnswerFormProps) => {
   const t = useTranslations('question_detail');
+  const tCreate = useTranslations('create_question');
   const tApiErrors = useTranslations('api_errors');
   const [content, setContent] = useState('');
+  const [images, setImages] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -44,14 +47,17 @@ export const AnswerForm = ({
 
     setSubmitting(true);
     try {
-      await onSubmit(trimmed);
+      await onSubmit(trimmed, images.length > 0 ? images : undefined);
       setContent('');
+      setImages([]);
     } catch (err: unknown) {
       setError(resolveApiErrorMessage(err, tApiErrors));
     } finally {
       setSubmitting(false);
     }
   };
+
+  const isDisabled = disabled || submitting;
 
   return (
     <Form onSubmit={handleSubmit} className={compact ? 'space-y-3' : 'space-y-0'}>
@@ -66,12 +72,18 @@ export const AnswerForm = ({
       <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        disabled={disabled || submitting}
+        disabled={isDisabled}
         rows={compact ? 3 : 4}
         placeholder={placeholder ?? t('answer_placeholder')}
         hideErrorMessage
         className={composeTextareaClass}
       />
+      <div className="mt-2">
+        <AnswerImagePicker images={images} disabled={isDisabled} onChange={setImages} />
+        <Text variant="small" className="mt-1 !text-slate-400">
+          {tCreate('images_hint')}
+        </Text>
+      </div>
       {error && (
         <Text variant="small" className="mt-2 !text-red-500">
           {error}
@@ -83,7 +95,7 @@ export const AnswerForm = ({
             {t('cancel')}
           </Button>
         )}
-        <Button type="submit" size="sm" disabled={disabled || submitting}>
+        <Button type="submit" size="sm" disabled={isDisabled}>
           {submitting ? t('submitting') : submitLabel ?? t('submit_answer')}
         </Button>
       </div>

@@ -10,6 +10,7 @@ export interface AnswerItem {
   target_type: 'question' | 'answer';
   target_id: string;
   content: string;
+  images?: string[];
   author: AnswerAuthor;
   is_accepted: boolean;
   created_at: string;

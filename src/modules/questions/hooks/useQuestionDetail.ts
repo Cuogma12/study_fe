@@ -84,7 +84,7 @@ export const useQuestionDetail = (questionId: string) => {
     setActionLoading(false);
   };
 
-  const submitAnswer = async (content: string) => {
+  const submitAnswer = async (content: string, images?: string[]) => {
     if (!question) {
       return;
     }
@@ -98,6 +98,7 @@ export const useQuestionDetail = (questionId: string) => {
     try {
       const answer = await answerService.createForQuestion(question.id, {
         content: trimmed,
+        ...(images && images.length > 0 ? { images } : {}),
       });
       setQuestion((current) =>
         current
@@ -113,7 +114,7 @@ export const useQuestionDetail = (questionId: string) => {
     }
   };
 
-  const submitReply = async (parentAnswerId: string, content: string) => {
+  const submitReply = async (parentAnswerId: string, content: string, images?: string[]) => {
     if (!question) {
       return;
     }
@@ -129,6 +130,7 @@ export const useQuestionDetail = (questionId: string) => {
         target_type: 'answer',
         target_id: parentAnswerId,
         content: trimmed,
+        ...(images && images.length > 0 ? { images } : {}),
       });
       setQuestion((current) =>
         current
