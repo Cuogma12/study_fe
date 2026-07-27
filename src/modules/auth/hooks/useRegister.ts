@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
 import { authService } from '@/modules/auth/services/auth.service';
 import { FieldError } from '@/shared/types/field-error';
+import {
+  buildLoginPath,
+  getSafeAuthRedirect,
+} from '@/shared/utils/authRedirect';
 
 export type RegisterField =
   | 'full_name'
@@ -45,6 +49,7 @@ const invalidError = (message: string): FieldError => ({ message, tone: 'invalid
 
 export const useRegister = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations();
   const tApiErrors = useTranslations('api_errors');
 
@@ -55,6 +60,8 @@ export const useRegister = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const redirectAfterAuth = getSafeAuthRedirect(searchParams.get('redirect'));
+
   const gradeOptions = [
     { label: t('auth.register.grades.grade_10'), value: '10' },
     { label: t('auth.register.grades.grade_11'), value: '11' },
@@ -62,7 +69,7 @@ export const useRegister = () => {
   ];
 
   const handleLoginRedirect = () => {
-    router.push('/login');
+    router.push(buildLoginPath(redirectAfterAuth));
   };
 
   const validateField = (
@@ -217,7 +224,7 @@ export const useRegister = () => {
         password: form.password,
         full_name: form.full_name.trim() || undefined,
       });
-      router.push('/login');
+      router.push(buildLoginPath(redirectAfterAuth));
     } catch (err: unknown) {
       setSubmitError(resolveApiErrorMessage(err, tApiErrors));
     } finally {

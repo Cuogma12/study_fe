@@ -12,7 +12,7 @@ import { ProfileEditModal } from '../components/organisms/ProfileEditModal';
 
 export const ProfilePage = () => {
   const t = useTranslations('profile');
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin, navigateToRegister } = useAppNavigation();
   const {
     ready,
     isAuthenticated,
@@ -60,12 +60,12 @@ export const ProfilePage = () => {
           {t('login_required_desc')}
         </Text>
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button onClick={() => navigateTo('/login')} className="sm:min-w-[140px]">
+          <Button onClick={() => navigateToLogin()} className="sm:min-w-[140px]">
             {t('go_login')}
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigateTo('/register')}
+            onClick={() => navigateToRegister()}
             className="sm:min-w-[140px]"
           >
             {t('go_register')}

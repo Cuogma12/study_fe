@@ -203,6 +203,8 @@
       "logout": "Đăng xuất"
     },
     "sidebar": {
+      "search": "Tìm kiếm",
+      "search_placeholder": "Tìm câu hỏi...",
       "grades": "Khối lớp",
       "grade_12": "Lớp 12",
       "grade_11": "Lớp 11",
@@ -377,7 +379,11 @@
     "answers_count": "{count} trả lời",
     "closed_notice": "Thảo luận đã đóng. Không thể thêm trả lời mới.",
     "login_to_answer": "Đăng nhập để trả lời câu hỏi này.",
+    "login_action": "Đăng nhập",
+    "login_to_answer_suffix": " để trả lời câu hỏi này.",
     "no_answers": "Chưa có câu trả lời nào. Hãy là người đầu tiên!",
+    "no_answers_guest_suffix": " để làm người đầu tiên!",
+    "no_answers_guest_prefix": "Chưa có câu trả lời nào. Hãy ",
     "write_answer": "Viết câu trả lời",
     "answer_placeholder": "Chia sẻ cách giải hoặc gợi ý của bạn...",
     "reply_placeholder": "Viết phản hồi...",

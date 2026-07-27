@@ -10,6 +10,7 @@ import { useHomeFeed } from '../../hooks/useHomeFeed';
 import { QuestionCard } from '../molecules/QuestionCard';
 import { HomeActiveFilterChips } from '../molecules/HomeActiveFilterChips';
 import { HomeFilterDrawer } from './HomeFilterDrawer';
+import { HomeSearchField } from '@/shared/components/molecules/HomeSearchField';
 
 interface HomeFeedProps {
   filters: HomeFilters;
@@ -68,6 +69,10 @@ export const HomeFeed = ({
         ref={scrollRootRef}
         className="scrollbar-nice min-h-0 min-w-0 flex-1 overflow-y-auto px-0 py-6 lg:px-8"
       >
+        <div className="mb-4 xl:hidden">
+          <HomeSearchField />
+        </div>
+
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Text variant="h3" className="min-w-0 truncate">
             {feedTitle}

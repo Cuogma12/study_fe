@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 
 export const CreateQuestionLoginOverlay = () => {
   const t = useTranslations('create_question');
-  const { navigateTo } = useAppNavigation();
+  const { navigateToLogin, navigateToRegister } = useAppNavigation();
 
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/20 p-4">
@@ -26,12 +26,12 @@ export const CreateQuestionLoginOverlay = () => {
         </Text>
 
         <div className="flex w-full max-w-xs flex-col gap-3">
-          <Button onClick={() => navigateTo('/login')} className="w-full">
+          <Button onClick={() => navigateToLogin()} className="w-full">
             {t('login_overlay.login')}
           </Button>
           <Text variant="body2" className="!text-slate-500">
             {t('login_overlay.no_account')}{' '}
-            <TextLink onClick={() => navigateTo('/register')} className="!text-sm">
+            <TextLink onClick={() => navigateToRegister()} className="!text-sm">
               {t('login_overlay.register')}
             </TextLink>
           </Text>

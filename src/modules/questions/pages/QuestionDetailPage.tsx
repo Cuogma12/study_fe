@@ -17,7 +17,7 @@ interface QuestionDetailPageProps {
 
 export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
   const t = useTranslations('question_detail');
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const { isAuthenticated, userId } = useAuth();
   const {
     question,
@@ -43,7 +43,7 @@ export const QuestionDetailPage = ({ questionId }: QuestionDetailPageProps) => {
 
   const requireAuth = () => {
     if (!isAuthenticated) {
-      navigateTo('/login');
+      navigateToLogin();
       return false;
     }
     return true;

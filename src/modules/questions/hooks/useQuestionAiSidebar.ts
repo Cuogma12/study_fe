@@ -16,7 +16,7 @@ export const useQuestionAiSidebar = ({
 }: UseQuestionAiSidebarOptions) => {
   const t = useTranslations('question_detail.ai');
   const tChat = useTranslations('ai.chat');
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const { ready, isAuthenticated } = useAuth();
 
   const chat = useAiTutorChat({
@@ -27,13 +27,13 @@ export const useQuestionAiSidebar = ({
 
   const openFullscreen = () => {
     if (!isAuthenticated) {
-      navigateTo('/login');
+      navigateToLogin();
       return;
     }
     navigateTo(`/ai?mode=tutor&question_id=${questionId}`);
   };
 
-  const goLogin = () => navigateTo('/login');
+  const goLogin = () => navigateToLogin();
 
   return {
     t,

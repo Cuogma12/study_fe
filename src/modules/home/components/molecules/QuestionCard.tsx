@@ -66,7 +66,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
   const tDetail = useTranslations('question_detail');
   const tApiError = useTranslations('api_errors');
   const locale = useLocale();
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const { userId, isAuthenticated } = useAuth();
   const [deleting, setDeleting] = useState(false);
   const [isSaved, setIsSaved] = useState(question.is_saved);
@@ -107,7 +107,7 @@ export const QuestionCard = ({ question, onDeleted, onSavedChange }: QuestionCar
     event.stopPropagation();
 
     if (!isAuthenticated) {
-      navigateTo('/login');
+      navigateToLogin();
       return;
     }
 

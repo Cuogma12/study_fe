@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { resolveApiErrorMessage } from '@/shared/utils/resolveApiErrorMessage';
+import {
+  buildRegisterPath,
+  getSafeAuthRedirect,
+} from '@/shared/utils/authRedirect';
 import { authService } from '@/modules/auth/services/auth.service';
 
 export const useLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations();
   const tApiErrors = useTranslations('api_errors');
 
@@ -13,6 +18,8 @@ export const useLogin = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const redirectAfterAuth = getSafeAuthRedirect(searchParams.get('redirect')) ?? '/';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +29,7 @@ export const useLogin = () => {
     try {
       const res = await authService.login(email, password);
       if (res.data?.accessToken) {
-        router.push('/');
+        router.push(redirectAfterAuth);
       }
     } catch (err: unknown) {
       setError(resolveApiErrorMessage(err, tApiErrors));
@@ -32,7 +39,7 @@ export const useLogin = () => {
   };
 
   const handleRegisterRedirect = () => {
-    router.push('/register');
+    router.push(buildRegisterPath(redirectAfterAuth === '/' ? null : redirectAfterAuth));
   };
 
   return {

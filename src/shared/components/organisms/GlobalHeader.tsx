@@ -1,24 +1,11 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import { MaterialIcon, Text, Button } from '../atoms';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { UserMenu } from './UserMenu';
-import { HomeSearchField } from '../molecules/HomeSearchField';
-
-const HeaderSearchFallback = () => {
-  const t = useTranslations('home.header');
-  return (
-    <div className="hidden min-w-80 md:block">
-      <div className="h-10 rounded-full bg-slate-100 dark:bg-slate-800" aria-hidden />
-      <Text as="span" variant="small" className="sr-only">
-        {t('search_placeholder')}
-      </Text>
-    </div>
-  );
-};
 
 const isHomePath = (pathname: string | null) => {
   if (!pathname) return false;
@@ -52,12 +39,6 @@ export const GlobalHeader = () => {
             {t('brand_name')}
           </Text>
         </Button>
-
-        <div className="hidden min-w-80 flex-col md:flex">
-          <Suspense fallback={<HeaderSearchFallback />}>
-            <HomeSearchField />
-          </Suspense>
-        </div>
       </div>
 
       <div className="flex items-center gap-3 lg:gap-5">
@@ -66,13 +47,18 @@ export const GlobalHeader = () => {
           size="sm"
           onClick={() => navigateTo('/')}
           aria-label={t('home')}
-          className={`hidden !h-10 !gap-1.5 !rounded-full !border-sky-200 !bg-sky-50 !px-3 !text-sky-700 transition-all hover:!border-sky-300 hover:!bg-sky-100 hover:!shadow-sm dark:!border-sky-500/40 dark:!bg-sky-500/15 dark:!text-sky-200 dark:hover:!bg-sky-500/25 lg:inline-flex ${
+          aria-current={onHome ? 'page' : undefined}
+          className={`hidden !h-10 !gap-1.5 !rounded-full !px-3 transition-all lg:inline-flex ${
             onHome
-              ? '!border-sky-400 !shadow-md ring-2 ring-sky-200 dark:!border-sky-400 dark:ring-sky-500/30'
-              : ''
+              ? '!border-sky-500 !bg-sky-500 !text-white !shadow-sm hover:!border-sky-600 hover:!bg-sky-600 dark:!border-sky-400 dark:!bg-sky-500 dark:!text-white dark:hover:!bg-sky-400'
+              : '!border-sky-200 !bg-sky-50 !text-sky-700 hover:!border-sky-300 hover:!bg-sky-100 dark:!border-sky-500/40 dark:!bg-sky-500/15 dark:!text-sky-200 dark:hover:!bg-sky-500/25'
           }`}
         >
-          <MaterialIcon icon="home" size="text-lg" className="!text-sky-600 dark:!text-sky-300" />
+          <MaterialIcon
+            icon="home"
+            size="text-lg"
+            className={onHome ? '!text-white' : '!text-sky-600 dark:!text-sky-300'}
+          />
           <Text as="span" variant="small" className="!font-semibold !text-inherit">
             {t('home')}
           </Text>
@@ -83,16 +69,17 @@ export const GlobalHeader = () => {
           size="sm"
           onClick={() => navigateTo('/ai')}
           aria-label={t('ai_hub')}
-          className={`!h-10 !gap-1.5 !rounded-full !border-violet-200 !bg-violet-50 !px-3 !text-violet-700 transition-all hover:!border-violet-300 hover:!bg-violet-100 hover:!shadow-sm dark:!border-violet-500/40 dark:!bg-violet-500/15 dark:!text-violet-200 dark:hover:!bg-violet-500/25 ${
+          aria-current={onAi ? 'page' : undefined}
+          className={`!h-10 !gap-1.5 !rounded-full !px-3 transition-all ${
             onAi
-              ? '!border-violet-400 !shadow-md ring-2 ring-violet-200 dark:!border-violet-400 dark:ring-violet-500/30'
-              : ''
+              ? '!border-violet-500 !bg-violet-500 !text-white !shadow-sm hover:!border-violet-600 hover:!bg-violet-600 dark:!border-violet-400 dark:!bg-violet-500 dark:!text-white dark:hover:!bg-violet-400'
+              : '!border-violet-200 !bg-violet-50 !text-violet-700 hover:!border-violet-300 hover:!bg-violet-100 dark:!border-violet-500/40 dark:!bg-violet-500/15 dark:!text-violet-200 dark:hover:!bg-violet-500/25'
           }`}
         >
           <MaterialIcon
             icon="smart_toy"
             size="text-lg"
-            className="!text-violet-600 dark:!text-violet-300"
+            className={onAi ? '!text-white' : '!text-violet-600 dark:!text-violet-300'}
           />
           <Text as="span" variant="small" className="hidden !font-semibold !text-inherit sm:inline">
             {t('ai_hub')}
@@ -104,16 +91,17 @@ export const GlobalHeader = () => {
           size="sm"
           onClick={() => navigateTo('/quiz')}
           aria-label={t('quiz')}
-          className={`!h-10 !gap-1.5 !rounded-full !border-amber-200 !bg-amber-50 !px-3 !text-amber-800 transition-all hover:!border-amber-300 hover:!bg-amber-100 hover:!shadow-sm dark:!border-amber-500/40 dark:!bg-amber-500/15 dark:!text-amber-200 dark:hover:!bg-amber-500/25 ${
+          aria-current={onQuiz ? 'page' : undefined}
+          className={`!h-10 !gap-1.5 !rounded-full !px-3 transition-all ${
             onQuiz
-              ? '!border-amber-400 !shadow-md ring-2 ring-amber-200 dark:!border-amber-400 dark:ring-amber-500/30'
-              : ''
+              ? '!border-amber-500 !bg-amber-500 !text-white !shadow-sm hover:!border-amber-600 hover:!bg-amber-600 dark:!border-amber-400 dark:!bg-amber-500 dark:!text-white dark:hover:!bg-amber-400'
+              : '!border-amber-200 !bg-amber-50 !text-amber-800 hover:!border-amber-300 hover:!bg-amber-100 dark:!border-amber-500/40 dark:!bg-amber-500/15 dark:!text-amber-200 dark:hover:!bg-amber-500/25'
           }`}
         >
           <MaterialIcon
             icon="quiz"
             size="text-lg"
-            className="!text-amber-600 dark:!text-amber-300"
+            className={onQuiz ? '!text-white' : '!text-amber-600 dark:!text-amber-300'}
           />
           <Text as="span" variant="small" className="hidden !font-semibold !text-inherit sm:inline">
             {t('quiz')}
@@ -125,16 +113,17 @@ export const GlobalHeader = () => {
           size="sm"
           onClick={() => navigateTo('/questions/new')}
           aria-label={t('ask_question')}
-          className={`hidden !h-10 !gap-1.5 !rounded-full !border-emerald-200 !bg-emerald-50 !px-3 !text-emerald-700 transition-all hover:!border-emerald-300 hover:!bg-emerald-100 hover:!shadow-sm dark:!border-emerald-500/40 dark:!bg-emerald-500/15 dark:!text-emerald-200 dark:hover:!bg-emerald-500/25 sm:inline-flex ${
+          aria-current={onAskQuestion ? 'page' : undefined}
+          className={`hidden !h-10 !gap-1.5 !rounded-full !px-3 transition-all sm:inline-flex ${
             onAskQuestion
-              ? '!border-emerald-400 !shadow-md ring-2 ring-emerald-200 dark:!border-emerald-400 dark:ring-emerald-500/30'
-              : ''
+              ? '!border-emerald-500 !bg-emerald-500 !text-white !shadow-sm hover:!border-emerald-600 hover:!bg-emerald-600 dark:!border-emerald-400 dark:!bg-emerald-500 dark:!text-white dark:hover:!bg-emerald-400'
+              : '!border-emerald-200 !bg-emerald-50 !text-emerald-700 hover:!border-emerald-300 hover:!bg-emerald-100 dark:!border-emerald-500/40 dark:!bg-emerald-500/15 dark:!text-emerald-200 dark:hover:!bg-emerald-500/25'
           }`}
         >
           <MaterialIcon
             icon="edit_note"
             size="text-lg"
-            className="!text-emerald-600 dark:!text-emerald-300"
+            className={onAskQuestion ? '!text-white' : '!text-emerald-600 dark:!text-emerald-300'}
           />
           <Text as="span" variant="small" className="hidden !font-semibold !text-inherit md:inline">
             {t('ask_question')}

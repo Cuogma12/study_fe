@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { MaterialIcon, Text, Button } from '@/shared/components/atoms';
+import { HomeSearchField } from '@/shared/components/molecules/HomeSearchField';
 import { Subject } from '@/shared/services/subject.service';
 import { useTranslations } from 'next-intl';
 
@@ -27,6 +28,10 @@ export const HomeLeftSidebar = ({
   return (
     <aside className="scrollbar-nice hidden min-h-0 w-64 shrink-0 flex-col overflow-y-auto border-r border-slate-200 py-6 pr-6 dark:border-slate-700 xl:flex">
       <div className="flex flex-col gap-8">
+        <div className="min-w-0 px-2">
+          <HomeSearchField showLabel compact />
+        </div>
+
         <div className="flex flex-col gap-4">
           <div className="px-2">
             <Text variant="caption" className="mb-4 block text-slate-400">

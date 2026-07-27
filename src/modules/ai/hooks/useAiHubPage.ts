@@ -8,7 +8,7 @@ import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 export const useAiHubPage = () => {
   const t = useTranslations('ai.hub');
   const { ready, isAuthenticated } = useAuth();
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const searchParams = useSearchParams();
 
   const mode = searchParams.get('mode');
@@ -19,7 +19,7 @@ export const useAiHubPage = () => {
 
   const startTutor = () => navigateTo('/ai?mode=tutor');
   const startGenerateQuiz = () => navigateTo('/quiz/new');
-  const goLogin = () => navigateTo('/login');
+  const goLogin = () => navigateToLogin();
 
   const hubStats = [
     {

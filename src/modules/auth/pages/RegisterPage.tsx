@@ -1,15 +1,19 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { RegisterForm } from '@/modules/auth/components/organisms/RegisterForm';
 import { SchoolIcon } from '@/shared/components/atoms/icon';
 import { Button, Text, TextLink } from '@/shared/components/atoms';
+import { buildLoginPath } from '@/shared/utils/authRedirect';
+import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 
 export const RegisterPage = () => {
-  const router = useRouter();
+  const { navigateTo } = useAppNavigation();
+  const searchParams = useSearchParams();
   const t = useTranslations();
+  const loginPath = buildLoginPath(searchParams.get('redirect'));
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark">
@@ -32,7 +36,7 @@ export const RegisterPage = () => {
               variant="outline" 
               size="sm" 
               className="!h-10 !px-4 !font-bold"
-              onClick={() => router.push('/login')}
+              onClick={() => navigateTo(loginPath)}
             >
               {t('auth.register.login_link')}
             </Button>

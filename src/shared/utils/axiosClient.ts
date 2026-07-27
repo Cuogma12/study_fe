@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { API_ENDPOINTS } from '@/shared/constants/api';
+import { buildLoginPath, getCurrentReturnPath } from '@/shared/utils/authRedirect';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -10,6 +11,13 @@ const axiosClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+const redirectToLogin = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  window.location.href = buildLoginPath(getCurrentReturnPath());
+};
 
 // Request Interceptor (Attach Token)
 axiosClient.interceptors.request.use(
@@ -37,9 +45,7 @@ axiosClient.interceptors.response.use(
     if (error.response?.status === 401 && errorCode === 'STD_AUT_020') {
       Cookies.remove('access_token');
       Cookies.remove('refresh_token');
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
+      redirectToLogin();
       return Promise.reject(error);
     }
 
@@ -73,9 +79,7 @@ axiosClient.interceptors.response.use(
         // If refresh token also fails, redirect to login
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
+        redirectToLogin();
         return Promise.reject(refreshError);
       }
     }

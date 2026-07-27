@@ -6,13 +6,13 @@ import { useAppNavigation } from './useAppNavigation';
 
 export const useRequireAuth = () => {
   const { ready, isAuthenticated } = useAuth();
-  const { navigateTo } = useAppNavigation();
+  const { navigateToLogin } = useAppNavigation();
 
   useEffect(() => {
     if (ready && !isAuthenticated) {
-      navigateTo('/login');
+      navigateToLogin();
     }
-  }, [ready, isAuthenticated, navigateTo]);
+  }, [ready, isAuthenticated, navigateToLogin]);
 
   return { ready, isAuthenticated };
 };

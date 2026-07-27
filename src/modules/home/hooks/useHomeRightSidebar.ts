@@ -6,12 +6,12 @@ import { useAuth } from '@/shared/hooks/useAuth';
 
 export const useHomeRightSidebar = () => {
   const t = useTranslations('home.right_sidebar');
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const { isAuthenticated } = useAuth();
 
   const requireAuthThen = (path: string) => {
     if (!isAuthenticated) {
-      navigateTo('/login');
+      navigateToLogin();
       return;
     }
     navigateTo(path);

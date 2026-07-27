@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { MaterialIcon, Text } from '@/shared/components/atoms';
+import { MaterialIcon, Text, TextLink } from '@/shared/components/atoms';
 import { useTranslations } from 'next-intl';
+import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { detailPanel } from '../../constants/detailPanelStyles';
 import { AnswerItem } from '../../types/answer';
 import { AnswerItemCard } from '../molecules/AnswerItem';
@@ -36,6 +37,10 @@ export const AnswersSection = ({
   loadReplies,
 }: AnswersSectionProps) => {
   const t = useTranslations('question_detail');
+  const { navigateToLogin } = useAppNavigation();
+  const hasAnswers = answers.length > 0;
+  const showCompose =
+    isClosed || isAuthenticated || (hasAnswers && !isAuthenticated);
 
   return (
     <section className={detailPanel.shell}>
@@ -53,29 +58,41 @@ export const AnswersSection = ({
         </div>
       </div>
 
-      <div className={detailPanel.composeSection}>
-        <div className={detailPanel.composeArea}>
-          {isClosed ? (
-            <Text variant="body2" className="!text-slate-600 dark:!text-slate-300">
-              {t('closed_notice')}
-            </Text>
-          ) : isAuthenticated ? (
-            <AnswerForm
-              disabled={actionLoading}
-              onSubmit={onSubmitAnswer}
-            />
-          ) : (
-            <Text variant="body2" weight="medium" className="!text-primary">
-              {t('login_to_answer')}
-            </Text>
-          )}
+      {showCompose && (
+        <div className={detailPanel.composeSection}>
+          <div className={detailPanel.composeArea}>
+            {isClosed ? (
+              <Text variant="body2" className="!text-slate-600 dark:!text-slate-300">
+                {t('closed_notice')}
+              </Text>
+            ) : isAuthenticated ? (
+              <AnswerForm disabled={actionLoading} onSubmit={onSubmitAnswer} />
+            ) : (
+              <Text variant="body2" className="!text-slate-600 dark:!text-slate-300">
+                <TextLink onClick={() => navigateToLogin()} className="!text-base">
+                  {t('login_action')}
+                </TextLink>
+                {t('login_to_answer_suffix')}
+              </Text>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className={detailPanel.listSection}>
-        {answers.length === 0 ? (
+        {!hasAnswers ? (
           <Text variant="body2" className="py-2 text-center !text-slate-500">
-            {t('no_answers')}
+            {isAuthenticated || isClosed ? (
+              t('no_answers')
+            ) : (
+              <>
+                {t('no_answers_guest_prefix')}
+                <TextLink onClick={() => navigateToLogin()} className="!text-sm">
+                  {t('login_action')}
+                </TextLink>
+                {t('no_answers_guest_suffix')}
+              </>
+            )}
           </Text>
         ) : (
           <>
