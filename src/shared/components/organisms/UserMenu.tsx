@@ -17,7 +17,7 @@ import { useToast } from '@/shared/components/organisms/ToastProvider';
 export const UserMenu = () => {
   const t = useTranslations('home.header');
   const tProfile = useTranslations('profile');
-  const { navigateTo } = useAppNavigation();
+  const { navigateTo, navigateToLogin } = useAppNavigation();
   const { ready, isAuthenticated, userId } = useAuth();
   const toast = useToast();
   const [open, setOpen] = useState(false);
@@ -102,7 +102,7 @@ export const UserMenu = () => {
     return (
       <IconButton
         label={t('login')}
-        onClick={() => navigateTo('/profile')}
+        onClick={() => navigateToLogin()}
         className="!border !border-primary/30 !bg-primary/20 hover:!scale-105 hover:!bg-primary/30 hover:!shadow-md"
       >
         <MaterialIcon icon="person" className="text-primary" size="text-lg" />
