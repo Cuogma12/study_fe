@@ -3,7 +3,8 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { SchoolIcon } from '@/shared/components/atoms/icon';
-import { Image, Text } from '@/shared/components/atoms';
+import { Button, Image, Text } from '@/shared/components/atoms';
+import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -11,17 +12,30 @@ interface AuthLayoutProps {
 
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   const t = useTranslations();
+  const { navigateTo } = useAppNavigation();
+
+  const goHome = () => navigateTo('/');
+
+  const brandButton = (
+    <Button
+      type="button"
+      variant="ghost"
+      onClick={goHome}
+      aria-label={t('common.app_name')}
+      className="!h-auto !gap-2 !rounded-lg !p-0 hover:!bg-transparent hover:!opacity-80"
+    >
+      <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
+        <SchoolIcon size={20} />
+      </div>
+      <Text variant="h3">{t('common.app_name')}</Text>
+    </Button>
+  );
 
   return (
     <div className="flex min-h-screen">
       {/* Left Side: Illustration & Branding */}
       <div className="relative hidden items-center justify-center overflow-hidden bg-primary/10 p-12 lg:flex lg:w-1/2">
-        <div className="absolute left-10 top-10 flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
-            <SchoolIcon size={20} />
-          </div>
-          <Text variant="h3">{t('common.app_name')}</Text>
-        </div>
+        <div className="absolute left-10 top-10">{brandButton}</div>
         <div className="z-10 max-w-[300px] text-center">
           <div className="mb-8 overflow-hidden rounded-2xl shadow-2xl">
             <Image
@@ -43,8 +57,9 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
       </div>
 
       {/* Right Side: Dynamic Content (Login, Register, etc.) */}
-      <div className="flex w-full items-center justify-center bg-white p-6 dark:bg-background-dark sm:p-12 lg:w-1/2">
-        {children}
+      <div className="flex w-full flex-col bg-white dark:bg-background-dark lg:w-1/2">
+        <div className="flex items-center px-6 pt-6 sm:px-12 lg:hidden">{brandButton}</div>
+        <div className="flex flex-1 items-center justify-center p-6 sm:p-12">{children}</div>
       </div>
     </div>
   );
